@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>서울 옥상 지도 🏙️</title>
+  <title>서울 스카이 🏙️</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -756,27 +756,29 @@
     }
 
     .marker-pin.is-paid .pin-body {
-      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
-      box-shadow: 0 4px 14px rgba(234, 88, 12, 0.6), 0 0 0 2.5px #fbbf24;
+      background: var(--accent);
+      box-shadow: 0 2px 8px rgba(245,158,11,0.45);
       border: 3px solid #ffffff;
     }
 
     .marker-pin .pin-badge {
       position: absolute;
-      top: -10px;
-      right: -10px;
-      background: #e11d48;
-      color: #ffffff;
+      top: -5px;
+      right: -5px;
+      width: 17px;
+      height: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #b45309;
       font-size: 10px;
       font-weight: 800;
-      padding: 1px 6px;
-      border-radius: 9999px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
-      border: 1.5px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      border: 1.5px solid #b45309;
       z-index: 10;
-      white-space: nowrap;
-      letter-spacing: -0.3px;
-      line-height: 1.3;
+      line-height: 1;
     }
 
     .badge-paid-pill {
@@ -841,7 +843,173 @@
     .custom-tooltip.tooltip-paid {
       background: #7c2d12;
       color: #ffedd5;
-      border: 1px solid #ea580c;
+      border: 1px solid #b45309;
+    }
+
+    /* Height-tier pin sizing */
+    .marker-pin.h-low { width: 30px; height: 38px; }
+    .marker-pin.h-low .pin-body { width: 30px; height: 30px; }
+    .marker-pin.h-low .pin-icon { font-size: 13px; }
+
+    .marker-pin.h-high { width: 44px; height: 52px; }
+    .marker-pin.h-high .pin-body { width: 44px; height: 44px; }
+    .marker-pin.h-high .pin-icon { font-size: 20px; }
+
+    /* ── Map Legend Widget ── */
+    .legend-widget {
+      position: fixed;
+      top: 76px;
+      left: 16px;
+      z-index: 600;
+    }
+
+    /* Hide the legend while the list or detail panel covers the same screen area */
+    body:has(.sidebar.open) .legend-widget,
+    body:has(.detail-panel.open) .legend-widget {
+      display: none;
+    }
+
+    .legend-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 14px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .legend-toggle-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    .legend-panel {
+      display: none;
+      position: absolute;
+      top: 44px;
+      left: 0;
+      width: 250px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-xl);
+      padding: 14px;
+    }
+
+    .legend-panel.open { display: block; }
+
+    .legend-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .legend-panel-header span {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+
+    .legend-panel-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--gray-400);
+      line-height: 1;
+      padding: 2px;
+    }
+
+    .legend-group { margin-bottom: 12px; }
+    .legend-group:last-of-type { margin-bottom: 10px; }
+
+    .legend-group-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray-500);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .legend-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .legend-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 9px;
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      background: white;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-400);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .legend-chip .legend-count {
+      color: var(--gray-400);
+      font-size: 11px;
+    }
+
+    .legend-chip.active {
+      color: var(--gray-700);
+      border-color: var(--gray-300);
+      background: var(--gray-50);
+    }
+
+    .legend-chip.active .legend-count { color: var(--gray-500); }
+
+    .legend-swatch {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      opacity: 0.35;
+    }
+
+    .legend-chip.active .legend-swatch { opacity: 1; }
+
+    .swatch-free { background: var(--primary); }
+    .swatch-paid { background: var(--accent); }
+    .swatch-h-low { width: 6px; height: 6px; background: var(--gray-600); }
+    .swatch-h-mid { width: 9px; height: 9px; background: var(--gray-600); }
+    .swatch-h-high { width: 12px; height: 12px; background: var(--gray-600); }
+    .swatch-type-shopping { background: #8b5cf6; }
+    .swatch-type-public { background: #0d9488; }
+    .swatch-type-park { background: #16a34a; }
+    .swatch-type-landmark { background: #db2777; }
+
+    .legend-reset-btn {
+      width: 100%;
+      padding: 7px;
+      border: 1px dashed var(--gray-300);
+      border-radius: var(--radius-sm);
+      background: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .legend-reset-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    @media (max-width: 640px) {
+      .legend-widget { top: 68px; left: 12px; }
+      .legend-panel { width: calc(100vw - 56px); max-width: 280px; }
     }
 
     /* ── Empty State ── */
@@ -890,7 +1058,7 @@
   <header class="header">
     <div class="header-logo">
       <span class="emoji">🏙️</span>
-      <span id="appTitle">서울 옥상 지도</span>
+      <span id="appTitle">서울 스카이</span>
     </div>
     <div class="header-actions">
       <button class="btn btn-secondary" id="langToggleBtn" onclick="toggleLanguage()" style="font-weight: 600;">
@@ -907,6 +1075,66 @@
 
   <!-- ══════ MAP ══════ -->
   <div id="map"></div>
+
+  <!-- ══════ MAP LEGEND ══════ -->
+  <div class="legend-widget" id="legendWidget">
+    <button class="legend-toggle-btn" onclick="toggleLegendPanel()">
+      <span>🗂️</span><span id="legendToggleLabel">범례</span>
+    </button>
+    <div class="legend-panel" id="legendPanel">
+      <div class="legend-panel-header">
+        <span id="legendPanelTitle">지도 범례</span>
+        <button class="legend-panel-close" onclick="toggleLegendPanel()">✕</button>
+      </div>
+
+      <div class="legend-group">
+        <div class="legend-group-title" id="legendFeeTitle">요금</div>
+        <div class="legend-row">
+          <button class="legend-chip active" data-legend="fee" data-value="free" onclick="toggleLegend('fee','free',this)">
+            <span class="legend-swatch swatch-free"></span><span id="legendFreeLabel">무료</span><span class="legend-count" id="legendFreeCount"></span>
+          </button>
+          <button class="legend-chip active" data-legend="fee" data-value="paid" onclick="toggleLegend('fee','paid',this)">
+            <span class="legend-swatch swatch-paid"></span><span id="legendPaidLabel">유료</span><span class="legend-count" id="legendPaidCount"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="legend-group">
+        <div class="legend-group-title" id="legendHeightTitle">높이</div>
+        <div class="legend-row">
+          <button class="legend-chip active" data-legend="height" data-value="low" onclick="toggleLegend('height','low',this)">
+            <span class="legend-swatch swatch-h-low"></span><span id="legendHLowLabel">~30m</span>
+          </button>
+          <button class="legend-chip active" data-legend="height" data-value="mid" onclick="toggleLegend('height','mid',this)">
+            <span class="legend-swatch swatch-h-mid"></span><span id="legendHMidLabel">30~100m</span>
+          </button>
+          <button class="legend-chip active" data-legend="height" data-value="high" onclick="toggleLegend('height','high',this)">
+            <span class="legend-swatch swatch-h-high"></span><span id="legendHHighLabel">100m~</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="legend-group">
+        <div class="legend-group-title" id="legendTypeTitle">유형</div>
+        <div class="legend-row">
+          <button class="legend-chip active" data-legend="type" data-value="shopping" onclick="toggleLegend('type','shopping',this)">
+            <span class="legend-swatch swatch-type-shopping"></span><span id="legendTypeShoppingLabel">쇼핑·상업</span>
+          </button>
+          <button class="legend-chip active" data-legend="type" data-value="public" onclick="toggleLegend('type','public',this)">
+            <span class="legend-swatch swatch-type-public"></span><span id="legendTypePublicLabel">공공·문화</span>
+          </button>
+          <button class="legend-chip active" data-legend="type" data-value="park" onclick="toggleLegend('type','park',this)">
+            <span class="legend-swatch swatch-type-park"></span><span id="legendTypeParkLabel">공원·한강</span>
+          </button>
+          <button class="legend-chip active" data-legend="type" data-value="landmark" onclick="toggleLegend('type','landmark',this)">
+            <span class="legend-swatch swatch-type-landmark"></span><span id="legendTypeLandmarkLabel">랜드마크·호텔</span>
+          </button>
+        </div>
+      </div>
+
+      <button class="legend-reset-btn" onclick="resetLegend()" id="legendResetBtn">전체 보기</button>
+    </div>
+  </div>
 
   <!-- ══════ SIDEBAR (Location List) ══════ -->
   <div class="sidebar" id="sidebar">
@@ -926,8 +1154,6 @@
         <button class="filter-chip" data-filter="garden" onclick="setFilter('garden', this)"><span id="chipGarden">🌿 정원</span></button>
         <button class="filter-chip" data-filter="cafe" onclick="setFilter('cafe', this)"><span id="chipCafe">☕ 카페</span></button>
         <button class="filter-chip" data-filter="night" onclick="setFilter('night', this)"><span id="chipNight">🌙 야간개방</span></button>
-        <button class="filter-chip" data-filter="free" onclick="setFilter('free', this)"><span id="chipFree">🆓 무료</span></button>
-        <button class="filter-chip" data-filter="paid" onclick="setFilter('paid', this)"><span id="chipPaid">🔭 유료 전망대</span></button>
         <button class="filter-chip" data-filter="public" onclick="setFilter('public', this)"><span id="chipPublic">🚪 개방형</span></button>
       </div>
 
@@ -1065,6 +1291,7 @@
     "height": 17,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "park",
     "hours": "매일 00:00~24:00 (연중무휴)",
     "hours_en": "Open 24/7 (Year-round)",
     "fee": "무료",
@@ -1102,6 +1329,7 @@
     "height": 35,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "매일 10:00~18:00 (수·토 야간개방 10:00~21:00)",
     "hours_en": "Daily 10:00 - 18:00 (Wed & Sat open until 21:00)",
     "fee": "무료",
@@ -1140,6 +1368,7 @@
     "height": 50,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "평일 13:30~17:30 / 주말 09:00~18:00 (금·토 22:00까지)",
     "hours_en": "Weekdays 13:30 - 17:30 / Weekends 09:00 - 18:00 (Fri-Sat until 22:00)",
     "fee": "무료",
@@ -1177,6 +1406,7 @@
     "height": 25,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "평일 09:00~21:00 / 주말 09:00~18:00 (매주 월요일 휴관)",
     "hours_en": "Weekdays 09:00 - 21:00 / Weekends 09:00 - 18:00 (Closed Mondays)",
     "fee": "무료",
@@ -1214,12 +1444,13 @@
     "height": 45,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "월~목 07:30~18:00 / 금·토 07:30~22:00 (일요일 휴무)",
     "hours_en": "Mon-Thu 07:30 - 18:00 / Fri-Sat 07:30 - 22:00 (Closed Sundays)",
     "fee": "무료",
     "fee_en": "Free",
     "view": "신청사 본관 1층 로봇카페 옆 전용 엘리베이터로 직통 이동 가능하며, 통유리 너머로 서울광장, 덕수궁, 숭례문으로 이어지는 서울 도심 스카이라인 파노라마 야경을 감상할 수 있습니다.",
-    "view_en": "Direct express elevator access from 1F. Full panoramic glass windows overlooking Seoul Plaza, Gwanghwamun, and the city skyline towards Sungnyemun Gate. Open late on Fri & Sat.",
+    "view_en": "Direct express elevator access from 1F. Full panoramic glass windows overlooking Seoul Plaza, Deoksugung Palace, and the city skyline towards Sungnyemun Gate. Open late on Fri & Sat.",
     "tags": [
       "cafe",
       "bench",
@@ -1251,6 +1482,7 @@
     "height": 15,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "화~일 09:00~21:00 (매주 월요일 휴관)",
     "hours_en": "Tue-Sun 09:00 - 21:00 (Closed Mondays)",
     "fee": "무료",
@@ -1288,6 +1520,7 @@
     "height": 40,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "화~일 10:00~20:00 (기상 여건에 따라 변동 가능)",
     "hours_en": "Tue-Sun 10:00 - 20:00 (Subject to weather)",
     "fee": "무료",
@@ -1325,6 +1558,7 @@
     "height": 22,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "화~일 11:00~20:00 (매주 월요일 휴관 / 옥상정원 상시)",
     "hours_en": "Tue-Sun 11:00 - 20:00 (Closed Mon / Outdoor roof open daily)",
     "fee": "무료",
@@ -1362,6 +1596,7 @@
     "height": 20,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "park",
     "hours": "매일 10:00~22:00 (연중무휴)",
     "hours_en": "Daily 10:00 - 22:00 (Open year-round)",
     "fee": "무료",
@@ -1400,6 +1635,7 @@
     "height": 15,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "park",
     "hours": "야외 상시 개방 24시간 (편의시설 10:00~21:00)",
     "hours_en": "Outdoor terrace open 24/7 (Facilities 10:00 - 21:00)",
     "fee": "무료",
@@ -1438,6 +1674,7 @@
     "height": 30,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "매일 09:00~22:00",
     "hours_en": "Daily 09:00 - 22:00",
     "fee": "무료",
@@ -1476,6 +1713,7 @@
     "height": 16,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "화~일 09:00~18:00 (매주 월요일 휴관)",
     "hours_en": "Tue-Sun 09:00 - 18:00 (Closed Mondays)",
     "fee": "성인 1,000원 (박물관 관람 포함)",
@@ -1511,6 +1749,7 @@
     "height": 25,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "화~일 10:00~18:00 (입장마감 17:30, 매주 월요일 휴관)",
     "hours_en": "Tue-Sun 10:00 - 18:00 (Last entry 17:30, Closed Mon)",
     "fee": "무료",
@@ -1547,6 +1786,7 @@
     "height": 30,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -1585,6 +1825,7 @@
     "height": 55,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -1616,13 +1857,14 @@
     "name": "신세계백화점 강남점 11층 S가든 (하늘정원)",
     "name_en": "Shinsegae Dept Store Gangnam 11F 'S Garden'",
     "address": "서울특별시 서초구 신반포로 176 센트럴시티 11층",
-    "address_en": "11F Central City, 176 Shinbanpo-ro, Seocho-gu, Seoul",
+    "address_en": "11F Central City, 176 Sinbanpo-ro, Seocho-gu, Seoul",
     "lat": 37.5049,
     "lng": 127.0044,
     "floor": 11,
     "height": 60,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -1661,6 +1903,7 @@
     "height": 28,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "매일 10:00~22:00",
     "hours_en": "Daily 10:00 - 22:00",
     "fee": "무료",
@@ -1699,6 +1942,7 @@
     "height": 70,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "매일 11:00~20:00",
     "hours_en": "Daily 11:00 - 20:00",
     "fee": "무료 (회원 확인)",
@@ -1736,6 +1980,7 @@
     "height": 25,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "화~일 10:00~19:00 (매주 월요일 휴관)",
     "hours_en": "Tue-Sun 10:00 - 19:00 (Closed Mondays)",
     "fee": "무료",
@@ -1772,6 +2017,7 @@
     "height": 38,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -1810,6 +2056,7 @@
     "height": 25,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "일~목 10:30~20:30 / 금·토 10:30~21:00",
     "hours_en": "Sun-Thu 10:30 - 20:30 / Fri-Sat 10:30 - 21:00",
     "fee": "무료",
@@ -1848,6 +2095,7 @@
     "height": 18,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "매일 10:30~20:30 (명절 당일 휴무)",
     "hours_en": "Daily 10:30 - 20:30 (Closed Lunar New Year/Chuseok)",
     "fee": "무료",
@@ -1886,6 +2134,7 @@
     "height": 22,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "화~일 10:00~18:00 (입장마감 17:30, 매주 월요일 휴관)",
     "hours_en": "Tue-Sun 10:00 - 18:00 (Last entry 17:30, Closed Mon)",
     "fee": "무료 (예약 불필요)",
@@ -1922,6 +2171,7 @@
     "height": 12,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "수~월 09:00~18:00 (입장마감 17:30, 매주 화요일 휴관)",
     "hours_en": "Wed-Mon 09:00 - 18:00 (Last entry 17:30, Closed Tue)",
     "fee": "무료 (예약 불필요)",
@@ -1958,6 +2208,7 @@
     "height": 20,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "화~일 10:00~18:00 (매주 월요일 휴관)",
     "hours_en": "Tue-Sun 10:00 - 18:00 (Closed Mondays)",
     "fee": "무료",
@@ -1994,6 +2245,7 @@
     "height": 15,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "park",
     "hours": "화~일 10:00~18:00 (월요일 휴관 / 공원 야외 24시간 상시 개방)",
     "hours_en": "Tue-Sun 10:00 - 18:00 (Closed Mon / Park grounds open 24/7)",
     "fee": "무료",
@@ -2031,6 +2283,7 @@
     "height": 48,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "평일 09:00~18:00 (주말 및 공휴일 휴관)",
     "hours_en": "Weekdays 09:00 - 18:00 (Closed Weekends & Holidays)",
     "fee": "무료",
@@ -2068,6 +2321,7 @@
     "height": 18,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "화~금 09:00~19:00 / 토·일 09:00~18:00 (매주 월요일 휴관)",
     "hours_en": "Tue-Fri 09:00 - 19:00 / Weekends 09:00 - 18:00 (Closed Mon)",
     "fee": "무료",
@@ -2105,6 +2359,7 @@
     "height": 12,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "화~일 10:00~18:00 (입장마감 17:30, 매주 월요일 휴관)",
     "hours_en": "Tue-Sun 10:00 - 18:00 (Last entry 17:30, Closed Mon)",
     "fee": "무료 (예약 불필요)",
@@ -2142,6 +2397,7 @@
     "height": 60,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -2173,13 +2429,14 @@
     "name": "성수연방 3층 천상가옥 온실 루프탑",
     "name_en": "Seongsu Yeonbang 3F 'Cheonsang Gaok' Greenhouse Rooftop",
     "address": "서울특별시 성동구 성수이로14길 14 3층",
-    "address_en": "3F, 14 Seongsuui-ro 14-gil, Seongdong-gu, Seoul",
+    "address_en": "3F, 14 Seongsui-ro 14-gil, Seongdong-gu, Seoul",
     "lat": 37.5412,
     "lng": 127.0571,
     "floor": 3,
     "height": 12,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "매일 11:00~22:00",
     "hours_en": "Daily 11:00 - 22:00",
     "fee": "무료 (카페 이용 자율)",
@@ -2217,6 +2474,7 @@
     "height": 42,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "평일 09:00~20:00 (주말 및 공휴일 휴무)",
     "hours_en": "Weekdays 09:00 - 20:00 (Closed Weekends & Holidays)",
     "fee": "무료",
@@ -2254,6 +2512,7 @@
     "height": 36,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -2292,6 +2551,7 @@
     "height": 12,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "park",
     "hours": "매일 10:00~21:00",
     "hours_en": "Daily 10:00 - 21:00",
     "fee": "무료",
@@ -2329,6 +2589,7 @@
     "height": 15,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "park",
     "hours": "화~일 10:00~21:00 (매주 월요일 휴관)",
     "hours_en": "Tue-Sun 10:00 - 21:00 (Closed Mondays)",
     "fee": "무료",
@@ -2366,6 +2627,7 @@
     "height": 50,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -2404,6 +2666,7 @@
     "height": 20,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "평일 09:00~18:00 (주말 및 공휴일 휴무)",
     "hours_en": "Weekdays 09:00 - 18:00 (Closed Weekends & Holidays)",
     "fee": "무료",
@@ -2440,6 +2703,7 @@
     "height": 8,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "상시 개방 24시간 (전시관 실내 화~일 10:00~18:00)",
     "hours_en": "Outdoor Roof Plaza open 24/7 (Exhibition Tue-Sun 10:00 - 18:00)",
     "fee": "무료",
@@ -2477,6 +2741,7 @@
     "height": 20,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "상시 개방 24시간 (연중무휴)",
     "hours_en": "Open 24/7 (Year-round)",
     "fee": "무료",
@@ -2514,6 +2779,7 @@
     "height": 45,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "매일 10:00~21:00",
     "hours_en": "Daily 10:00 - 21:00",
     "fee": "무료",
@@ -2552,6 +2818,7 @@
     "height": 28,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -2590,6 +2857,7 @@
     "height": 36,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -2628,6 +2896,7 @@
     "height": 45,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -2666,6 +2935,7 @@
     "height": 14,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "평일 09:00~22:00 / 주말 09:00~18:00 (매주 금요일 휴관)",
     "hours_en": "Weekdays 09:00 - 22:00 / Weekends 09:00 - 18:00 (Closed Fridays)",
     "fee": "무료",
@@ -2704,6 +2974,7 @@
     "height": 42,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~21:00 / 금~일 10:30~22:00",
     "hours_en": "Mon-Thu 10:30 - 21:00 / Fri-Sun 10:30 - 22:00",
     "fee": "무료",
@@ -2742,6 +3013,7 @@
     "height": 15,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "public",
     "hours": "화~금 09:00~18:00 / 토~일 09:00~17:00 (월요일 휴관)",
     "hours_en": "Tue-Fri 09:00 - 18:00 / Sat-Sun 09:00 - 17:00 (Closed Mon)",
     "fee": "무료",
@@ -2778,6 +3050,7 @@
     "height": 20,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "park",
     "hours": "매일 00:00~24:00 (24시간 상시 개방)",
     "hours_en": "Open 24/7 (Year-round)",
     "fee": "무료",
@@ -2815,6 +3088,7 @@
     "height": 45,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~21:00 / 금~일 10:30~21:30",
     "hours_en": "Mon-Thu 10:30 - 21:00 / Fri-Sun 10:30 - 21:30",
     "fee": "무료",
@@ -2853,6 +3127,7 @@
     "height": 40,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
     "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
@@ -2891,6 +3166,7 @@
     "height": 65,
     "heightUnit": "m",
     "access": "open",
+    "venueType": "shopping",
     "hours": "매일 10:30~21:00 (입장 마감 20:30)",
     "hours_en": "Daily 10:30 - 21:00 (Last entry 20:30)",
     "fee": "무료",
@@ -2928,8 +3204,9 @@
     "height": 500,
     "heightUnit": "m",
     "access": "limited",
+    "venueType": "landmark",
     "hours": "일~목 10:30~22:00 / 금~토·공휴일 10:30~23:00 (마감 1시간 전까지)",
-    "hours_en": "Sun-Thu 10:30 - 22:00 / Fri-Sat & Holidays 10:30 - 23:00",
+    "hours_en": "Sun-Thu 10:30 - 22:00 / Fri-Sat & Holidays 10:30 - 23:00 (Last entry 1hr before closing)",
     "fee": "어른 31,000원 / 어린이 27,000원",
     "fee_en": "Adults 31,000 KRW / Children 27,000 KRW",
     "view": "지상 500m 국내 최고층 전망대로, 120층 야외 스카이테라스에서 바람을 맞으며 한강 줄기와 잠실 롯데월드, 서울 전역과 멀리 서해 앞바다까지 360도로 굽어보는 최상급 파노라마 전망 명소입니다.",
@@ -2965,6 +3242,7 @@
     "height": 236,
     "heightUnit": "m (해발 480m)",
     "access": "limited",
+    "venueType": "landmark",
     "hours": "월~금 10:30~22:30 / 토~일·공휴일 10:00~23:00",
     "hours_en": "Mon-Fri 10:30 - 22:30 / Sat-Sun & Holidays 10:00 - 23:00",
     "fee": "대인 29,000원 / 소인 23,000원",
@@ -3002,10 +3280,11 @@
     "height": 130,
     "heightUnit": "m",
     "access": "limited",
+    "venueType": "landmark",
     "hours": "화~일 12:00~22:00 (월요일 휴무, 기상상황 연동 운행)",
     "hours_en": "Tue-Sun 12:00 - 22:00 (Closed Mon, weather permitting)",
     "fee": "대인 25,000원 / 청소년·경로 20,000원 / 소인 15,000원",
-    "fee_en": "Adults 25,000 KRW / Youths 20,000 KRW / Children 15,000 KRW",
+    "fee_en": "Adults 25,000 KRW / Youths & Seniors 20,000 KRW / Children 15,000 KRW",
     "view": "여의도공원에서 최고 130m 상공으로 수직 비행하는 계류식 헬륨가스 기구 야외 공중 전망대입니다. 여의도 마천루 빌딩숲과 국회의사당, 한강 야경을 발아래로 생생하게 내려다볼 수 있습니다.",
     "view_en": "An open-air tethered helium gas balloon observatory ascending 130m above Yeouido Park, offering sensational vertical vistas of Yeouido's glittering skyscraper financial hub and the Han River.",
     "tags": [
@@ -3038,6 +3317,7 @@
     "height": 249,
     "heightUnit": "m",
     "access": "limited",
+    "venueType": "landmark",
     "hours": "매일 10:00~20:00",
     "hours_en": "Daily 10:00 - 20:00",
     "fee": "성인 약 18,000원~20,000원",
@@ -3075,6 +3355,7 @@
     "height": 29,
     "heightUnit": "m",
     "access": "limited",
+    "venueType": "landmark",
     "hours": "금~일 11:00 / 13:00 / 16:00 (시즌별 사전예약제, 우천 시 취소)",
     "hours_en": "Fri-Sun 11:00 / 13:00 / 16:00 (Advance reservation, weather permitting)",
     "fee": "일반 26,000원 / 스페셜(노을) 50,000원",
@@ -3111,6 +3392,7 @@
     "height": 75,
     "heightUnit": "m",
     "access": "limited",
+    "venueType": "landmark",
     "hours": "매일 17:00~01:00",
     "hours_en": "Daily 17:00 - 01:00",
     "fee": "식음료 주문 시 이용 (칵테일 약 18,000원~)",
@@ -3147,6 +3429,7 @@
     "height": 70,
     "heightUnit": "m",
     "access": "limited",
+    "venueType": "landmark",
     "hours": "매일 18:00~01:00",
     "hours_en": "Daily 18:00 - 01:00",
     "fee": "식음료 주문 시 이용 (칵테일 약 22,000원~)",
@@ -3183,6 +3466,7 @@
     "height": 115,
     "heightUnit": "m",
     "access": "limited",
+    "venueType": "landmark",
     "hours": "매일 17:00~01:00",
     "hours_en": "Daily 17:00 - 01:00",
     "fee": "식음료 주문 시 이용 (칵테일 약 25,000원~)",
@@ -3219,6 +3503,7 @@
     "height": 28,
     "heightUnit": "m",
     "access": "limited",
+    "venueType": "landmark",
     "hours": "매일 18:00~02:00",
     "hours_en": "Daily 18:00 - 02:00",
     "fee": "식음료 주문 시 이용 (칵테일 약 24,000원~)",
@@ -3255,6 +3540,7 @@
     "height": 55,
     "heightUnit": "m",
     "access": "limited",
+    "venueType": "landmark",
     "hours": "매일 18:00~24:00",
     "hours_en": "Daily 18:00 - 24:00",
     "fee": "식음료 주문 시 이용 (진토닉/칵테일 약 17,000원~)",
@@ -3286,10 +3572,22 @@
     let currentLang = localStorage.getItem('seoul_roof_lang') || 'ko';
     let markers = {};
 
+    // Map legend state (all categories shown by default)
+    let feeLegend = { free: true, paid: true };
+    let heightLegend = { low: true, mid: true, high: true };
+    let typeLegend = { shopping: true, public: true, park: true, landmark: true };
+
+    function heightTier(rt) {
+      const h = rt.height || 0;
+      if (h < 30) return 'low';
+      if (h < 100) return 'mid';
+      return 'high';
+    }
+
     const i18n = {
       ko: {
-        docTitle: '서울 옥상 지도 🏙️',
-        appTitle: '서울 옥상 지도',
+        docTitle: '서울 스카이 🏙️',
+        appTitle: '서울 스카이',
         langBtn: '🌐 English',
         btnList: '📋 목록',
         btnReport: '📍 새 옥상 제보',
@@ -3299,9 +3597,22 @@
         chipGarden: '🌿 정원',
         chipCafe: '☕ 카페',
         chipNight: '🌙 야간개방',
-        chipFree: '🆓 무료',
-        chipPaid: '🔭 유료 전망대',
         chipPublic: '🚪 개방형',
+        legendToggleLabel: '범례',
+        legendPanelTitle: '지도 범례',
+        legendFeeTitle: '요금',
+        legendFreeLabel: '무료',
+        legendPaidLabel: '유료',
+        legendHeightTitle: '높이',
+        legendHLowLabel: '~30m',
+        legendHMidLabel: '30~100m',
+        legendHHighLabel: '100m~',
+        legendTypeTitle: '유형',
+        legendTypeShoppingLabel: '쇼핑·상업',
+        legendTypePublicLabel: '공공·문화',
+        legendTypeParkLabel: '공원·한강',
+        legendTypeLandmarkLabel: '랜드마크·호텔',
+        legendResetBtn: '전체 보기',
         statCountLabel: '등록된 옥상',
         statReportsLabel: '제보',
         emptySearch: '검색 결과가 없습니다.<br>새로운 옥상을 제보해주세요!',
@@ -3363,8 +3674,8 @@
         reportSubmit: '제보하기'
       },
       en: {
-        docTitle: 'Seoul Rooftop Map 🏙️',
-        appTitle: 'Seoul Rooftop Map',
+        docTitle: 'Seoul Sky 🏙️',
+        appTitle: 'Seoul Sky',
         langBtn: '🇰🇷 한국어',
         btnList: '📋 List',
         btnReport: '📍 Report Spot',
@@ -3374,9 +3685,22 @@
         chipGarden: '🌿 Garden',
         chipCafe: '☕ Cafe',
         chipNight: '🌙 Night View',
-        chipFree: '🆓 Free',
-        chipPaid: '🔭 Paid Observatory',
         chipPublic: '🚪 Public',
+        legendToggleLabel: 'Legend',
+        legendPanelTitle: 'Map Legend',
+        legendFeeTitle: 'Fee',
+        legendFreeLabel: 'Free',
+        legendPaidLabel: 'Paid',
+        legendHeightTitle: 'Height',
+        legendHLowLabel: '~30m',
+        legendHMidLabel: '30-100m',
+        legendHHighLabel: '100m+',
+        legendTypeTitle: 'Type',
+        legendTypeShoppingLabel: 'Shopping',
+        legendTypePublicLabel: 'Public/Culture',
+        legendTypeParkLabel: 'Park/Riverside',
+        legendTypeLandmarkLabel: 'Landmark/Hotel',
+        legendResetBtn: 'Show All',
         statCountLabel: 'Rooftops',
         statReportsLabel: 'Reports',
         emptySearch: 'No rooftops found.<br>Feel free to report a new rooftop spot!',
@@ -3553,7 +3877,7 @@
     L.control.zoom({ position: 'topright' }).addTo(map);
 
     // Tile layer - CartoDB Positron (clean, modern look)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png?key=cb1_3fp6_1_f8fd06e18703b553471c859b', { // gitleaks:allow (public CARTO Basemaps tile key, client-exposed by design; same key already live on sudal.ghmun.com)
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 19
@@ -3572,23 +3896,31 @@
           rooftop.features.night ? '🌙' :
           rooftop.features.view ? '🌆' : '🏢';
 
-      const badgeText = isPaid ? (currentLang === 'en' ? 'PAID' : '유료') : '';
-      const badgeHtml = isPaid ? `<span class="pin-badge">${badgeText}</span>` : '';
+      const badgeHtml = isPaid ? `<span class="pin-badge">₩</span>` : '';
       const paidClass = isPaid ? 'is-paid' : '';
+
+      const tier = heightTier(rooftop);
+      const tierClass = 'h-' + tier;
+      const tierSizes = {
+        low: { iconSize: [32, 40], iconAnchor: [16, 40] },
+        mid: { iconSize: [38, 46], iconAnchor: [19, 46] },
+        high: { iconSize: [46, 54], iconAnchor: [23, 54] }
+      };
+      const { iconSize, iconAnchor } = tierSizes[tier];
 
       return L.divIcon({
         className: 'custom-marker',
         html: `
-          <div class="marker-pin ${paidClass}">
+          <div class="marker-pin ${paidClass} ${tierClass}">
             ${badgeHtml}
             <div class="pin-body">
               <span class="pin-icon">${icon}</span>
             </div>
           </div>
         `,
-        iconSize: [38, 46],
-        iconAnchor: [19, 46],
-        popupAnchor: [0, -46]
+        iconSize,
+        iconAnchor,
+        popupAnchor: [0, -iconSize[1]]
       });
     }
 
@@ -3648,11 +3980,15 @@
           (currentFilter === 'cafe' && rt.features.cafe) ||
           (currentFilter === 'garden' && rt.features.garden) ||
           (currentFilter === 'night' && rt.features.night) ||
-          (currentFilter === 'free' && (rt.tags.includes('free') || rt.fee.includes('무료') || (rt.fee_en && rt.fee_en.toLowerCase().includes('free')))) ||
-          (currentFilter === 'paid' && (rt.tags.includes('paid') || (rt.features && rt.features.paid) || (!rt.tags.includes('free') && !rt.fee.includes('무료')))) ||
           (currentFilter === 'public' && rt.access === 'open');
 
-        return matchesSearch && matchesFilter;
+        // Legend filters (fee / height / venue type)
+        const isPaidItem = rt.tags && rt.tags.includes('paid');
+        const matchesFee = isPaidItem ? feeLegend.paid : feeLegend.free;
+        const matchesHeight = heightLegend[heightTier(rt)];
+        const matchesType = rt.venueType ? typeLegend[rt.venueType] !== false : true;
+
+        return matchesSearch && matchesFilter && matchesFee && matchesHeight && matchesType;
       });
     }
 
@@ -3662,6 +3998,38 @@
       el.classList.add('active');
       renderMarkers();
       renderLocationList();
+    }
+
+    // ═══════════════════════════════════════════
+    // MAP LEGEND
+    // ═══════════════════════════════════════════
+
+    function toggleLegendPanel() {
+      document.getElementById('legendPanel').classList.toggle('open');
+    }
+
+    function toggleLegend(group, value, el) {
+      const state = group === 'fee' ? feeLegend : group === 'height' ? heightLegend : typeLegend;
+      state[value] = !state[value];
+      el.classList.toggle('active', state[value]);
+      renderMarkers();
+      renderLocationList();
+    }
+
+    function resetLegend() {
+      Object.keys(feeLegend).forEach(k => feeLegend[k] = true);
+      Object.keys(heightLegend).forEach(k => heightLegend[k] = true);
+      Object.keys(typeLegend).forEach(k => typeLegend[k] = true);
+      document.querySelectorAll('.legend-chip').forEach(c => c.classList.add('active'));
+      renderMarkers();
+      renderLocationList();
+    }
+
+    function updateLegendCounts() {
+      const freeCount = rooftops.filter(rt => !(rt.tags && rt.tags.includes('paid'))).length;
+      const paidCount = rooftops.filter(rt => rt.tags && rt.tags.includes('paid')).length;
+      document.getElementById('legendFreeCount').textContent = freeCount;
+      document.getElementById('legendPaidCount').textContent = paidCount;
     }
 
     function filterLocations() {
@@ -3677,6 +4045,7 @@
       const sb = document.getElementById('sidebar');
       sb.classList.toggle('open');
       if (sb.classList.contains('open')) {
+        document.getElementById('legendPanel').classList.remove('open');
         closeDetail();
         renderLocationList();
       }
@@ -4103,9 +4472,24 @@
       document.getElementById('chipGarden').textContent = t.chipGarden;
       document.getElementById('chipCafe').textContent = t.chipCafe;
       document.getElementById('chipNight').textContent = t.chipNight;
-      document.getElementById('chipFree').textContent = t.chipFree;
-      if (document.getElementById('chipPaid')) document.getElementById('chipPaid').textContent = t.chipPaid;
       document.getElementById('chipPublic').textContent = t.chipPublic;
+
+      document.getElementById('legendToggleLabel').textContent = t.legendToggleLabel;
+      document.getElementById('legendPanelTitle').textContent = t.legendPanelTitle;
+      document.getElementById('legendFeeTitle').textContent = t.legendFeeTitle;
+      document.getElementById('legendFreeLabel').textContent = t.legendFreeLabel;
+      document.getElementById('legendPaidLabel').textContent = t.legendPaidLabel;
+      document.getElementById('legendHeightTitle').textContent = t.legendHeightTitle;
+      document.getElementById('legendHLowLabel').textContent = t.legendHLowLabel;
+      document.getElementById('legendHMidLabel').textContent = t.legendHMidLabel;
+      document.getElementById('legendHHighLabel').textContent = t.legendHHighLabel;
+      document.getElementById('legendTypeTitle').textContent = t.legendTypeTitle;
+      document.getElementById('legendTypeShoppingLabel').textContent = t.legendTypeShoppingLabel;
+      document.getElementById('legendTypePublicLabel').textContent = t.legendTypePublicLabel;
+      document.getElementById('legendTypeParkLabel').textContent = t.legendTypeParkLabel;
+      document.getElementById('legendTypeLandmarkLabel').textContent = t.legendTypeLandmarkLabel;
+      document.getElementById('legendResetBtn').textContent = t.legendResetBtn;
+      updateLegendCounts();
 
       document.getElementById('statCountLabel').textContent = t.statCountLabel;
       document.getElementById('statReportsLabel').textContent = t.statReportsLabel;
@@ -4190,6 +4574,15 @@
         closeReportModal();
         closeDetail();
         document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('legendPanel').classList.remove('open');
+      }
+    });
+
+    // Close legend panel when clicking outside it
+    document.addEventListener('click', (e) => {
+      const widget = document.getElementById('legendWidget');
+      if (!widget.contains(e.target)) {
+        document.getElementById('legendPanel').classList.remove('open');
       }
     });
   </script>
