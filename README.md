@@ -1,8 +1,8 @@
 # 서울 옥상 지도 (Seoul Rooftop Map) 🏙️
 
-서울 시내에서 시민에게 무료 또는 자유롭게 개방되어 있는 옥상정원, 루프탑 테라스, 전망대 **45곳**을 한눈에 찾아볼 수 있는 인터랙티브 지도 웹 애플리케이션입니다. (한국어 및 영어 다국어 완벽 지원)
+서울 시내에서 시민에게 무료 또는 자유롭게 개방되어 있는 옥상정원, 루프탑 테라스, 전망대 **45곳**을 한눈에 찾아볼 수 있는 인터랙티브 지도 웹 애플리케이션입니다. (한국어 및 영어 다국어 지원, Supabase 실시간 댓글 및 시민 제보 시스템 연동)
 
-An interactive rooftop map web application showcasing **45 verified publicly accessible rooftop gardens, terraces, and observatories** across Seoul, South Korea. Fully supports both Korean and English.
+An interactive rooftop map web application showcasing **45 verified publicly accessible rooftop gardens, terraces, and observatories** across Seoul, South Korea. Fully supports both Korean and English with real-time Supabase visitor tips and citizen reporting.
 
 🔗 **라이브 서비스 (Live App)**: [https://ghmun-seoul-roof.vercel.app](https://ghmun-seoul-roof.vercel.app)
 
@@ -10,18 +10,23 @@ An interactive rooftop map web application showcasing **45 verified publicly acc
 
 ## 📌 주요 기능 (Features)
 
-- **🌐 다국어 지원 (Bilingual Support)**: 한국어(KO) 및 영어(EN) 원클릭 전환 기능 (`localStorage` 저장 및 새로고침 유지, 실시간 UI 및 45개 전 옥상 명소 영문 변환)
-- **🗺️ Leaflet 인터랙티브 지도 (Interactive Map)**: 서울 전역의 개방 옥상 위치를 맞춤형 핀 아이콘(🌿 정원, ☕ 카페, 🌙 야간개방, 🌆 전망, 🏢 빌딩)으로 시각화
+- **💬 Supabase 실시간 방문자 팁 및 댓글 (Real-time Comments)**:
+  - 가짜/임의로 지어낸 목업 댓글을 100% 배제하고, **실제 방문 시민들이 남긴 실시간 방문 팁과 댓글**만 연동되어 표시됩니다.
+  - 익명 세션 자동 연동으로 로그인 없이도 자유롭게 닉네임과 방문 팁/후기 작성 가능
+  - XSS 방지 HTML 이스케이프 및 스팸 방지 레이트 리밋 적용
+- **📍 Supabase 시민 새 옥상 제보 (Rooftop Reports)**:
+  - 미등록 개방 옥상을 시민들이 직접 제보하는 모달 폼이 Supabase 백엔드 데이터베이스에 실시간 기록됩니다.
+  - 건물명, 주소, 층수, 높이, 개방 시간, 출입 조건, 특징, 조망 설명, 제보자 닉네임 수집
+- **🌐 다국어 완벽 지원 (Bilingual Support)**:
+  - 한국어(KO) 및 영어(EN) 원클릭 전환 버튼 (`localStorage` 영구 보존)
+  - 45개 전 옥상 명소 영문 데이터셋 완비 및 UI/필터/모달/토스트 전면 영문화
+- **🗺️ Leaflet 인터랙티브 지도 (Interactive Map)**:
+  - 서울 전역의 개방 옥상 위치를 맞춤형 핀 아이콘(🌿 정원, ☕ 카페, 🌙 야간개방, 🌆 전망, 🏢 빌딩)으로 시각화
 - **🔍 스마트 검색 및 실시간 필터링 (Smart Search & Filter)**:
   - 명소 이름, 도로명/구/동 주소, 뷰 키워드(예: `경복궁`, `남산`, `한강`, `노을`, `비행기`, `Namsan`, `Han River` 등) 한영 동시 검색 지원
   - 카테고리 필터: `전체 (All)`, `🌿 정원 (Gardens)`, `☕ 카페 (Cafes)`, `🌙 야간개방 (Night Views)`, `🆓 무료 (Free Entry)`, `🚪 개방형 (Open Access)`
 - **📊 상세 정보 패널 (Detail Panel)**:
-  - 정확한 층수 및 건물 높이
-  - 개방 시간 및 휴관일 안내
-  - 입장료 및 외부인 출입 허용 여부
-  - 파노라마 조망 및 현장 특징 상세 설명
-  - 방문자 리뷰 및 팁 (다국어 지원)
-- **📍 새 옥상 제보하기 (Report Modal)**: 시민들이 알고 있는 숨은 개방 옥상을 직접 등록 및 제보할 수 있는 다국어 지원 모달 폼 제공
+  - 정확한 층수 및 건물 높이, 개방 시간 및 휴관일, 입장료 및 외부인 출입 허용 여부, 파노라마 조망 및 현장 특징 상세 설명
 
 ---
 
@@ -75,9 +80,20 @@ An interactive rooftop map web application showcasing **45 verified publicly acc
 
 ---
 
+## 🗄️ 백엔드 데이터베이스 (Supabase Schema)
+
+프로젝트 루트의 [`supabase-schema.sql`](supabase-schema.sql) 파일을 Supabase SQL Editor에서 실행하여 독립된 테이블을 구축할 수 있습니다. (미구축 시에도 기존 공용 피드 테이블을 통해 자동 폴백되어 즉시 정상 동작합니다.)
+
+- **`roof_comments`**: 옥상별 고유 ID(`roof_id`), 작성자(`nickname`), 내용(`content`), 작성일시
+- **`roof_reports`**: 건물명(`name`), 주소(`address`), 층수, 높이, 개방 시간, 출입 조건, 특징 배열, 뷰 설명, 추가 메모, 닉네임
+- **RLS & Anti-Spam**: 누구나 조회 및 작성 가능하며, 작성자 본인 삭제 권한 및 10초 연속 작성 방지 트리거 내장
+
+---
+
 ## 🚀 배포 및 기술 스택 (Tech Stack & Deployment)
 
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript (ES6+)
 - **Map Engine**: Leaflet.js & OpenStreetMap CartoDB Positron
+- **Backend / Database**: Supabase (`@supabase/supabase-js`)
 - **Deployment**: Vercel (`https://ghmun-seoul-roof.vercel.app`)
 - **VCS**: Git & GitHub (`https://github.com/py-yoon/ghmun-seoul-roof`)
