@@ -796,13 +796,16 @@
   <header class="header">
     <div class="header-logo">
       <span class="emoji">🏙️</span>
-      <span>서울 옥상 지도</span>
+      <span id="appTitle">서울 옥상 지도</span>
     </div>
     <div class="header-actions">
-      <button class="btn btn-secondary" onclick="toggleSidebar()">
+      <button class="btn btn-secondary" id="langToggleBtn" onclick="toggleLanguage()" style="font-weight: 600;">
+        🌐 English
+      </button>
+      <button class="btn btn-secondary" id="btnList" onclick="toggleSidebar()">
         📋 목록
       </button>
-      <button class="btn btn-primary" onclick="openReportModal()">
+      <button class="btn btn-primary" id="btnReport" onclick="openReportModal()">
         📍 새 옥상 제보
       </button>
     </div>
@@ -814,7 +817,7 @@
   <!-- ══════ SIDEBAR (Location List) ══════ -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <h2>📋 옥상 목록</h2>
+      <h2 id="sidebarTitle">📋 옥상 목록</h2>
       <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
     </div>
     <div class="sidebar-body">
@@ -825,12 +828,12 @@
       </div>
 
       <div class="filter-bar">
-        <button class="filter-chip active" data-filter="all" onclick="setFilter('all', this)">전체</button>
-        <button class="filter-chip" data-filter="garden" onclick="setFilter('garden', this)">🌿 정원</button>
-        <button class="filter-chip" data-filter="cafe" onclick="setFilter('cafe', this)">☕ 카페</button>
-        <button class="filter-chip" data-filter="night" onclick="setFilter('night', this)">🌙 야간개방</button>
-        <button class="filter-chip" data-filter="free" onclick="setFilter('free', this)">🆓 무료</button>
-        <button class="filter-chip" data-filter="public" onclick="setFilter('public', this)">🚪 개방형</button>
+        <button class="filter-chip active" data-filter="all" onclick="setFilter('all', this)"><span id="chipAll">전체</span></button>
+        <button class="filter-chip" data-filter="garden" onclick="setFilter('garden', this)"><span id="chipGarden">🌿 정원</span></button>
+        <button class="filter-chip" data-filter="cafe" onclick="setFilter('cafe', this)"><span id="chipCafe">☕ 카페</span></button>
+        <button class="filter-chip" data-filter="night" onclick="setFilter('night', this)"><span id="chipNight">🌙 야간개방</span></button>
+        <button class="filter-chip" data-filter="free" onclick="setFilter('free', this)"><span id="chipFree">🆓 무료</span></button>
+        <button class="filter-chip" data-filter="public" onclick="setFilter('public', this)"><span id="chipPublic">🚪 개방형</span></button>
       </div>
 
       <div class="location-list" id="locationList">
@@ -860,71 +863,71 @@
     <div class="modal">
       <div class="modal-header">
         <div>
-          <h2>📍 새 옥상 제보하기</h2>
-          <p>아직 등록되지 않은 개방 옥상을 알려주세요!</p>
+          <h2 id="modalTitle">📍 새 옥상 제보하기</h2>
+          <p id="modalSub">아직 등록되지 않은 개방 옥상을 알려주세요!</p>
         </div>
         <button class="sidebar-close" onclick="closeReportModal()">✕</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label>건물명 <span class="required">*</span></label>
+          <label id="labelReportName">건물명 <span class="required">*</span></label>
           <input type="text" id="reportName" placeholder="예: 서울시청 서소문별관">
         </div>
         <div class="form-group">
-          <label>주소(지번 또는 도로명) <span class="required">*</span></label>
+          <label id="labelReportAddr">주소(지번 또는 도로명) <span class="required">*</span></label>
           <input type="text" id="reportAddress" placeholder="예: 서울시 중구 세종대로 110">
-          <p class="hint">정확한 주소가 어려우면 대략적인 위치도 괜찮습니다</p>
+          <p class="hint" id="hintReportAddr">정확한 주소가 어려우면 대략적인 위치도 괜찮습니다</p>
         </div>
         <div class="form-group">
-          <label>옥상 층수 <span class="optional">(선택)</span></label>
+          <label id="labelReportFloor">옥상 층수 <span class="optional">(선택)</span></label>
           <input type="text" id="reportFloor" placeholder="예: 15층">
         </div>
         <div class="form-group">
-          <label>건물 높이(m) <span class="optional">(선택)</span></label>
+          <label id="labelReportHeight">건물 높이(m) <span class="optional">(선택)</span></label>
           <input type="text" id="reportHeight" placeholder="예: 약 60m">
         </div>
         <div class="form-group">
-          <label>개방 시간 <span class="optional">(선택)</span></label>
+          <label id="labelReportHours">개방 시간 <span class="optional">(선택)</span></label>
           <input type="text" id="reportHours" placeholder="예: 09:00~18:00, 평일만">
         </div>
         <div class="form-group">
-          <label>외부인 출입 <span class="optional">(선택)</span></label>
+          <label id="labelReportAccess">외부인 출입 <span class="optional">(선택)</span></label>
           <select id="reportAccess">
-            <option value="">선택해주세요</option>
-            <option value="open">누구나 자유롭게</option>
-            <option value="limited">조건부 (신분증 등)</option>
-            <option value="tenant">건물 입주자만</option>
-            <option value="unknown">잘 모르겠음</option>
+            <option value="" id="optAccessDefault">선택해주세요</option>
+            <option value="open" id="optAccessOpen">누구나 자유롭게</option>
+            <option value="limited" id="optAccessLimited">조건부 (신분증 등)</option>
+            <option value="tenant" id="optAccessTenant">건물 입주자만</option>
+            <option value="unknown" id="optAccessUnknown">잘 모르겠음</option>
           </select>
         </div>
         <div class="form-group">
-          <label>특징 <span class="optional">(해당하는 것 모두 선택)</span></label>
+          <label id="labelReportFeatures">특징 <span class="optional">(해당하는 것 모두 선택)</span></label>
           <div class="checkbox-group">
-            <label><input type="checkbox" value="garden"> 🌿 옥상정원</label>
-            <label><input type="checkbox" value="cafe"> ☕ 카페</label>
-            <label><input type="checkbox" value="restaurant"> 🍽️ 식당</label>
-            <label><input type="checkbox" value="smoking"> 🚬 흡연구역</label>
-            <label><input type="checkbox" value="bench"> 🪑 벤치/쉼터</label>
-            <label><input type="checkbox" value="view"> 🌆 전망 좋음</label>
-            <label><input type="checkbox" value="night"> 🌙 야간개방</label>
+            <label><input type="checkbox" value="garden"> <span id="cbGarden">🌿 옥상정원</span></label>
+            <label><input type="checkbox" value="cafe"> <span id="cbCafe">☕ 카페</span></label>
+            <label><input type="checkbox" value="restaurant"> <span id="cbRestaurant">🍽️ 식당</span></label>
+            <label><input type="checkbox" value="smoking"> <span id="cbSmoking">🚬 흡연구역</span></label>
+            <label><input type="checkbox" value="bench"> <span id="cbBench">🪑 벤치/쉼터</span></label>
+            <label><input type="checkbox" value="view"> <span id="cbView">🌆 전망 좋음</span></label>
+            <label><input type="checkbox" value="night"> <span id="cbNight">🌙 야간개방</span></label>
           </div>
         </div>
         <div class="form-group">
-          <label>뷰 설명 <span class="optional">(선택)</span></label>
+          <label id="labelReportView">뷰 설명 <span class="optional">(선택)</span></label>
           <textarea id="reportView" placeholder="어떤 뷰가 보이나요? (예: 남산타워가 정면으로 보이고, 서쪽으로 한강이 살짝 보입니다)"></textarea>
         </div>
         <div class="form-group">
-          <label>추가 메모 <span class="optional">(선택)</span></label>
+          <label id="labelReportMemo">추가 메모 <span class="optional">(선택)</span></label>
           <textarea id="reportMemo" placeholder="기타 알려주고 싶은 내용 (예: 엘리베이터 접근 가능, 바람 많이 불어요 등)"></textarea>
         </div>
         <div class="form-group">
-          <label>닉네임 <span class="optional">(선택)</span></label>
+          <label id="labelReportNick">닉네임 <span class="optional">(선택)</span></label>
           <input type="text" id="reportNickname" placeholder="제보자 닉네임 (미입력시 '익명')">
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeReportModal()">취소</button>
-        <button class="btn btn-primary" onclick="submitReport()">제보하기</button>
+        <button class="btn btn-secondary" id="btnModalCancel" onclick="closeReportModal()">취소</button>
+        <button class="btn btn-primary" id="btnModalSubmit" onclick="submitReport()">제보하기</button>
       </div>
     </div>
   </div>
@@ -933,13 +936,13 @@
   <div class="stats-bar" id="statsBar">
     <div class="stat">
       <span>📍</span>
-      <span>등록된 옥상</span>
+      <span id="statCountLabel">등록된 옥상</span>
       <span class="stat-num" id="statCount">0</span>
     </div>
     <div class="divider"></div>
     <div class="stat">
       <span>💬</span>
-      <span>제보</span>
+      <span id="statReportsLabel">제보</span>
       <span class="stat-num" id="statReports">0</span>
     </div>
   </div>
@@ -957,7 +960,9 @@
   {
     "id": 1,
     "name": "서울로7017 하늘정원",
+    "name_en": "Seoullo 7017 Sky Garden",
     "address": "서울특별시 중구 청파로 432",
+    "address_en": "432 Cheongpa-ro, Jung-gu, Seoul",
     "lat": 37.5559,
     "lng": 126.9723,
     "floor": 3,
@@ -965,8 +970,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "매일 00:00~24:00 (연중무휴)",
+    "hours_en": "Open 24/7 (Year-round)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "남산서울타워와 숭례문 방향 조망, 서울역 광장 및 철도 선로, 도심 빌딩 숲 스카이라인이 한눈에 내려다보이는 공중 보행 옥상정원입니다.",
+    "view_en": "An elevated public sky garden walkway overlooking N Seoul Tower, Sungnyemun Gate, Seoul Station plaza, railway tracks, and the sparkling downtown skyline.",
     "tags": [
       "garden",
       "bench",
@@ -989,20 +997,24 @@
         "id": 1,
         "author": "도심산책",
         "date": "2026-09-01",
-        "text": "밤에 가면 서울역 야경과 차량 불빛 궤적이 정말 멋집니다. 벤치가 많아 걷다 쉬기 좋아요."
+        "text": "밤에 가면 서울역 야경과 차량 불빛 궤적이 정말 멋집니다. 벤치가 많아 걷다 쉬기 좋아요.",
+        "text_en": "Walking here at night with Seoul Station lights and car trails is wonderful. Lots of benches to rest."
       },
       {
         "id": 2,
         "author": "초록식물",
         "date": "2026-08-20",
-        "text": "계절마다 피어나는 꽃과 식물이 달라져서 사계절 산책하는 재미가 있습니다."
+        "text": "계절마다 피어나는 꽃과 식물이 달라져서 사계절 산책하는 재미가 있습니다.",
+        "text_en": "Different flowers and plants bloom with each season. Fun to stroll anytime of year."
       }
     ]
   },
   {
     "id": 2,
     "name": "대한민국역사박물관 8층 황토마루 옥상정원",
+    "name_en": "National Museum of Korean Contemporary History (8F Hwangtomaru Garden)",
     "address": "서울특별시 종로구 세종대로 198 8층",
+    "address_en": "8F, 198 Sejong-daero, Jongno-gu, Seoul",
     "lat": 37.5738,
     "lng": 126.978,
     "floor": 8,
@@ -1010,8 +1022,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "매일 10:00~18:00 (수·토 야간개방 10:00~21:00)",
+    "hours_en": "Daily 10:00 - 18:00 (Wed & Sat open until 21:00)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "경복궁 광화문과 근정전, 청와대, 북악산 능선이 완벽하게 일렬로 펼쳐지는 서울 최고의 고궁 파노라마 옥상정원입니다. 수·토 야간개방 시 광화문 야경이 환상적입니다.",
+    "view_en": "The premier rooftop palace observatory in Seoul with a direct panoramic line of sight over Gwanghwamun Gate, Gyeongbokgung Palace, the Blue House, and Mt. Bugaksan. Stunning night views on Wed & Sat.",
     "tags": [
       "garden",
       "bench",
@@ -1035,29 +1050,36 @@
         "id": 3,
         "author": "경복궁사랑",
         "date": "2026-08-28",
-        "text": "8층 엘리베이터 내리자마자 감탄이 절로 나옵니다. 경복궁 전경을 가장 완벽한 각도에서 볼 수 있어요."
+        "text": "8층 엘리베이터 내리자마자 감탄이 절로 나옵니다. 경복궁 전경을 가장 완벽한 각도에서 볼 수 있어요.",
+        "text_en": "Breathtaking the moment you step off the 8F elevator. Best angle anywhere to see Gyeongbokgung Palace."
       },
       {
         "id": 4,
         "author": "노을사냥꾼",
         "date": "2026-08-15",
-        "text": "수요일 저녁 8시쯤 방문하면 고궁과 도심 빌딩 야경이 어우러진 최고의 장면을 담을 수 있습니다."
+        "text": "수요일 저녁 8시쯤 방문하면 고궁과 도심 빌딩 야경이 어우러진 최고의 장면을 담을 수 있습니다.",
+        "text_en": "Visit around 8 PM on Wednesday for an incredible harmony of illuminated palace and modern towers."
       }
     ]
   },
   {
     "id": 3,
     "name": "정동전망대 (서울시 서소문청사 1동 13층)",
+    "name_en": "Jeongdong Observatory (Seoul City Hall Seosomun Annex 1, 13F)",
     "address": "서울특별시 중구 덕수궁길 15 서소문청사 1동 13층",
+    "address_en": "13F, 15 Deoksugung-gil, Jung-gu, Seoul",
     "lat": 37.5644,
     "lng": 126.9748,
     "floor": 13,
     "height": 50,
     "heightUnit": "m",
     "access": "open",
-    "hours": "평일 13:30~17:30 / 주말 09:00~18:00 (금·토 야간 22:00까지)",
+    "hours": "평일 13:30~17:30 / 주말 09:00~18:00 (금·토 22:00까지)",
+    "hours_en": "Weekdays 13:30 - 17:30 / Weekends 09:00 - 18:00 (Fri-Sat until 22:00)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "덕수궁 중화전, 석조전, 즉조당 등 고궁 전각과 정동 로터리 일대 근현대 건축물이 미니어처처럼 내려다보이는 카페 겸 도심 옥상전망대입니다.",
+    "view_en": "Overlooking the courtyards and stone halls of Deoksugung Palace like a charming miniature, accompanied by the scenic historic Jeongdong quarter and Cafe Darak.",
     "tags": [
       "cafe",
       "bench",
@@ -1080,29 +1102,36 @@
         "id": 5,
         "author": "정동길산책",
         "date": "2026-09-05",
-        "text": "카페 다락 창가 좌석에서 커피 마시며 내려다보는 덕수궁 풍경은 언제 봐도 평화롭습니다."
+        "text": "카페 다락 창가 좌석에서 커피 마시며 내려다보는 덕수궁 풍경은 언제 봐도 평화롭습니다.",
+        "text_en": "Sitting by the window at Cafe Darak with a coffee overlooking Deoksugung Palace is pure serenity."
       },
       {
         "id": 6,
         "author": "단풍구경",
         "date": "2026-08-11",
-        "text": "가을 단풍철에는 석조전과 어우러진 노란 은행잎 풍경이 장관입니다."
+        "text": "가을 단풍철에는 석조전과 어우러진 노란 은행잎 풍경이 장관입니다.",
+        "text_en": "In autumn, the golden ginkgo foliage surrounding the stone palace is spectacular."
       }
     ]
   },
   {
     "id": 4,
     "name": "서울도서관 5층 하늘뜰 옥상정원",
+    "name_en": "Seoul Metropolitan Library 5F Haneultteul Rooftop Garden",
     "address": "서울특별시 중구 세종대로 110 (구 서울시청사 5층)",
+    "address_en": "5F, 110 Sejong-daero, Jung-gu, Seoul (Former City Hall)",
     "lat": 37.5663,
     "lng": 126.9779,
     "floor": 5,
     "height": 25,
     "heightUnit": "m",
     "access": "open",
-    "hours": "평일 09:00~21:00 / 주말 09:00~18:00 (매주 월요일 및 공휴일 휴관)",
+    "hours": "평일 09:00~21:00 / 주말 09:00~18:00 (매주 월요일 휴관)",
+    "hours_en": "Weekdays 09:00 - 21:00 / Weekends 09:00 - 18:00 (Closed Mondays)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "서울광장의 푸른 잔디와 분수, 세종대로 차량 행렬, 서울시청 신청사의 파도형 유리 건축미와 덕수궁 방면을 한눈에 담을 수 있는 아늑한 도심 옥상정원입니다.",
+    "view_en": "A peaceful green roof sanctuary on the historic 1926 City Hall building, overlooking Seoul Plaza's lawns, fountains, and the wave-shaped glass facade of New City Hall.",
     "tags": [
       "garden",
       "bench",
@@ -1125,20 +1154,24 @@
         "id": 7,
         "author": "책읽는오후",
         "date": "2026-09-02",
-        "text": "도서관에서 책 빌려 올라와 야외 벤치에서 읽기 좋아요. 서울광장이 바로 아래로 보입니다."
+        "text": "도서관에서 책 빌려 올라와 야외 벤치에서 읽기 좋아요. 서울광장이 바로 아래로 보입니다.",
+        "text_en": "Borrow a book and read on the outdoor benches with Seoul Plaza right below."
       },
       {
         "id": 8,
         "author": "시청직장인",
         "date": "2026-07-29",
-        "text": "점심시간에 5층 카페 행복플러스 들렀다가 바람 쐬러 나가기 딱 좋습니다."
+        "text": "점심시간에 5층 카페 행복플러스 들렀다가 바람 쐬러 나가기 딱 좋습니다.",
+        "text_en": "Great lunch spot to grab a coffee from Cafe Happiness Plus and enjoy the fresh air."
       }
     ]
   },
   {
     "id": 5,
     "name": "서울시청 본관 하늘전망대 (9층)",
+    "name_en": "Seoul City Hall Main Building Sky Observatory (9F)",
     "address": "서울특별시 중구 세종대로 110 서울시청 본관 9층",
+    "address_en": "9F, 110 Sejong-daero, Jung-gu, Seoul",
     "lat": 37.5665,
     "lng": 126.9784,
     "floor": 9,
@@ -1146,8 +1179,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "월~목 07:30~18:00 / 금·토 07:30~22:00 (일요일 휴무)",
+    "hours_en": "Mon-Thu 07:30 - 18:00 / Fri-Sat 07:30 - 22:00 (Closed Sundays)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "신청사 본관 1층 로봇카페 옆 전용 엘리베이터로 직통 이동 가능하며, 통유리 너머로 서울광장, 덕수궁, 숭례문으로 이어지는 서울 도심 스카이라인 파노라마 야경을 감상할 수 있습니다.",
+    "view_en": "Direct express elevator access from 1F. Full panoramic glass windows overlooking Seoul Plaza, Gwanghwamun, and the city skyline towards Sungnyemun Gate. Open late on Fri & Sat.",
     "tags": [
       "cafe",
       "bench",
@@ -1170,20 +1206,24 @@
         "id": 9,
         "author": "야경마니아",
         "date": "2026-09-04",
-        "text": "금요일과 토요일에는 밤 10시까지 야간 개방해서 서울광장 야경을 높은 곳에서 감상하기 최고입니다."
+        "text": "금요일과 토요일에는 밤 10시까지 야간 개방해서 서울광장 야경을 높은 곳에서 감상하기 최고입니다.",
+        "text_en": "Open until 10 PM on Friday and Saturday. Superb high-altitude night view over downtown Seoul."
       },
       {
         "id": 10,
         "author": "도심탐험가",
         "date": "2026-08-25",
-        "text": "전용 엘리베이터를 타면 9층으로 바로 올라갈 수 있어서 접근성이 아주 편리합니다."
+        "text": "전용 엘리베이터를 타면 9층으로 바로 올라갈 수 있어서 접근성이 아주 편리합니다.",
+        "text_en": "Take the dedicated elevator next to the 1F robot cafe to reach the 9F observatory in seconds."
       }
     ]
   },
   {
     "id": 6,
     "name": "국립정동극장 세실 세실마루 (옥상)",
+    "name_en": "National Jeongdong Theater Cecil 'Cecil Maru' Rooftop",
     "address": "서울특별시 중구 세종대로19길 16 국립정동극장 세실 R층",
+    "address_en": "RF, 16 Sejong-daero 19-gil, Jung-gu, Seoul",
     "lat": 37.5671,
     "lng": 126.9763,
     "floor": 3,
@@ -1191,8 +1231,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~일 09:00~21:00 (매주 월요일 휴관)",
+    "hours_en": "Tue-Sun 09:00 - 21:00 (Closed Mondays)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "대한성공회 서울주교좌성당의 로마네스크 양식 주황 기와지붕과 덕수궁 돌담길, 성공회 수녀원 건물이 바로 눈앞에 닿을 듯 펼쳐져 유럽의 고성을 마주한 듯 이국적인 옥상 쉼터입니다.",
+    "view_en": "An enchanting European-style rooftop overlooking the striking orange-tiled Romanesque roof of Seoul Anglican Cathedral and the quiet Deoksugung stone-wall pathway.",
     "tags": [
       "garden",
       "bench",
@@ -1215,29 +1258,36 @@
         "id": 11,
         "author": "정동골목",
         "date": "2026-09-08",
-        "text": "성공회 성당 지붕이 코앞에 보여서 유럽 감성이 물씬 납니다. 밤 9시까지 열려 야경도 훌륭해요."
+        "text": "성공회 성당 지붕이 코앞에 보여서 유럽 감성이 물씬 납니다. 밤 9시까지 열려 야경도 훌륭해요.",
+        "text_en": "The cathedral roof right in front feels like a romantic European village. Open until 9 PM for night views."
       },
       {
         "id": 12,
         "author": "숨은명소",
         "date": "2026-08-30",
-        "text": "엘리베이터 타고 R층 누르면 바로 정원이 연결됩니다. 조용히 힐링하기 좋은 명소예요."
+        "text": "엘리베이터 타고 R층 누르면 바로 정원이 연결됩니다. 조용히 힐링하기 좋은 명소예요.",
+        "text_en": "Press RF in the elevator for immediate access. One of Seoul's finest hidden quiet rooftops."
       }
     ]
   },
   {
     "id": 7,
     "name": "세운상가 9층 세운옥상 (서울옥상)",
+    "name_en": "Sewoon Plaza 9F 'Sewoon Rooftop' (Seoul Rooftop)",
     "address": "서울특별시 종로구 청계천로 159 9층",
+    "address_en": "9F, 159 Cheonggyecheon-ro, Jongno-gu, Seoul",
     "lat": 37.5702,
     "lng": 126.9951,
     "floor": 9,
     "height": 40,
     "heightUnit": "m",
     "access": "open",
-    "hours": "화~일 10:00~20:00 (기상 여건에 따라 탄력 운영)",
+    "hours": "화~일 10:00~20:00 (기상 여건에 따라 변동 가능)",
+    "hours_en": "Tue-Sun 10:00 - 20:00 (Subject to weather)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "북쪽으로는 유네스코 세계문화유산 종묘의 푸른 숲과 북악산, 남쪽으로는 청계천과 남산서울타워, 을지로 노포 지붕들이 360도로 시원하게 펼쳐지는 루프탑 덱입니다.",
+    "view_en": "360-degree panorama encompassing the sacred UNESCO World Heritage forest of Jongmyo Shrine, Mt. Bugaksan, Cheonggyecheon Stream, N Seoul Tower, and the vintage roofs of Euljiro.",
     "tags": [
       "garden",
       "bench",
@@ -1260,20 +1310,24 @@
         "id": 13,
         "author": "을지로러버",
         "date": "2026-09-03",
-        "text": "종묘 숲을 위에서 내려다보는 특별한 경험을 할 수 있어요. 해질 무렵 노을 뷰가 환상적입니다."
+        "text": "종묘 숲을 위에서 내려다보는 특별한 경험을 할 수 있어요. 해질 무렵 노을 뷰가 환상적입니다.",
+        "text_en": "One of the few spots where you can overlook the sacred forest canopy of Jongmyo Shrine. Sunset is magical."
       },
       {
         "id": 14,
         "author": "건축탐방",
         "date": "2026-08-18",
-        "text": "엘리베이터로 9층까지 올라가면 탁 트인 옥상 공간이 펼쳐집니다. 망원경도 갖춰져 있어요."
+        "text": "엘리베이터로 9층까지 올라가면 탁 트인 옥상 공간이 펼쳐집니다. 망원경도 갖춰져 있어요.",
+        "text_en": "Spacious observation deck on the 9th floor with free viewing telescopes looking out over Seoul."
       }
     ]
   },
   {
     "id": 8,
     "name": "도킹서울 & 서울역 옥상정원",
+    "name_en": "Docking Seoul & Seoul Station Rooftop Garden",
     "address": "서울특별시 중구 한강대로 405 (롯데마트 4F~옥상 연결)",
+    "address_en": "405 Hangang-daero, Jung-gu, Seoul (Connects from Lotte Mart 4F)",
     "lat": 37.5557,
     "lng": 126.9705,
     "floor": 5,
@@ -1281,8 +1335,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~일 11:00~20:00 (매주 월요일 휴관 / 옥상정원 상시)",
+    "hours_en": "Tue-Sun 11:00 - 20:00 (Closed Mon / Outdoor roof open daily)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "약 20년간 폐쇄되었던 옛 주차 램프가 예술 빛 공간으로 재탄생하여 옥상정원과 연결됩니다. 구 서울역사 돔 지붕과 인왕산, 숭례문 방향 철도 풍경을 독특한 시선으로 조망합니다.",
+    "view_en": "A 20-year abandoned circular vehicle spiral ramp reborn as an immersive public art galaxy connecting directly onto the green rooftop over Old Seoul Station.",
     "tags": [
       "garden",
       "bench",
@@ -1305,20 +1362,24 @@
         "id": 15,
         "author": "미술관산책",
         "date": "2026-09-07",
-        "text": "나선형 램프를 따라 빛 작품을 감상하며 올라와 옥상정원으로 이어지는 동선이 매우 독창적입니다."
+        "text": "나선형 램프를 따라 빛 작품을 감상하며 올라와 옥상정원으로 이어지는 동선이 매우 독창적입니다.",
+        "text_en": "Ascending the spiral ramp surrounded by neon and sound art up to the open rooftop garden is fantastic."
       },
       {
         "id": 16,
         "author": "기차소리",
         "date": "2026-08-22",
-        "text": "서울역으로 오가는 열차들과 구 역사의 클래식한 돔이 가까이서 보여 색다른 운치가 있어요."
+        "text": "서울역으로 오가는 열차들과 구 역사의 클래식한 돔이 가까이서 보여 색다른 운치가 있어요.",
+        "text_en": "Great viewpoint to watch incoming KTX express trains alongside the historic copper dome of 1925 Seoul Station."
       }
     ]
   },
   {
     "id": 9,
     "name": "세빛섬 가빛섬 4·5층 세빛마루 옥상정원",
+    "name_en": "Some Sevit (Gavit Island) 4-5F 'Sevitmaru' Rooftop Garden",
     "address": "서울특별시 서초구 올림픽대로 2085-14 가빛섬 4·5층",
+    "address_en": "4-5F Gavit Island, 2085-14 Olympic-daero, Seocho-gu, Seoul",
     "lat": 37.5113,
     "lng": 126.9946,
     "floor": 4,
@@ -1326,8 +1387,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "매일 10:00~22:00 (연중무휴)",
+    "hours_en": "Daily 10:00 - 22:00 (Open year-round)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "반포한강공원 한가운데 수상 복합문화시설 가빛섬 옥상에서 감상하는 360도 한강 파노라마 뷰입니다. 반포대교 달빛무지개분수와 남산타워, 한강 노을과 야경을 빈백과 벤치에서 누릴 수 있습니다.",
+    "view_en": "A floating island rooftop terrace in Banpo Hangang Park offering 360-degree river panoramas, comfy beanbags, and direct views of Banpo Bridge's Moonlight Rainbow Fountain.",
     "tags": [
       "garden",
       "bench",
@@ -1351,20 +1415,24 @@
         "id": 17,
         "author": "한강분수러버",
         "date": "2026-09-08",
-        "text": "반포대교 달빛무지개분수가 한눈에 내려다보이는 최고의 루프탑 무료 명소입니다. 빈백에 누워 야경 보면 천국이에요."
+        "text": "반포대교 달빛무지개분수가 한눈에 내려다보이는 최고의 루프탑 무료 명소입니다. 빈백에 누워 야경 보면 천국이에요.",
+        "text_en": "Best free rooftop to view the Banpo Moonlight Rainbow Fountain. Laying on the beanbags with river breeze is heavenly."
       },
       {
         "id": 18,
         "author": "세빛밤산책",
         "date": "2026-08-27",
-        "text": "물 위에 떠 있는 옥상이라 바람도 정말 시원하고 사방이 탁 트여 있어 가슴이 뻥 뚫립니다."
+        "text": "물 위에 떠 있는 옥상이라 바람도 정말 시원하고 사방이 탁 트여 있어 가슴이 뻥 뚫립니다.",
+        "text_en": "Being on a floating building rooftop gives you an extraordinary unobstructed view of the Han River."
       }
     ]
   },
   {
     "id": 10,
     "name": "노들섬 3층 루프탑 테라스 (노들스퀘어)",
+    "name_en": "Nodeul Island 3F Rooftop Terrace (Nodeul Square)",
     "address": "서울특별시 용산구 양녕로 445 노들섬 3층",
+    "address_en": "3F, 445 Yangnyeong-ro, Yongsan-gu, Seoul (Nodeul Island)",
     "lat": 37.5176,
     "lng": 126.9582,
     "floor": 3,
@@ -1372,8 +1440,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "야외 상시 개방 24시간 (편의시설 10:00~21:00)",
+    "hours_en": "Outdoor terrace open 24/7 (Facilities 10:00 - 21:00)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "한강 중앙 섬 위에서 여의도 63빌딩과 마천루 스카이라인, 한강철교를 건너는 지하철과 기차들, 붉게 물드는 노을과 서울의 찬란한 리버뷰 야경을 감상할 수 있는 오픈 루프탑입니다.",
+    "view_en": "Right in the center of the Han River on Nodeul Island, offering world-class sunset views across the Yeouido financial skyline and trains crossing Hangang Railway Bridge.",
     "tags": [
       "garden",
       "bench",
@@ -1397,20 +1468,24 @@
         "id": 19,
         "author": "노을러버",
         "date": "2026-09-09",
-        "text": "여의도 방향으로 해가 지는 일몰 풍경은 서울에서 단연 손꼽힙니다. 루프탑 잔디계단에 앉아있으면 행복해요."
+        "text": "여의도 방향으로 해가 지는 일몰 풍경은 서울에서 단연 손꼽힙니다. 루프탑 잔디계단에 앉아있으면 행복해요.",
+        "text_en": "The sunset sinking behind Yeouido's 63 Building is arguably the best sunset panorama in Seoul."
       },
       {
         "id": 20,
         "author": "한강자전거",
         "date": "2026-08-16",
-        "text": "한강대교 걷다가 노들섬 루프탑으로 올라오면 시원하고 쾌적합니다. 24시간 열려 있어 밤 산책에도 좋아요."
+        "text": "한강대교 걷다가 노들섬 루프탑으로 올라오면 시원하고 쾌적합니다. 24시간 열려 있어 밤 산책에도 좋아요.",
+        "text_en": "Open 24 hours. Walk across Hangang Bridge and head up to this open terrace for night breeze."
       }
     ]
   },
   {
     "id": 11,
     "name": "노량진수산시장 5층 하늘채 옥상정원",
+    "name_en": "Noryangjin Fish Market 5F Sky Park Rooftop Garden",
     "address": "서울특별시 동작구 노들로 674 노량진수산물도매시장 신관 5층",
+    "address_en": "5F New Building, 674 Nodeul-ro, Dongjak-gu, Seoul",
     "lat": 37.5147,
     "lng": 126.9415,
     "floor": 5,
@@ -1418,8 +1493,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "매일 09:00~22:00",
+    "hours_en": "Daily 09:00 - 22:00",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "여의도 63빌딩, 파크원, IFC 마천루 군락이 손에 잡힐 듯 가까이 보이며, 그 아래로 쉴 새 없이 열차가 오가는 노량진역 철도선로와 한강철교가 다이내믹하게 교차하는 사진가들의 성지입니다.",
+    "view_en": "Direct visual front-row seat to the Yeouido skyscrapers (63 Square, Parc.1, IFC) and dozens of passenger and subway trains cutting across Noryangjin Station tracks.",
     "tags": [
       "garden",
       "bench",
@@ -1443,20 +1521,24 @@
         "id": 21,
         "author": "철도마니아",
         "date": "2026-09-06",
-        "text": "수산시장 건물 5층에 이런 옥상정원이 숨어있어요. 기차 지나가는 모습과 여의도 빌딩 뷰가 정말 멋집니다."
+        "text": "수산시장 건물 5층에 이런 옥상정원이 숨어있어요. 기차 지나가는 모습과 여의도 빌딩 뷰가 정말 멋집니다.",
+        "text_en": "A secret green roof on top of the fish market! The passing trains and towering Yeouido view are amazing."
       },
       {
         "id": 22,
         "author": "노량진이웃",
         "date": "2026-08-14",
-        "text": "식사 후 엘리베이터 타고 5층 옥상으로 올라와서 야경 보며 커피 한잔 마시기 좋은 힐링 코스입니다."
+        "text": "식사 후 엘리베이터 타고 5층 옥상으로 올라와서 야경 보며 커피 한잔 마시기 좋은 힐링 코스입니다.",
+        "text_en": "After sashimi dinner downstairs, take the elevator up to 5F for fresh night air and coffee."
       }
     ]
   },
   {
     "id": 12,
     "name": "은평역사한옥박물관 3층 용출정 옥상전망대",
+    "name_en": "Eunpyeong History Hanok Museum (3F Yongchuljeong Pavilion)",
     "address": "서울특별시 은평구 연서로50길 8 3층/옥상",
+    "address_en": "3F, 8 Yeonseo-ro 50-gil, Eunpyeong-gu, Seoul",
     "lat": 37.6385,
     "lng": 126.9387,
     "floor": 3,
@@ -1464,8 +1546,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~일 09:00~18:00 (매주 월요일 휴관)",
+    "hours_en": "Tue-Sun 09:00 - 18:00 (Closed Mondays)",
     "fee": "성인 1,000원 (박물관 관람 포함)",
+    "fee_en": "1,000 KRW (Includes museum ticket)",
     "view": "북한산 의상봉과 용출봉의 웅장한 바위 능선이 병풍처럼 둘러싸고, 그 아래로 은평한옥마을의 단아한 기와지붕 군락과 생태숲이 한 폭의 진경산수화처럼 시원하게 펼쳐집니다.",
+    "view_en": "A traditional wooden pavilion set upon the rooftop, framing a live Korean ink painting of Mt. Bukhansan's rocky peaks above the sea of tiled roofs in Eunpyeong Hanok Village.",
     "tags": [
       "bench",
       "view",
@@ -1486,20 +1571,24 @@
         "id": 23,
         "author": "한옥마니아",
         "date": "2026-08-31",
-        "text": "정자 용출정 마루에 걸터앉아 바라보는 북한산 봉우리와 은평한옥마을 전경은 서울 최고의 절경입니다."
+        "text": "정자 용출정 마루에 걸터앉아 바라보는 북한산 봉우리와 은평한옥마을 전경은 서울 최고의 절경입니다.",
+        "text_en": "Sitting on the wooden floor of Yongchuljeong pavilion looking over the hanok rooftops and mountains is peak Seoul."
       },
       {
         "id": 24,
         "author": "가족나들이",
         "date": "2026-08-09",
-        "text": "입장료 1,000원으로 박물관 관람과 함께 북한산 뷰 명당 옥상을 누릴 수 있어 가성비가 최고입니다."
+        "text": "입장료 1,000원으로 박물관 관람과 함께 북한산 뷰 명당 옥상을 누릴 수 있어 가성비가 최고입니다.",
+        "text_en": "For just 1,000 won admission, you get both a great museum exhibit and an unforgettable mountain view."
       }
     ]
   },
   {
     "id": 13,
     "name": "국립항공박물관 4층 옥상전망대",
+    "name_en": "National Aviation Museum 4F Rooftop Observatory",
     "address": "서울특별시 강서구 하늘길 177 4층",
+    "address_en": "4F, 177 Haneul-gil, Gangseo-gu, Seoul",
     "lat": 37.5606,
     "lng": 126.8016,
     "floor": 4,
@@ -1507,8 +1596,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~일 10:00~18:00 (입장마감 17:30, 매주 월요일 휴관)",
+    "hours_en": "Tue-Sun 10:00 - 18:00 (Last entry 17:30, Closed Mon)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "김포국제공항 활주로 바로 옆 옥상에서 여객기들의 이륙과 착륙, 지상 유도로 이동을 360도로 생생하게 관람할 수 있는 국내 유일의 공항 활주로 특화 옥상전망대입니다.",
+    "view_en": "Korea's only 360-degree airport runway observation roof deck, overlooking commercial airliners taking off, taxiing, and landing directly before your eyes at Gimpo International Airport.",
     "tags": [
       "bench",
       "view",
@@ -1530,20 +1622,24 @@
         "id": 25,
         "author": "비행기덕후",
         "date": "2026-09-05",
-        "text": "비행기 뜨고 내리는 모습이 눈앞에 가득 찹니다. 아이들도 너무 좋아하고 출사지로도 최고예요."
+        "text": "비행기 뜨고 내리는 모습이 눈앞에 가득 찹니다. 아이들도 너무 좋아하고 출사지로도 최고예요.",
+        "text_en": "Planes taking off right in front of you. Great for aviation photographers and families."
       },
       {
         "id": 26,
         "author": "공항스케치",
         "date": "2026-08-17",
-        "text": "박물관 무료 관람 후 4층 옥상으로 올라가 시원한 바람맞으며 비행기를 구경할 수 있어 힐링됩니다."
+        "text": "박물관 무료 관람 후 4층 옥상으로 올라가 시원한 바람맞으며 비행기를 구경할 수 있어 힐링됩니다.",
+        "text_en": "Free admission to the museum and this wide open runway view on the 4th floor is fantastic."
       }
     ]
   },
   {
     "id": 14,
     "name": "신세계백화점 본점 신관 6층 트리니티 가든",
+    "name_en": "Shinsegae Dept Store Main Store (New Wing 6F Trinity Garden)",
     "address": "서울특별시 중구 소공로 63 신관 6층",
+    "address_en": "6F New Wing, 63 Sogong-ro, Jung-gu, Seoul",
     "lat": 37.5607,
     "lng": 126.981,
     "floor": 6,
@@ -1551,8 +1647,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "제프 쿤스, 헨리 무어 등 세계적인 현대 미술 거장들의 조각 컬렉션이 야외 정원에 전시되어 있으며, 남산서울타워와 신세계 본점의 고풍스러운 석조건물이 어우러진 도심 속 고급 조각 정원입니다.",
+    "view_en": "An open sculpture park hosting masterworks by Jeff Koons and Henry Moore against the backdrop of historic stone architecture and N Seoul Tower above Myeongdong.",
     "tags": [
       "garden",
       "bench",
@@ -1576,20 +1675,24 @@
         "id": 27,
         "author": "조각미술관",
         "date": "2026-09-03",
-        "text": "명동 쇼핑 후 6층 옥상으로 나오면 복잡한 도심과 단절된 미술관 정원 같은 평화로움이 느껴집니다."
+        "text": "명동 쇼핑 후 6층 옥상으로 나오면 복잡한 도심과 단절된 미술관 정원 같은 평화로움이 느껴집니다.",
+        "text_en": "Step onto the 6F garden after shopping in bustling Myeongdong and you feel like you are in an art museum courtyard."
       },
       {
         "id": 28,
         "author": "남산뷰",
         "date": "2026-08-19",
-        "text": "남산타워가 정면으로 올려다보이고 세계적인 조각품들과 함께 멋진 사진을 남길 수 있습니다."
+        "text": "남산타워가 정면으로 올려다보이고 세계적인 조각품들과 함께 멋진 사진을 남길 수 있습니다.",
+        "text_en": "Clear view looking up to N Seoul Tower with world-class sculptures right beside you."
       }
     ]
   },
   {
     "id": 15,
     "name": "현대백화점 무역센터점 11층 하늘정원",
+    "name_en": "Hyundai Dept Store Trade Center 11F Sky Garden",
     "address": "서울특별시 강남구 테헤란로 517 11층",
+    "address_en": "11F, 517 Teheran-ro, Gangnam-gu, Seoul",
     "lat": 37.5086,
     "lng": 127.0597,
     "floor": 11,
@@ -1597,8 +1700,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "강남 테헤란로의 초고층 빌딩 숲과 코엑스 일대 전경을 11층 상공에서 조망하는 도심형 힐링 정원입니다. 잔디 화단과 파라솔 테이블, 벤치 및 계절별 테마 전시가 열립니다.",
+    "view_en": "An 11th-floor oasis perched amidst Gangnam's Teheran-ro skyscrapers and COEX complex, featuring garden greenery, parasol cafe tables, and seasonal art installations.",
     "tags": [
       "garden",
       "bench",
@@ -1622,20 +1728,24 @@
         "id": 29,
         "author": "삼성동직장인",
         "date": "2026-09-02",
-        "text": "코엑스가 붐빌 때 11층 하늘정원으로 올라오면 파라솔 아래서 여유롭게 쉴 수 있어 애용합니다."
+        "text": "코엑스가 붐빌 때 11층 하늘정원으로 올라오면 파라솔 아래서 여유롭게 쉴 수 있어 애용합니다.",
+        "text_en": "When COEX is packed, escape up to this 11th floor garden to relax under parasols in peace."
       },
       {
         "id": 30,
         "author": "테헤란뷰",
         "date": "2026-08-12",
-        "text": "강남 한복판에서 녹지를 즐길 수 있는 깔끔하고 쾌적한 옥상 쉼터입니다."
+        "text": "강남 한복판에서 녹지를 즐길 수 있는 깔끔하고 쾌적한 옥상 쉼터입니다.",
+        "text_en": "Very clean and well-kept rooftop in the core of Gangnam."
       }
     ]
   },
   {
     "id": 16,
     "name": "신세계백화점 강남점 11층 S가든 (하늘정원)",
+    "name_en": "Shinsegae Dept Store Gangnam 11F 'S Garden'",
     "address": "서울특별시 서초구 신반포로 176 센트럴시티 11층",
+    "address_en": "11F Central City, 176 Shinbanpo-ro, Seocho-gu, Seoul",
     "lat": 37.5049,
     "lng": 127.0044,
     "floor": 11,
@@ -1643,8 +1753,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "반포와 서초 도심 일대가 시원하게 내려다보이는 공중 옥상정원입니다. 미로형 잔디 화단과 분수대, 빛과 프리즘 조형물, 편안한 벤치가 고속터미널의 번잡함을 잊게 합니다.",
+    "view_en": "A 60m-high elevated green maze park on top of Central City Terminal, with dancing fountains, prism light sculptures, and wide panoramic views of Banpo and Seocho.",
     "tags": [
       "garden",
       "bench",
@@ -1668,20 +1781,24 @@
         "id": 31,
         "author": "반포힐링",
         "date": "2026-09-04",
-        "text": "11층 식당가에서 식사하고 야외 정원으로 나오면 조경이 잘 되어 있어 산책하기 아주 좋아요."
+        "text": "11층 식당가에서 식사하고 야외 정원으로 나오면 조경이 잘 되어 있어 산책하기 아주 좋아요.",
+        "text_en": "After dinner on the 11th floor, stepping into this manicured garden maze feels wonderful."
       },
       {
         "id": 32,
         "author": "터미널대기",
         "date": "2026-08-21",
-        "text": "고속버스 시간 남을 때 올라와서 분수 소리 들으며 바람 쐬기 최적의 장소입니다."
+        "text": "고속버스 시간 남을 때 올라와서 분수 소리 들으며 바람 쐬기 최적의 장소입니다.",
+        "text_en": "If you have time before your bus at Express Bus Terminal, this is the ultimate resting spot."
       }
     ]
   },
   {
     "id": 17,
     "name": "영등포 타임스퀘어 5층 하늘정원",
+    "name_en": "Yeongdeungpo Times Square 5F Sky Garden",
     "address": "서울특별시 영등포구 영중로 15 타임스퀘어 5층",
+    "address_en": "5F, 15 Yeongjung-ro, Yeongdeungpo-gu, Seoul",
     "lat": 37.517,
     "lng": 126.9038,
     "floor": 5,
@@ -1689,8 +1806,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "매일 10:00~22:00",
+    "hours_en": "Daily 10:00 - 22:00",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "타임스퀘어 5층 GATE 18번을 통해 바로 연결되는 대형 개방형 옥상정원입니다. 푸른 잔디밭과 나무 산책로, 조형물과 벤치가 어우러져 영등포 도심 전경을 여유롭게 감상할 수 있습니다.",
+    "view_en": "Directly accessible via Gate 18 on 5F, featuring wide grassy lawns, wooden boardwalks, modern outdoor sculptures, and night illumination until 10 PM.",
     "tags": [
       "garden",
       "bench",
@@ -1714,20 +1834,24 @@
         "id": 33,
         "author": "영등포주민",
         "date": "2026-09-07",
-        "text": "타임스퀘어 5층 게이트 18번으로 나가면 넓은 잔디 하늘정원이 나와요. 쇼핑하다가 야외 공기 쐬기 최고입니다."
+        "text": "타임스퀘어 5층 게이트 18번으로 나가면 넓은 잔디 하늘정원이 나와요. 쇼핑하다가 야외 공기 쐬기 최고입니다.",
+        "text_en": "Exit through Gate 18 on 5F and a huge outdoor lawn awaits. Great fresh air while shopping."
       },
       {
         "id": 34,
         "author": "도심오아시스",
         "date": "2026-08-23",
-        "text": "밤 10시까지 개방되어 저녁에 조명 켜진 정원 산책하기 정말 낭만적입니다."
+        "text": "밤 10시까지 개방되어 저녁에 조명 켜진 정원 산책하기 정말 낭만적입니다.",
+        "text_en": "Open until 10 PM. Strolling along the lit garden paths in the evening is very romantic."
       }
     ]
   },
   {
     "id": 18,
     "name": "AK플라자 홍대 17층 무신사 테라스 파크",
+    "name_en": "AK Plaza Hongdae 17F 'Musinsa Terrace Park'",
     "address": "서울특별시 마포구 양화로 188 AK플라자 홍대 17층",
+    "address_en": "17F, 188 Yanghwa-ro, Mapo-gu, Seoul",
     "lat": 37.5574,
     "lng": 126.9255,
     "floor": 17,
@@ -1735,8 +1859,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "매일 11:00~20:00",
+    "hours_en": "Daily 11:00 - 20:00",
     "fee": "무료 (회원 확인)",
+    "fee_en": "Free (App check)",
     "view": "홍대입구역 전용 엘리베이터로 직통 이동하는 17층 최상층 루프탑입니다. 약 800평 규모의 초대형 야외 옥상 테라스에서 홍대 거리, 신촌, 경의선숲길과 멀리 여의도까지 시원하게 조망합니다.",
+    "view_en": "An enormous 2,600㎡ rooftop terrace on the 17th floor right at Hongik Univ. Station, looking across the dynamic streets of Hongdae, Gyeongui Line Forest, and Yeouido towers.",
     "tags": [
       "bench",
       "view",
@@ -1759,20 +1886,24 @@
         "id": 35,
         "author": "홍대매니아",
         "date": "2026-09-08",
-        "text": "전용 엘리베이터 타고 17층 올라가면 홍대 전체가 발아래 펼쳐지는 광활한 루프탑이 나옵니다. 뷰가 압도적이에요."
+        "text": "전용 엘리베이터 타고 17층 올라가면 홍대 전체가 발아래 펼쳐지는 광활한 루프탑이 나옵니다. 뷰가 압도적이에요.",
+        "text_en": "Express elevator right to 17F. Hongdae unfolds right under your feet on this colossal deck."
       },
       {
         "id": 36,
         "author": "테라스러버",
         "date": "2026-08-26",
-        "text": "카페 라운지와 야외 테라스 파크가 넓고 쾌적해서 홍대에서 가장 좋아하는 뷰 포인트입니다."
+        "text": "카페 라운지와 야외 테라스 파크가 넓고 쾌적해서 홍대에서 가장 좋아하는 뷰 포인트입니다.",
+        "text_en": "Spacious indoor lounge with huge outdoor terrace. Best viewpoint in the entire Hongdae area."
       }
     ]
   },
   {
     "id": 19,
     "name": "하이커 그라운드 5층 청계천 테라스",
+    "name_en": "HiKR Ground (KTO Seoul Center) 5F Cheonggyecheon Terrace",
     "address": "서울특별시 중구 청계천로 40 한국관광공사 서울센터 5층",
+    "address_en": "5F, 40 Cheonggyecheon-ro, Jung-gu, Seoul",
     "lat": 37.5687,
     "lng": 126.9816,
     "floor": 5,
@@ -1780,8 +1911,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~일 10:00~19:00 (매주 월요일 휴관)",
+    "hours_en": "Tue-Sun 10:00 - 19:00 (Closed Mondays)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "청계천 광교사거리 중심에 위치하여 5층 야외 테라스에서 청계천 물길과 양옆 빌딩 숲의 시원한 수변 도심 풍경을 가깝게 조망할 수 있는 복합문화 옥상 라운지입니다.",
+    "view_en": "Overlooking the meandering Cheonggyecheon Stream and Gwanggyo intersection from a chic 5th-floor outdoor terrace with on-site Knotted Cafe.",
     "tags": [
       "bench",
       "view",
@@ -1803,20 +1937,24 @@
         "id": 37,
         "author": "청계천산책",
         "date": "2026-09-05",
-        "text": "5층 하이커 라운지에 노티드 도넛도 있고, 야외 테라스에서 내려다보는 청계천 뷰가 일품입니다."
+        "text": "5층 하이커 라운지에 노티드 도넛도 있고, 야외 테라스에서 내려다보는 청계천 뷰가 일품입니다.",
+        "text_en": "Knotted Donuts on 5F, plus outdoor terrace overlooking Cheonggyecheon stream."
       },
       {
         "id": 38,
         "author": "도심포토존",
         "date": "2026-08-19",
-        "text": "관광안내센터 건물이라 무료로 누구나 들어갈 수 있고 청계천 풍경 사진 찍기 딱 좋은 숨은 명당입니다."
+        "text": "관광안내센터 건물이라 무료로 누구나 들어갈 수 있고 청계천 풍경 사진 찍기 딱 좋은 숨은 명당입니다.",
+        "text_en": "Free public admission into this tourism culture center and a premier stream photo spot."
       }
     ]
   },
   {
     "id": 20,
     "name": "더현대 서울 6층 뷰라운지 & 사운즈 포레스트",
+    "name_en": "The Hyundai Seoul 6F View Lounge & Sounds Forest",
     "address": "서울특별시 영등포구 여의대로 108 6층",
+    "address_en": "6F, 108 Yeoui-daero, Yeongdeungpo-gu, Seoul",
     "lat": 37.5259,
     "lng": 126.9284,
     "floor": 6,
@@ -1824,8 +1962,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "천연 채광이 쏟아지는 유리 천장 아래 축구장 절반 크기의 초대형 실내 숲 '사운즈 포레스트'를 6층 공중 브릿지와 뷰라운지에서 한눈에 내려다보는 여의도 대표 랜드마크입니다.",
+    "view_en": "Looking down into the vast 3,300㎡ indoor forest garden 'Sounds Forest' flooded with natural skylight from the 6F aerial skybridge walkways.",
     "tags": [
       "garden",
       "bench",
@@ -1849,20 +1990,24 @@
         "id": 39,
         "author": "포토스팟",
         "date": "2026-09-06",
-        "text": "6층 브릿지에서 아래 숲과 자연광 천장을 배경으로 사진 찍으면 온실 숲에 들어온 듯 근사합니다."
+        "text": "6층 브릿지에서 아래 숲과 자연광 천장을 배경으로 사진 찍으면 온실 숲에 들어온 듯 근사합니다.",
+        "text_en": "Photos taken from the 6F bridge with the indoor greenery and sunlit glass roof look magical."
       },
       {
         "id": 40,
         "author": "여의도나들이",
         "date": "2026-08-23",
-        "text": "날씨 상관없이 사계절 푸른 정원을 높은 곳에서 즐길 수 있어 서울에서 가장 세련된 힐링 공간입니다."
+        "text": "날씨 상관없이 사계절 푸른 정원을 높은 곳에서 즐길 수 있어 서울에서 가장 세련된 힐링 공간입니다.",
+        "text_en": "Year-round indoor garden accessible regardless of weather, stylish and tranquil."
       }
     ]
   },
   {
     "id": 21,
     "name": "용산 아이파크몰 4층 더가든 야외테라스",
+    "name_en": "Yongsan I'Park Mall 4F 'The Garden' Outdoor Terrace",
     "address": "서울특별시 용산구 한강대로23길 55 테이스트파크 4층",
+    "address_en": "4F Taste Park, 55 Hangang-daero 23-gil, Yongsan-gu, Seoul",
     "lat": 37.5298,
     "lng": 126.9647,
     "floor": 4,
@@ -1870,8 +2015,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "일~목 10:30~20:30 / 금·토 10:30~21:00",
+    "hours_en": "Sun-Thu 10:30 - 20:30 / Fri-Sat 10:30 - 21:00",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "용산역 철도 기지창과 용산 도심 초고층 빌딩 숲이 시원하게 열려 있으며, 넓은 잔디 계단 덱과 휴식 테라스에서 노을과 반짝이는 도심 조명 야경을 여유롭게 만끽할 수 있습니다.",
+    "view_en": "Step onto stepped lawn decks overlooking Yongsan's vast railway depot and gleaming high-rises. Sunset and nighttime city lights are especially charming.",
     "tags": [
       "garden",
       "bench",
@@ -1895,20 +2043,24 @@
         "id": 41,
         "author": "용산마니아",
         "date": "2026-09-01",
-        "text": "4층 야외 가든이 정말 넓고 쾌적해요. 잔디 계단에 걸터앉아 노을 바라보기 좋습니다."
+        "text": "4층 야외 가든이 정말 넓고 쾌적해요. 잔디 계단에 걸터앉아 노을 바라보기 좋습니다.",
+        "text_en": "The 4F garden terrace is expansive and airy. Sitting on the grass steps at sunset is lovely."
       },
       {
         "id": 42,
         "author": "철길야경",
         "date": "2026-08-15",
-        "text": "용산 CGV 영화 보러 올 때마다 들르는 힐링 공간입니다. 도심 야경이 아주 운치 있어요."
+        "text": "용산 CGV 영화 보러 올 때마다 들르는 힐링 공간입니다. 도심 야경이 아주 운치 있어요.",
+        "text_en": "My favorite place to kill time before movies at Yongsan CGV. Night city lights are gorgeous."
       }
     ]
   },
   {
     "id": 22,
     "name": "인사동 쌈지길 4층 하늘정원",
+    "name_en": "Insadong Ssamziegil 4F Sky Garden",
     "address": "서울특별시 종로구 인사동길 44 4층 옥상",
+    "address_en": "4F, 44 Insadong-gil, Jongno-gu, Seoul",
     "lat": 37.5743,
     "lng": 126.9849,
     "floor": 4,
@@ -1916,8 +2068,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "매일 10:30~20:30 (명절 당일 휴무)",
+    "hours_en": "Daily 10:30 - 20:30 (Closed Lunar New Year/Chuseok)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "중정을 둘러싼 나선형 경사로를 따라 공방을 구경하며 오르면 만나는 옥상정원입니다. 인사동 전통 골목의 기와지붕과 한옥 풍경, 연인들의 소원 담장이 아기자기한 매력을 전합니다.",
+    "view_en": "Ascend the spiraling architectural walkway past artisan boutiques up to this rooftop garden overlooking traditional tile roofs and romantic love-tag walls.",
     "tags": [
       "garden",
       "bench",
@@ -1941,20 +2096,24 @@
         "id": 43,
         "author": "인사동데이트",
         "date": "2026-09-02",
-        "text": "나선형 길을 걷다 보면 어느새 옥상에 도착해요. 하늘정원 카페에서 식혜 마시며 쉬기 좋습니다."
+        "text": "나선형 길을 걷다 보면 어느새 옥상에 도착해요. 하늘정원 카페에서 식혜 마시며 쉬기 좋습니다.",
+        "text_en": "Follow the spiraling walkway to the top and enjoy traditional sikhye rice punch at the roof cafe."
       },
       {
         "id": 44,
         "author": "전통기와뷰",
         "date": "2026-08-11",
-        "text": "인사동 골목 기와지붕들이 올망졸망 보여서 한국적인 정취를 옥상에서 제대로 느낄 수 있습니다."
+        "text": "인사동 골목 기와지붕들이 올망졸망 보여서 한국적인 정취를 옥상에서 제대로 느낄 수 있습니다.",
+        "text_en": "Cozy rooftop panorama over traditional hanok tiled roofs in the heart of Insadong."
       }
     ]
   },
   {
     "id": 23,
     "name": "서울공예박물관 교육동 5층 옥상전망대",
+    "name_en": "Seoul Museum of Craft Art (Education Wing 5F Rooftop)",
     "address": "서울특별시 종로구 율곡로3길 4 교육동 5층",
+    "address_en": "5F Education Wing, 4 Yulgok-ro 3-gil, Jongno-gu, Seoul",
     "lat": 37.5768,
     "lng": 126.9839,
     "floor": 5,
@@ -1962,8 +2121,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~일 10:00~18:00 (입장마감 17:30, 매주 월요일 휴관)",
+    "hours_en": "Tue-Sun 10:00 - 18:00 (Last entry 17:30, Closed Mon)",
     "fee": "무료 (예약 불필요)",
+    "fee_en": "Free (No booking needed)",
     "view": "안국동 로터리와 북촌 방향의 전통 한옥 기와 골목들, 인왕산과 북악산의 능선이 병풍처럼 펼쳐지는 조용한 옥상전망대입니다. 옛 풍문여고 건물을 리모델링해 정취가 특별합니다.",
+    "view_en": "Quiet rooftop viewing platform in Anguk-dong looking out over Bukchon Hanok Village tile roofs, Mt. Inwangsan, and Mt. Bugaksan slopes.",
     "tags": [
       "bench",
       "view",
@@ -1985,20 +2147,24 @@
         "id": 45,
         "author": "북촌전망",
         "date": "2026-08-29",
-        "text": "예약 없이도 교육동 5층 엘리베이터 타고 올라가면 바로 옥상전망대를 이용할 수 있어요. 북촌 기와 뷰가 멋집니다."
+        "text": "예약 없이도 교육동 5층 엘리베이터 타고 올라가면 바로 옥상전망대를 이용할 수 있어요. 북촌 기와 뷰가 멋집니다.",
+        "text_en": "No reservation required. Take the elevator to the 5th floor for serene Bukchon hanok roof views."
       },
       {
         "id": 46,
         "author": "공예마실",
         "date": "2026-08-07",
-        "text": "박물관 관람 후 옥상 벤치에서 인왕산과 도심 풍경 보며 사색하기 참 좋은 무료 공간입니다."
+        "text": "박물관 관람 후 옥상 벤치에서 인왕산과 도심 풍경 보며 사색하기 참 좋은 무료 공간입니다.",
+        "text_en": "A peaceful free rooftop retreat to admire Inwangsan and the historic district."
       }
     ]
   },
   {
     "id": 24,
     "name": "청와대 사랑채 2층 테라스 & 카페",
+    "name_en": "Cheongwadae Sarangchae 2F Terrace & Cafe",
     "address": "서울특별시 종로구 효자로13길 45 청와대 사랑채 2층",
+    "address_en": "2F, 45 Hyoja-ro 13-gil, Jongno-gu, Seoul",
     "lat": 37.5833,
     "lng": 126.9734,
     "floor": 2,
@@ -2006,8 +2172,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "수~월 09:00~18:00 (입장마감 17:30, 매주 화요일 휴관)",
+    "hours_en": "Wed-Mon 09:00 - 18:00 (Last entry 17:30, Closed Tue)",
     "fee": "무료 (예약 불필요)",
+    "fee_en": "Free (No reservation needed)",
     "view": "청와대 본관의 청기와 지붕과 영빈관, 북악산의 푸른 산세, 사랑채 앞 분수광장과 인왕산 자락을 시원한 야외 테라스에서 한눈에 조망할 수 있는 도심 테라스 쉼터입니다.",
+    "view_en": "Direct terrace viewing deck gazing upon the blue tiled roof of the Presidential Blue House (Cheongwadae), the Yeongbingwan State Guest House, fountain plaza, and Mt. Bugaksan.",
     "tags": [
       "bench",
       "view",
@@ -2029,20 +2198,24 @@
         "id": 47,
         "author": "청와대나들이",
         "date": "2026-09-04",
-        "text": "예약 없이 무료로 사랑채에 들어와서 2층 테라스 카페로 나가면 청와대 본관과 북악산이 한 폭의 그림입니다."
+        "text": "예약 없이 무료로 사랑채에 들어와서 2층 테라스 카페로 나가면 청와대 본관과 북악산이 한 폭의 그림입니다.",
+        "text_en": "Free entry without prior booking. The 2F terrace cafe frames the Blue House against Bugaksan like a portrait."
       },
       {
         "id": 48,
         "author": "효자동산책",
         "date": "2026-08-20",
-        "text": "테라스에서 내려다보는 분수대 광장과 북악산 풍경이 평화로워요. 음료 마시며 쉬기 좋습니다."
+        "text": "테라스에서 내려다보는 분수대 광장과 북악산 풍경이 평화로워요. 음료 마시며 쉬기 좋습니다.",
+        "text_en": "Overlooking the fountain plaza and green mountain ridge while sipping iced tea is delightful."
       }
     ]
   },
   {
     "id": 25,
     "name": "도봉구 평화문화진지 5동 옥상전망대",
+    "name_en": "Dobong Peace Culture Bunker Building 5 Rooftop Observatory",
     "address": "서울특별시 도봉구 마들로 932 평화문화진지 5동",
+    "address_en": "Bldg 5, 932 Madeul-ro, Dobong-gu, Seoul (Dobongsan Station)",
     "lat": 37.6896,
     "lng": 127.0435,
     "floor": 4,
@@ -2050,8 +2223,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~일 10:00~18:00 (매주 월요일 휴관)",
+    "hours_en": "Tue-Sun 10:00 - 18:00 (Closed Mondays)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "과거 군사 대전차방호시설 상부에 세워진 4층(20m) 높이의 옥상전망대 타워입니다. 도봉산 자운봉, 만장봉, 선인봉의 웅장한 화강암 바위 절벽과 수락산이 파노라마로 압도적인 장관을 선사합니다.",
+    "view_en": "Built atop a decommissioned military anti-tank shelter, this 20m rooftop tower offers stunning front-row panoramas of Mt. Dobongsan's dramatic granite cliffs and Mt. Suraksan.",
     "tags": [
       "bench",
       "view",
@@ -2073,20 +2249,24 @@
         "id": 49,
         "author": "도봉산등산객",
         "date": "2026-09-03",
-        "text": "도봉산역 1-1번 출구 나오면 바로 있어요. 전망대 꼭대기에서 보는 도봉산 암벽 파노라마는 서울 최고입니다."
+        "text": "도봉산역 1-1번 출구 나오면 바로 있어요. 전망대 꼭대기에서 보는 도봉산 암벽 파노라마는 서울 최고입니다.",
+        "text_en": "Directly outside Dobongsan Station Exit 1-1. The sheer granite cliffs of Dobongsan from the tower top are breathtaking."
       },
       {
         "id": 50,
         "author": "역사문화탐방",
         "date": "2026-08-16",
-        "text": "대전차방호벽이 문화공간으로 변신한 의미 있는 장소이자 가슴이 뻥 뚫리는 옥상 전망 명소입니다."
+        "text": "대전차방호벽이 문화공간으로 변신한 의미 있는 장소이자 가슴이 뻥 뚫리는 옥상 전망 명소입니다.",
+        "text_en": "A historic cold-war anti-tank bunker transformed into a cultural hub with an uplifting rooftop panorama."
       }
     ]
   },
   {
     "id": 26,
     "name": "마포 문화비축기지 T6 옥상마루",
+    "name_en": "Mapo Oil Tank Culture Park T6 'Rooftop Maru'",
     "address": "서울특별시 마포구 증산로 87 T6 커뮤니티센터 2~3층",
+    "address_en": "2-3F, T6 Community Center, 87 Jeungsan-ro, Mapo-gu, Seoul",
     "lat": 37.5701,
     "lng": 126.8943,
     "floor": 3,
@@ -2094,8 +2274,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~일 10:00~18:00 (월요일 휴관 / 공원 야외 24시간 상시 개방)",
+    "hours_en": "Tue-Sun 10:00 - 18:00 (Closed Mon / Park grounds open 24/7)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "과거 석유비축기지 시절 해체된 거대 철제 탱크의 철판을 재활용해 세운 독창적인 원형 건물입니다. 옥상마루 중앙에서 둥근 하늘을 올려다보며 매봉산 숲의 피톤치드를 온전히 느낄 수 있습니다.",
+    "view_en": "Crafted from the reclaimed steel plates of dismantled giant oil reserve tanks, this circular open roof deck offers an architectural view of open skies and Maebongsan forest.",
     "tags": [
       "garden",
       "bench",
@@ -2118,20 +2301,24 @@
         "id": 51,
         "author": "생태건축",
         "date": "2026-09-01",
-        "text": "녹슨 원형 철판 너머로 둥근 하늘이 올려다보이는 옥상마루는 서울 어디에서도 볼 수 없는 건축적 감동을 줍니다."
+        "text": "녹슨 원형 철판 너머로 둥근 하늘이 올려다보이는 옥상마루는 서울 어디에서도 볼 수 없는 건축적 감동을 줍니다.",
+        "text_en": "Gazing at the round sky framed by weathered steel plates gives an architectural serenity unmatched in Seoul."
       },
       {
         "id": 52,
         "author": "상암숲길",
         "date": "2026-08-16",
-        "text": "T6 안 에코도서관과 카페에서 책 한 권 들고 옥상마루 벤치에 앉아 쉬어가기 정말 평화롭습니다."
+        "text": "T6 안 에코도서관과 카페에서 책 한 권 들고 옥상마루 벤치에 앉아 쉬어가기 정말 평화롭습니다.",
+        "text_en": "Grab a book from the eco-library inside T6 and relax on the wooden roof benches surrounded by nature."
       }
     ]
   },
   {
     "id": 27,
     "name": "마포구청 12층 하늘정원 (하늘도서관)",
+    "name_en": "Mapo Ward Office 12F Sky Garden (Sky Library)",
     "address": "서울특별시 마포구 월드컵로 212 마포구청 12층",
+    "address_en": "12F, 212 World Cup-ro, Mapo-gu, Seoul",
     "lat": 37.5662,
     "lng": 126.9015,
     "floor": 12,
@@ -2139,8 +2326,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "평일 09:00~18:00 (주말 및 공휴일 휴관)",
+    "hours_en": "Weekdays 09:00 - 18:00 (Closed Weekends & Holidays)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "구청사 12층 최상층에 위치하여 통창과 야외 하늘정원 테라스에서 상암 월드컵경기장, 매봉산 숲, 평화의공원과 멀리 한강 방면까지 탁 트인 시야로 조망할 수 있는 마포의 숨은 전망 쉼터입니다.",
+    "view_en": "Top-floor 12F public rooftop garden and sky library overlooking Seoul World Cup Stadium, Peace Park, and the Han River horizon.",
     "tags": [
       "garden",
       "bench",
@@ -2163,20 +2353,24 @@
         "id": 53,
         "author": "마포주민",
         "date": "2026-08-26",
-        "text": "12층 엘리베이터 타고 올라가면 도서관과 멋진 야외 하늘정원이 나옵니다. 뷰가 정말 시원하고 쾌적해요."
+        "text": "12층 엘리베이터 타고 올라가면 도서관과 멋진 야외 하늘정원이 나옵니다. 뷰가 정말 시원하고 쾌적해요.",
+        "text_en": "Take the 12th floor elevator to find a tranquil library and an open outdoor terrace with huge panoramic views."
       },
       {
         "id": 54,
         "author": "월드컵경기장뷰",
         "date": "2026-08-08",
-        "text": "월드컵경기장과 공원 숲을 무료로 내려다볼 수 있는 최고의 공공 옥상 공간입니다."
+        "text": "월드컵경기장과 공원 숲을 무료로 내려다볼 수 있는 최고의 공공 옥상 공간입니다.",
+        "text_en": "Great free municipal viewpoint overlooking the World Cup stadium and surrounding greenery."
       }
     ]
   },
   {
     "id": 28,
     "name": "한성백제박물관 3층 옥상정원 (하늘공원)",
+    "name_en": "Hanseong Baekje Museum 3F Rooftop Garden (Sky Park)",
     "address": "서울특별시 송파구 위례성대로 71 한성백제박물관 3층/옥상",
+    "address_en": "3F, 71 Wiryeseong-daero, Songpa-gu, Seoul (Olympic Park)",
     "lat": 37.5165,
     "lng": 127.1189,
     "floor": 3,
@@ -2184,8 +2378,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~금 09:00~19:00 / 토·일 09:00~18:00 (매주 월요일 휴관)",
+    "hours_en": "Tue-Fri 09:00 - 19:00 / Weekends 09:00 - 18:00 (Closed Mon)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "몽촌토성의 부드러운 고대 잔디 능선과 올림픽공원의 드넓은 녹지, 저 멀리 솟아오른 롯데월드타워의 현대적 마천루가 과거와 미래의 조화를 이루며 평화롭게 펼쳐집니다.",
+    "view_en": "Gentle sloping roof garden overlooking the rolling earthen fortress walls of Mongchontoseong, Olympic Park lawns, and the towering silhouette of Lotte World Tower.",
     "tags": [
       "garden",
       "bench",
@@ -2208,20 +2405,24 @@
         "id": 55,
         "author": "송파공원러",
         "date": "2026-09-07",
-        "text": "박물관 지붕 경사로를 걸어 올라가면 몽촌토성 잔디 언덕이 파노라마로 보입니다. 피크닉 온 것처럼 평온해요."
+        "text": "박물관 지붕 경사로를 걸어 올라가면 몽촌토성 잔디 언덕이 파노라마로 보입니다. 피크닉 온 것처럼 평온해요.",
+        "text_en": "Walk up the sloping ramp roof to view the ancient fortress mound. Very peaceful like a picnic."
       },
       {
         "id": 56,
         "author": "올림픽공원",
         "date": "2026-08-19",
-        "text": "올림픽공원 산책할 때 가장 좋아하는 쉼터입니다. 롯데타워 전경도 시원하게 잘 보입니다."
+        "text": "올림픽공원 산책할 때 가장 좋아하는 쉼터입니다. 롯데타워 전경도 시원하게 잘 보입니다.",
+        "text_en": "My favorite resting spot in Olympic Park, with an unobstructed view of Lotte World Tower."
       }
     ]
   },
   {
     "id": 29,
     "name": "송파책박물관 2층 야외 옥상정원 (어울림정원)",
+    "name_en": "Songpa Book Museum 2F Outdoor Rooftop Garden",
     "address": "서울특별시 송파구 송파대로37길 77 송파책박물관 2층",
+    "address_en": "2F, 77 Songpa-daero 37-gil, Songpa-gu, Seoul",
     "lat": 37.4984,
     "lng": 127.1082,
     "floor": 2,
@@ -2229,8 +2430,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~일 10:00~18:00 (입장마감 17:30, 매주 월요일 휴관)",
+    "hours_en": "Tue-Sun 10:00 - 18:00 (Last entry 17:30, Closed Mon)",
     "fee": "무료 (예약 불필요)",
+    "fee_en": "Free (No reservation needed)",
     "view": "책장의 레이어를 형상화한 건축미를 품은 2층 야외 옥상정원입니다. 푸른 잔디와 야외 조형 벤치가 조성되어 있어 도서관 관람 후 여유롭게 햇살과 바람을 느끼며 휴식하기 좋습니다.",
+    "view_en": "An open roof garden inspired by layered bookshelves, offering breezy outdoor seating and lawns next to the modern book museum.",
     "tags": [
       "garden",
       "bench",
@@ -2253,20 +2457,24 @@
         "id": 57,
         "author": "책과정원",
         "date": "2026-09-04",
-        "text": "2층으로 나가면 조용한 야외 어울림정원이 나와요. 아이들과 함께 책 읽다 바람 쐬기 정말 좋습니다."
+        "text": "2층으로 나가면 조용한 야외 어울림정원이 나와요. 아이들과 함께 책 읽다 바람 쐬기 정말 좋습니다.",
+        "text_en": "Step onto the 2F terrace for a quiet landscaped garden. Ideal for a reading break with kids."
       },
       {
         "id": 58,
         "author": "송파이웃",
         "date": "2026-08-18",
-        "text": "건축물 디자인도 세련되고 정원 관리가 아주 깔끔하게 되어 있어 기분 전환에 최고예요."
+        "text": "건축물 디자인도 세련되고 정원 관리가 아주 깔끔하게 되어 있어 기분 전환에 최고예요.",
+        "text_en": "Sophisticated architecture and very clean manicured rooftop garden."
       }
     ]
   },
   {
     "id": 30,
     "name": "현대백화점 천호점 13층 하늘정원 (수국광장)",
+    "name_en": "Hyundai Dept Store Cheonho 13F Sky Garden (Hydrangea Square)",
     "address": "서울특별시 강동구 천호대로 1005 현대백화점 천호점 13층",
+    "address_en": "13F, 1005 Cheonho-daero, Gangdong-gu, Seoul",
     "lat": 37.5386,
     "lng": 127.1245,
     "floor": 13,
@@ -2274,8 +2482,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "백화점 13층 최상층에 넓게 펼쳐진 목재 덱 광장과 원형 수국정원입니다. 풍납토성 능선과 한강 줄기, 잠실 롯데월드타워와 강동구 도심 스카이라인이 시원하게 조망됩니다.",
+    "view_en": "13th-floor top roof terrace deck with circular hydrangea gardens, overlooking the Han River, ancient Pungnaptoseong fortress, and Lotte World Tower skyline.",
     "tags": [
       "garden",
       "bench",
@@ -2299,20 +2510,24 @@
         "id": 59,
         "author": "강동주민",
         "date": "2026-09-05",
-        "text": "13층 옥상정원이 생각보다 훨씬 넓고 수국 정원이 예쁩니다. 롯데타워와 한강 쪽 야경이 끝내줘요."
+        "text": "13층 옥상정원이 생각보다 훨씬 넓고 수국 정원이 예쁩니다. 롯데타워와 한강 쪽 야경이 끝내줘요.",
+        "text_en": "The 13th-floor garden is unexpectedly spacious with blooming hydrangeas and a great night view of Lotte Tower."
       },
       {
         "id": 60,
         "author": "천호마실",
         "date": "2026-08-22",
-        "text": "쇼핑하다가 엘리베이터 타고 13층 올라오면 바람도 시원하고 벤치가 많아 편하게 쉴 수 있습니다."
+        "text": "쇼핑하다가 엘리베이터 타고 13층 올라오면 바람도 시원하고 벤치가 많아 편하게 쉴 수 있습니다.",
+        "text_en": "Breezy deck with lots of benches to relax after shopping."
       }
     ]
   },
   {
     "id": 31,
     "name": "성수연방 3층 천상가옥 온실 루프탑",
+    "name_en": "Seongsu Yeonbang 3F 'Cheonsang Gaok' Greenhouse Rooftop",
     "address": "서울특별시 성동구 성수이로14길 14 3층",
+    "address_en": "3F, 14 Seongsuui-ro 14-gil, Seongdong-gu, Seoul",
     "lat": 37.5412,
     "lng": 127.0571,
     "floor": 3,
@@ -2320,8 +2535,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "매일 11:00~22:00",
+    "hours_en": "Daily 11:00 - 22:00",
     "fee": "무료 (카페 이용 자율)",
+    "fee_en": "Free (Cafe optional)",
     "view": "옛 화학공장을 리모델링한 복합문화공간 꼭대기의 온실형 루프탑 테라스입니다. 성수동 붉은 벽돌 팩토리 감성과 녹음 가득한 화분 인테리어, 트렌디한 성수동 골목 정취를 누릴 수 있습니다.",
+    "view_en": "A glasshouse cafe and open roof terrace atop a repurposed chemical factory compound, embracing Seongsu-dong's trendy industrial red-brick charm.",
     "tags": [
       "garden",
       "bench",
@@ -2344,20 +2562,24 @@
         "id": 61,
         "author": "성수핫플러",
         "date": "2026-09-05",
-        "text": "온실 통유리 사이로 쏟아지는 햇살과 초록 식물들이 너무 예쁜 공간입니다. 루프탑 야외 좌석도 매력적이에요."
+        "text": "온실 통유리 사이로 쏟아지는 햇살과 초록 식물들이 너무 예쁜 공간입니다. 루프탑 야외 좌석도 매력적이에요.",
+        "text_en": "Sunlight pouring through the greenhouse glass ceiling filled with greenery. Outdoor roof seats are lovely."
       },
       {
         "id": 62,
         "author": "카페탐방",
         "date": "2026-08-24",
-        "text": "성수동의 인더스트리얼한 분위기를 옥상 테라스에서 즐길 수 있어서 데이트 코스로 제격입니다."
+        "text": "성수동의 인더스트리얼한 분위기를 옥상 테라스에서 즐길 수 있어서 데이트 코스로 제격입니다.",
+        "text_en": "Great date spot blending Seongsu's factory vibe with a botanical rooftop feel."
       }
     ]
   },
   {
     "id": 32,
     "name": "서울창업허브 공덕 본관 10층 하늘정원",
+    "name_en": "Seoul Startup Hub Gongdeok 10F Sky Garden",
     "address": "서울특별시 마포구 백범로31길 21 10층 옥상",
+    "address_en": "10F, 21 Baekbeom-ro 31-gil, Mapo-gu, Seoul",
     "lat": 37.5469,
     "lng": 126.9507,
     "floor": 10,
@@ -2365,8 +2587,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "평일 09:00~20:00 (주말 및 공휴일 휴무)",
+    "hours_en": "Weekdays 09:00 - 20:00 (Closed Weekends & Holidays)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "마포 공덕역 스타트업 허브 꼭대기에 마련된 공공 개방형 하늘정원입니다. 경의선숲길의 초록 선형 녹지와 공덕·여의도 방면의 빌딩숲 스카이라인이 시원하게 조망됩니다.",
+    "view_en": "Public 10th-floor rooftop overlooking the green linear canopy of Gyeongui Line Forest Park and the high-density towers of Gongdeok and Mapo.",
     "tags": [
       "garden",
       "bench",
@@ -2389,20 +2614,24 @@
         "id": 63,
         "author": "공덕직장인",
         "date": "2026-08-30",
-        "text": "외부인도 자유롭게 이용할 수 있는 공공 옥상정원입니다. 나무 덱과 벤치에서 바람 쐬면 머리가 맑아져요."
+        "text": "외부인도 자유롭게 이용할 수 있는 공공 옥상정원입니다. 나무 덱과 벤치에서 바람 쐬면 머리가 맑아져요.",
+        "text_en": "Freely open to the public. The wooden decks and breezes clear your mind instantly."
       },
       {
         "id": 64,
         "author": "경의선숲길러버",
         "date": "2026-08-11",
-        "text": "경의선숲길 라인이 높은 곳에서 한눈에 내려다보여서 산책길 뷰가 아주 좋습니다."
+        "text": "경의선숲길 라인이 높은 곳에서 한눈에 내려다보여서 산책길 뷰가 아주 좋습니다.",
+        "text_en": "Looking down at the entire green corridor of Gyeongui Line Forest from 10 floors up is fantastic."
       }
     ]
   },
   {
     "id": 33,
     "name": "현대백화점 목동점 7층 하늘정원 (글라스하우스)",
+    "name_en": "Hyundai Dept Store Mokdong 7F Sky Garden (Glasshaus)",
     "address": "서울특별시 양천구 목동동로 257 7층",
+    "address_en": "7F, 257 Mokdongdong-ro, Yangcheon-gu, Seoul",
     "lat": 37.5265,
     "lng": 126.8752,
     "floor": 7,
@@ -2410,8 +2639,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "통유리 온실형 카페 글라스하우스와 자연스럽게 연결된 푸른 야외 테라스 옥상정원입니다. 안양천 줄기와 목동 고층 아파트 단지, 푸른 하늘이 편안한 휴식을 선사합니다.",
+    "view_en": "Seamlessly connected to the botanical indoor Glasshaus cafe, this 7th-floor terrace garden looks over Anyangcheon Stream and the Mokdong skyline.",
     "tags": [
       "garden",
       "bench",
@@ -2435,20 +2667,24 @@
         "id": 65,
         "author": "목동맘",
         "date": "2026-09-04",
-        "text": "글라스하우스 온실과 이어진 야외 정원 조경이 정말 훌륭합니다. 아이와 함께 쉬어가기 참 좋아요."
+        "text": "글라스하우스 온실과 이어진 야외 정원 조경이 정말 훌륭합니다. 아이와 함께 쉬어가기 참 좋아요.",
+        "text_en": "The combination of the Glasshaus greenhouse cafe and open-air garden is marvelous."
       },
       {
         "id": 66,
         "author": "휴식시간",
         "date": "2026-08-25",
-        "text": "야외 테라스 소파에 앉아 바람맞으며 쉴 수 있어 쇼핑의 피로가 싹 가십니다."
+        "text": "야외 테라스 소파에 앉아 바람맞으며 쉴 수 있어 쇼핑의 피로가 싹 가십니다.",
+        "text_en": "Outdoor terrace sofas with pleasant breezes melt away shopping fatigue."
       }
     ]
   },
   {
     "id": 34,
     "name": "서울숲 언더스탠드에비뉴 옥상 브릿지 테라스",
+    "name_en": "Seoul Forest Understand Avenue Rooftop Bridge Terrace",
     "address": "서울특별시 성동구 왕십리로 63 3층",
+    "address_en": "3F, 63 Wangsimni-ro, Seongdong-gu, Seoul",
     "lat": 37.5434,
     "lng": 127.0428,
     "floor": 3,
@@ -2456,8 +2692,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "매일 10:00~21:00",
+    "hours_en": "Daily 10:00 - 21:00",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "알록달록한 컨테이너 건축물 위 옥상 브릿지 테라스에서 서울숲 입구의 울창한 메타세쿼이아 숲길과 성수동 디타워, 아크로서울포레스트의 세련된 건축 풍경을 가깝게 조망합니다.",
+    "view_en": "Elevated walkways linking colorful shipping container modules right at the threshold of Seoul Forest, framing metasequoia groves and Seongsu's D-Tower.",
     "tags": [
       "bench",
       "view",
@@ -2480,20 +2719,24 @@
         "id": 67,
         "author": "서울숲산책",
         "date": "2026-09-05",
-        "text": "컨테이너 건물들 옥상을 이어놓은 브릿지 테라스를 걷는 기분이 이색적입니다. 서울숲 가기 전 필수 코스예요."
+        "text": "컨테이너 건물들 옥상을 이어놓은 브릿지 테라스를 걷는 기분이 이색적입니다. 서울숲 가기 전 필수 코스예요.",
+        "text_en": "Walking the bridge terrace connecting container rooftops is quirky and fun before entering Seoul Forest."
       },
       {
         "id": 68,
         "author": "성수감성",
         "date": "2026-08-13",
-        "text": "주변에 푸드트럭과 카페가 많아서 간식 사들고 옥상 벤치에서 먹으면 나들이 온 기분 납니다."
+        "text": "주변에 푸드트럭과 카페가 많아서 간식 사들고 옥상 벤치에서 먹으면 나들이 온 기분 납니다.",
+        "text_en": "Grab snacks from nearby cafes and enjoy them on the roof benches like a picnic."
       }
     ]
   },
   {
     "id": 35,
     "name": "뚝섬 자벌레 3층 전망데크 (한강이야기전시관)",
+    "name_en": "Ttukseom Jabeolle (Hangang Story Exhibition Hall 3F Deck)",
     "address": "서울특별시 광진구 강변북로 2202 뚝섬한강공원 내 3층",
+    "address_en": "3F, 2202 Gangbyeonbuk-ro, Gwangjin-gu, Seoul (Ttukseom Park)",
     "lat": 37.5298,
     "lng": 127.0699,
     "floor": 3,
@@ -2501,8 +2744,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "화~일 10:00~21:00 (매주 월요일 휴관)",
+    "hours_en": "Tue-Sun 10:00 - 21:00 (Closed Mondays)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "자벌레 형상의 미래형 교량 건축물 꼭대기 전망데크에서 청담대교를 건너는 7호선 전철과 올림픽대로의 자동차 불빛, 잠실 롯데월드타워와 드넓은 한강 물결을 입체적으로 조망합니다.",
+    "view_en": "Perched inside and atop the inchworm-shaped bridge structure at Ttukseom, watching Line 7 subway trains cross Cheongdam Bridge alongside glittering Lotte World Tower.",
     "tags": [
       "bench",
       "view",
@@ -2525,20 +2771,24 @@
         "id": 69,
         "author": "한강야경",
         "date": "2026-09-02",
-        "text": "7호선 뚝섬유원지역에서 바로 연결되어 접근성이 최고입니다. 청담대교 불빛과 롯데타워 뷰가 아름다워요."
+        "text": "7호선 뚝섬유원지역에서 바로 연결되어 접근성이 최고입니다. 청담대교 불빛과 롯데타워 뷰가 아름다워요.",
+        "text_en": "Directly connected from Line 7 station. The illuminated Cheongdam Bridge and Lotte Tower are gorgeous."
       },
       {
         "id": 70,
         "author": "강바람솔솔",
         "date": "2026-08-16",
-        "text": "실내 도서 쉼터도 잘 되어 있고 야외 데크에서 강바람 맞으며 힐링하기 최적의 장소입니다."
+        "text": "실내 도서 쉼터도 잘 되어 있고 야외 데크에서 강바람 맞으며 힐링하기 최적의 장소입니다.",
+        "text_en": "Cozy indoor reading lounge and breezy outdoor viewing decks right over the water."
       }
     ]
   },
   {
     "id": 36,
     "name": "롯데백화점 영등포점 11층 샤롯데가든 (옥상정원)",
+    "name_en": "Lotte Dept Store Yeongdeungpo 11F Charlotte Garden",
     "address": "서울특별시 영등포구 경인로 846 롯데백화점 영등포점 11층",
+    "address_en": "11F, 846 Gyeongin-ro, Yeongdeungpo-gu, Seoul",
     "lat": 37.5158,
     "lng": 126.9079,
     "floor": 11,
@@ -2546,8 +2796,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "영등포역사 상부 11층 옥상에 조성된 도심 휴게정원입니다. 영등포역 광장과 오가는 열차 선로, 서남권 도심 빌딩 숲 스카이라인을 높은 곳에서 탁 트인 시야로 내려다볼 수 있습니다.",
+    "view_en": "An 11th-floor observation rooftop over Yeongdeungpo Station, surveying the extensive railway tracks and southwestern Seoul city skyline.",
     "tags": [
       "garden",
       "bench",
@@ -2571,20 +2824,24 @@
         "id": 71,
         "author": "영등포역러버",
         "date": "2026-09-06",
-        "text": "11층 엘리베이터 타고 올라오면 야외 샤롯데가든이 펼쳐집니다. 기차 소리와 도심 뷰가 색달라요."
+        "text": "11층 엘리베이터 타고 올라오면 야외 샤롯데가든이 펼쳐집니다. 기차 소리와 도심 뷰가 색달라요.",
+        "text_en": "Take the elevator to 11F for an open rooftop garden with lively train sounds and city views."
       },
       {
         "id": 72,
         "author": "쉼터찾기",
         "date": "2026-08-20",
-        "text": "영등포역 환승하거나 백화점 쇼핑할 때 잠시 들러 바람 쐬기 좋은 숨은 옥상정원입니다."
+        "text": "영등포역 환승하거나 백화점 쇼핑할 때 잠시 들러 바람 쐬기 좋은 숨은 옥상정원입니다.",
+        "text_en": "A handy hidden rooftop oasis when transferring at Yeongdeungpo Station or shopping."
       }
     ]
   },
   {
     "id": 37,
     "name": "강동구청 본관 5층 싱싱마당 하늘정원",
+    "name_en": "Gangdong Ward Office 5F 'Singsing Madang' Sky Garden",
     "address": "서울특별시 강동구 성내로 25 강동구청 본관 5층",
+    "address_en": "5F, 25 Seongnae-ro, Gangdong-gu, Seoul",
     "lat": 37.5301,
     "lng": 127.1238,
     "floor": 5,
@@ -2592,8 +2849,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "평일 09:00~18:00 (주말 및 공휴일 휴무)",
+    "hours_en": "Weekdays 09:00 - 18:00 (Closed Weekends & Holidays)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "서울시 옥상녹화 우수 건축물로 선정된 친환경 생태 옥상공원입니다. 유기농 텃밭과 야생화 군락, 작은 생태연못과 파고라 쉼터가 어우러져 도심 속 전원일기 같은 편안함을 줍니다.",
+    "view_en": "Award-winning municipal green roof featuring organic urban farming plots, wildflower beds, a small bio-pond, and shaded pergolas.",
     "tags": [
       "garden",
       "bench",
@@ -2615,20 +2875,24 @@
         "id": 73,
         "author": "도시농부",
         "date": "2026-08-27",
-        "text": "구청 옥상에 이렇게 아기자기한 텃밭과 생태정원이 가꿔져 있다니 놀라워요. 꽃과 허브 향기가 가득합니다."
+        "text": "구청 옥상에 이렇게 아기자기한 텃밭과 생태정원이 가꿔져 있다니 놀라워요. 꽃과 허브 향기가 가득합니다.",
+        "text_en": "Amazing to see such a lush herb and vegetable garden on top of a district office. Lovely scents."
       },
       {
         "id": 74,
         "author": "성내동이웃",
         "date": "2026-08-04",
-        "text": "민원 업무 보러 왔다가 잠시 올라가서 쉬기 참 좋습니다. 벤치도 그늘져서 시원해요."
+        "text": "민원 업무 보러 왔다가 잠시 올라가서 쉬기 참 좋습니다. 벤치도 그늘져서 시원해요.",
+        "text_en": "Great quiet shady bench spot to rest after running civic errands."
       }
     ]
   },
   {
     "id": 38,
     "name": "서울도시건축전시관 서울마루 (옥상광장)",
+    "name_en": "Seoul Hall of Urbanism & Architecture 'Seoul Maru' Roof Plaza",
     "address": "서울특별시 중구 세종대로 119 서울도시건축전시관 옥상",
+    "address_en": "119 Sejong-daero, Jung-gu, Seoul (Ground-level roof plaza)",
     "lat": 37.5675,
     "lng": 126.9769,
     "floor": 1,
@@ -2636,8 +2900,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "상시 개방 24시간 (전시관 실내 화~일 10:00~18:00)",
+    "hours_en": "Outdoor Roof Plaza open 24/7 (Exhibition Tue-Sun 10:00 - 18:00)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "옛 국세청 남대문별관 철거 후 시민을 위해 비워진 열린 지상 옥상마루 광장 데크입니다. 대한성공회 서울주교좌성당 본당과 덕수궁 석조전, 서울시청이 막힘없는 시선으로 마주합니다.",
+    "view_en": "An open street-level roof deck created by demolishing a colonial tax annex, opening up stunning architectural sightlines to Seoul Anglican Cathedral and Deoksugung Palace.",
     "tags": [
       "bench",
       "view",
@@ -2660,20 +2927,24 @@
         "id": 75,
         "author": "광화문산책",
         "date": "2026-08-27",
-        "text": "성공회 성당 건물이 가장 웅장하고 예쁘게 보이는 뷰포인트입니다. 벤치에 앉아 쉬기 정말 편해요."
+        "text": "성공회 성당 건물이 가장 웅장하고 예쁘게 보이는 뷰포인트입니다. 벤치에 앉아 쉬기 정말 편해요.",
+        "text_en": "The cathedral stands with majestic beauty from this open deck. Very comfortable benches."
       },
       {
         "id": 76,
         "author": "건축파빌리온",
         "date": "2026-08-05",
-        "text": "계절마다 독창적인 공공 건축 파빌리온 구조물이 설치되어 볼거리와 그늘 쉼터 역할을 톡톡히 합니다."
+        "text": "계절마다 독창적인 공공 건축 파빌리온 구조물이 설치되어 볼거리와 그늘 쉼터 역할을 톡톡히 합니다.",
+        "text_en": "Seasonal architectural pavilions hosted here provide shade, seating, and artistic charm."
       }
     ]
   },
   {
     "id": 39,
     "name": "동대문디자인플라자(DDP) 잔디언덕 옥상공원",
+    "name_en": "Dongdaemun Design Plaza (DDP) Grass Hill Rooftop Park",
     "address": "서울특별시 중구 을지로 281 DDP 배움터 4층 옥상",
+    "address_en": "4F Museum, 281 Eulji-ro, Jung-gu, Seoul",
     "lat": 37.5668,
     "lng": 127.0095,
     "floor": 4,
@@ -2681,8 +2952,11 @@
     "heightUnit": "m",
     "access": "open",
     "hours": "상시 개방 24시간 (연중무휴)",
+    "hours_en": "Open 24/7 (Year-round)",
     "fee": "무료",
+    "fee_en": "Free",
     "view": "자하 하디드가 설계한 은빛 유선형 외장 지붕을 따라 완만하게 이어지는 잔디언덕 옥상공원입니다. 동대문 패션타운의 24시간 네온사인과 고층 쇼핑타워 스카이라인이 초현실적으로 어우러집니다.",
+    "view_en": "Gentle sloping green lawns flowing directly along Zaha Hadid's futuristic aluminum curve roof, surveying the 24-hour illuminated fashion towers of Dongdaemun.",
     "tags": [
       "garden",
       "bench",
@@ -2705,13 +2979,333 @@
         "id": 77,
         "author": "심야러너",
         "date": "2026-09-08",
-        "text": "24시간 열려 있어 심야 산책할 때 최고입니다. 곡선 지붕 위 잔디와 동대문 야경이 멋집니다."
+        "text": "24시간 열려 있어 심야 산책할 때 최고입니다. 곡선 지붕 위 잔디와 동대문 야경이 멋집니다.",
+        "text_en": "Open 24 hours. A dream walk at midnight along the curved green roof surrounded by neon towers."
       },
       {
         "id": 78,
         "author": "DDP탐방",
         "date": "2026-08-20",
-        "text": "배움터 4층에서 바깥 잔디언덕으로 바로 이어지는 동선이 독특하고 피크닉 기분 내기 좋습니다."
+        "text": "배움터 4층에서 바깥 잔디언덕으로 바로 이어지는 동선이 독특하고 피크닉 기분 내기 좋습니다.",
+        "text_en": "Connected directly from the 4th floor museum hallway. Great for a breezy picnic vibe."
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "name": "송파 가든파이브 10층 포시즌파크 옥상정원",
+    "name_en": "Garden5 10F 'Four Seasons Park' Rooftop Garden",
+    "address": "서울특별시 송파구 충민로 66 가든파이브 라이프 10층",
+    "address_en": "10F Garden5 Life, 66 Chungmin-ro, Songpa-gu, Seoul",
+    "lat": 37.4778,
+    "lng": 127.1248,
+    "floor": 10,
+    "height": 45,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "매일 10:00~21:00",
+    "hours_en": "Daily 10:00 - 21:00",
+    "fee": "무료",
+    "fee_en": "Free",
+    "view": "축구장 3개 면적(25,000㎡)에 달하는 국내 최대 규모의 복합 옥상정원입니다. 에코·웰빙·시네마·페스티벌 4개 테마 정원과 스카이링크 보행로를 통해 남한산성 능선과 송파 도심을 파노라마로 조망합니다.",
+    "view_en": "One of Korea's largest rooftop parks spanning 25,000㎡ (3 soccer fields), featuring 4 themed botanical sections and a continuous sky-link walkway with views of Mt. Namhansanseong.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 79,
+        "author": "옥상공원매니아",
+        "date": "2026-09-07",
+        "text": "국내 최대 옥상정원답게 규모가 어마어마합니다. 테마별 정원을 걸으며 남한산성 능선까지 시원하게 볼 수 있어요.",
+        "text_en": "Massive rooftop park spanning several building wings. Walking the themed sections with mountain views is incredible."
+      },
+      {
+        "id": 80,
+        "author": "송파산책러",
+        "date": "2026-08-25",
+        "text": "쇼핑이나 영화 본 뒤 10층으로 올라와서 탁 트인 하늘 보며 산책하기 참 좋습니다.",
+        "text_en": "Great place to catch fresh air and panoramic skies after shopping or catching a film at CGV."
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "name": "현대백화점 압구정본점 6층 하늘정원",
+    "name_en": "Hyundai Dept Store Apgujeong Main Branch 6F Sky Garden",
+    "address": "서울특별시 강남구 압구정로 165 6층 옥상",
+    "address_en": "6F Rooftop, 165 Apgujeong-ro, Gangnam-gu, Seoul",
+    "lat": 37.5273,
+    "lng": 127.0274,
+    "floor": 6,
+    "height": 28,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
+    "fee": "무료",
+    "fee_en": "Free",
+    "view": "압구정 중심가 상공 6층에 조성된 도심 옥상정원입니다. 정성스럽게 가꿔진 녹지 화단과 카페 H 연계 테라스 쉼터에서 압구정 도심과 푸른 하늘을 여유롭게 누릴 수 있습니다.",
+    "view_en": "A refined rooftop garden terrace above the bustling luxury district of Apgujeong, offering lush landscaping, shaded tables, and Cafe H refreshments.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 81,
+        "author": "압구정단골",
+        "date": "2026-09-06",
+        "text": "압구정역과 바로 연결되어 접근성이 좋고, 옥상 테라스 좌석에서 커피 한잔하며 바람 쐬기 최고입니다.",
+        "text_en": "Directly linked to Apgujeong Station. Wonderful breezy cafe terrace on the 6th floor."
+      },
+      {
+        "id": 82,
+        "author": "강남휴식",
+        "date": "2026-08-21",
+        "text": "도심 한복판인데도 조용하고 조경 관리가 잘 되어 있어 백화점 방문 시 꼭 들릅니다.",
+        "text_en": "Quiet, pristine, and beautifully landscaped garden right in central Gangnam."
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "name": "롯데백화점 청량리점 8층 샤롯데가든 (옥상정원)",
+    "name_en": "Lotte Dept Store Cheongnyangni 8F Charlotte Garden",
+    "address": "서울특별시 동대문구 왕산로 214 8층",
+    "address_en": "8F, 214 Wangsan-ro, Dongdaemun-gu, Seoul",
+    "lat": 37.5802,
+    "lng": 127.0468,
+    "floor": 8,
+    "height": 36,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
+    "fee": "무료",
+    "fee_en": "Free",
+    "view": "청량리 민자역사 복합환승센터 상부 8층에 조성된 대형 야외 옥상공원입니다. 넓은 잔디마당과 벤치 쉼터에서 수많은 기차와 전철이 오가는 철도 전경 및 동대문구 도심 스카이라인을 조망합니다.",
+    "view_en": "An expansive 8th-floor rooftop park sitting directly above the major Cheongnyangni railway junction, viewing trains coming and going with wide eastern Seoul skylines.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 83,
+        "author": "청량리기차",
+        "date": "2026-09-04",
+        "text": "청량리역에서 KTX나 ITX 타기 전에 8층 옥상정원에서 바람 쐬기 딱 좋습니다. 잔디가 넓게 펼쳐져 있어요.",
+        "text_en": "Perfect rest area before boarding KTX trains downstairs. Spacious green lawn and open sky."
+      },
+      {
+        "id": 84,
+        "author": "도심전망",
+        "date": "2026-08-17",
+        "text": "아이들과 함께 오기 좋고, 도심 속에서 기차 소리 들으며 쉬어갈 수 있는 소중한 공간입니다.",
+        "text_en": "Kid-friendly open space where you can listen to passing trains in a relaxed setting."
+      }
+    ]
+  },
+  {
+    "id": 43,
+    "name": "롯데백화점 노원점 10층 옥상정원",
+    "name_en": "Lotte Dept Store Nowon 10F Rooftop Garden",
+    "address": "서울특별시 노원구 동일로 1414 10층",
+    "address_en": "10F, 1414 Dongil-ro, Nowon-gu, Seoul",
+    "lat": 37.6552,
+    "lng": 127.0612,
+    "floor": 10,
+    "height": 45,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "hours_en": "Mon-Thu 10:30 - 20:00 / Fri-Sun 10:30 - 20:30",
+    "fee": "무료",
+    "fee_en": "Free",
+    "view": "노원역 번화가 중심 10층 옥상에 조성된 도심 휴게정원입니다. 북쪽 수락산과 동쪽 불암산의 기암괴석 능선이 파노라마로 펼쳐지며, 동북권 도심 빌딩과 4·7호선 전철 노선을 시원하게 내려다봅니다.",
+    "view_en": "10th-floor rooftop overlooking the bustling Nowon district, framed by dramatic mountain ridges of Mt. Suraksan to the north and Mt. Buramsan to the east.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 85,
+        "author": "노원토박이",
+        "date": "2026-09-08",
+        "text": "10층 옥상에서 바라보는 수락산과 불암산 능선 뷰가 일품입니다. 노원역 일대에서 가장 전망 좋은 쉼터예요.",
+        "text_en": "The mountain panoramas of Suraksan and Buramsan from the 10F deck are the best in Nowon."
+      },
+      {
+        "id": 86,
+        "author": "노원마실",
+        "date": "2026-08-28",
+        "text": "백화점 리뉴얼 이후 옥상 조경도 더 쾌적해졌어요. 쇼핑 후 들러 노을 보기 좋습니다.",
+        "text_en": "Refreshed landscaping on the roof. Great spot to watch the sunset over northeastern Seoul."
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "name": "서초구 방배숲환경도서관 옥상정원 '구름, 뜰'",
+    "name_en": "Bangbae Forest Environmental Library Rooftop 'Gureum, Tteul'",
+    "address": "서울특별시 서초구 서리풀1길 112 옥상",
+    "address_en": "RF, 112 Seoripul 1-gil, Seocho-gu, Seoul",
+    "lat": 37.4891,
+    "lng": 126.9961,
+    "floor": 3,
+    "height": 14,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "평일 09:00~22:00 / 주말 09:00~18:00 (매주 금요일 휴관)",
+    "hours_en": "Weekdays 09:00 - 22:00 / Weekends 09:00 - 18:00 (Closed Fridays)",
+    "fee": "무료",
+    "fee_en": "Free",
+    "view": "서리풀근린공원의 울창한 숲속 한가운데 자리한 친환경 특화 도서관 옥상정원입니다. 잔디밭과 쉼표(,) 형태의 유려한 산책로를 걸으며 360도로 에워싼 숲의 피톤치드와 고즈넉한 휴식을 만끽할 수 있습니다.",
+    "view_en": "An eco-library roof terrace nestled inside the lush canopy of Seoripul Park, featuring comma-shaped stroll paths, lawn terraces, and pure forest air.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 87,
+        "author": "숲속책방",
+        "date": "2026-09-07",
+        "text": "도서관 옥상 '구름, 뜰'에 올라오면 사방이 서리풀공원 숲으로 둘러싸여 새소리가 들립니다. 완벽한 힐링 장소예요.",
+        "text_en": "Surrounded entirely by forest and birdsong on the 'Gureum, Tteul' roof deck. Absolute bliss."
+      },
+      {
+        "id": 88,
+        "author": "방배이웃",
+        "date": "2026-08-30",
+        "text": "평일 밤 10시까지 열려 있어 밤에 숲 냄새 맡으며 옥상 산책하기 정말 좋습니다. 인테리어와 건축 모두 최고예요.",
+        "text_en": "Open until 10 PM on weekdays. Strolling the quiet forest rooftop at night is therapeutic."
+      }
+    ]
+  },
+  {
+    "id": 45,
+    "name": "NC백화점 강서점 10층 하늘공원",
+    "name_en": "NC Dept Store Gangseo 10F Sky Park",
+    "address": "서울특별시 강서구 강서로56길 17 10층",
+    "address_en": "10F, 17 Gangseo-ro 56-gil, Gangseo-gu, Seoul",
+    "lat": 37.5601,
+    "lng": 126.8392,
+    "floor": 10,
+    "height": 42,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~21:00 / 금~일 10:30~22:00",
+    "hours_en": "Mon-Thu 10:30 - 21:00 / Fri-Sun 10:30 - 22:00",
+    "fee": "무료",
+    "fee_en": "Free",
+    "view": "발산역 중심가 10층 옥상에 조성된 개방형 하늘공원입니다. 우장산의 푸른 숲과 강서구 일대 도심 스카이라인, 멀리 김포 방향의 트인 하늘을 감상하며 벤치에서 휴식을 취할 수 있습니다.",
+    "view_en": "Open 10th-floor rooftop sky park by Balsan Station, offering wide western Seoul vistas over Ujangsan Mountain, airport horizons, and city skyline.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 89,
+        "author": "발산주민",
+        "date": "2026-09-05",
+        "text": "10층 식당가 들렀다가 하늘공원으로 나오면 바람이 정말 시원합니다. 강서구 일대가 시원하게 보여요.",
+        "text_en": "Enjoy the breezy open sky after dining on the 10th floor. Great vantage point over Gangseo."
+      },
+      {
+        "id": 90,
+        "author": "옥상산책",
+        "date": "2026-08-24",
+        "text": "주말 저녁 10시까지 개방되어 있어 가족들과 함께 들러 야경 보며 쉬기 참 좋습니다.",
+        "text_en": "Open until 10 PM on weekends, perfect for an evening family breeze under the stars."
       }
     ]
   }
@@ -2719,7 +3313,149 @@
 
     let reports = [];
     let currentFilter = 'all';
+    let currentLang = localStorage.getItem('seoul_roof_lang') || 'ko';
     let markers = {};
+
+    const i18n = {
+      ko: {
+        docTitle: '서울 옥상 지도 🏙️',
+        appTitle: '서울 옥상 지도',
+        langBtn: '🌐 English',
+        btnList: '📋 목록',
+        btnReport: '📍 새 옥상 제보',
+        sidebarTitle: '📋 옥상 목록',
+        searchPlaceholder: '건물명, 지역, 뷰 키워드로 검색 (예: 경복궁, 한강)...',
+        chipAll: '전체',
+        chipGarden: '🌿 정원',
+        chipCafe: '☕ 카페',
+        chipNight: '🌙 야간개방',
+        chipFree: '🆓 무료',
+        chipPublic: '🚪 개방형',
+        statCountLabel: '등록된 옥상',
+        statReportsLabel: '제보',
+        emptySearch: '검색 결과가 없습니다.<br>새로운 옥상을 제보해주세요!',
+        basicInfo: '📊 기본 정보',
+        labelFloor: '층수',
+        labelHeight: '높이',
+        labelFee: '입장료',
+        labelAccess: '외부인 출입',
+        hoursTitle: '🕐 개방 시간',
+        featuresTitle: '✨ 특징',
+        viewTitle: '🌆 뷰 설명',
+        commentsTitle: '💬 댓글 · 제보',
+        noComments: '아직 댓글이 없습니다. 첫 댓글을 남겨보세요!',
+        commentAuthorPlh: '닉네임',
+        commentTextPlh: '댓글을 남겨보세요...',
+        commentSubmit: '등록',
+        toastCommentSuccess: '💬 댓글이 등록되었습니다!',
+        toastCommentEmpty: '댓글 내용을 입력해주세요',
+        toastReportSuccess: '📍 제보가 접수되었습니다! 검토 후 등록됩니다.',
+        toastReportRequired: '건물명과 주소는 필수입니다!',
+        accessOpen: ['🚪 누구나 출입 가능', 'access-open'],
+        accessLimited: ['⚠️ 조건부 출입', 'access-limited'],
+        accessTenant: ['🔒 입주자만', 'access-closed'],
+        accessUnknown: ['❓ 미확인', ''],
+        tagGarden: ['🌿 옥상정원', 'tag-green'],
+        tagCafe: ['☕ 카페', 'tag-amber'],
+        tagRestaurant: ['🍽️ 식당', 'tag-amber'],
+        tagSmoking: ['🚬 흡연구역', 'tag-gray'],
+        tagBench: ['🪑 벤치/쉼터', 'tag-blue'],
+        tagView: ['🌆 전망 좋음', 'tag-purple'],
+        tagNight: ['🌙 야간개방', 'tag-blue'],
+        noFeatures: '등록된 특징 정보가 없습니다',
+        noView: '아직 뷰 설명이 등록되지 않았습니다',
+        reportModalTitle: '📍 새 옥상 제보하기',
+        reportModalSubtitle: '아직 등록되지 않은 개방 옥상을 알려주세요!',
+        reportNameLabel: '건물명',
+        reportNamePlh: '예: 서울시청 서소문별관',
+        reportAddrLabel: '주소(지번 또는 도로명)',
+        reportAddrPlh: '예: 서울시 중구 세종대로 110',
+        reportFloorLabel: '옥상 층수',
+        reportFloorPlh: '예: 15층',
+        reportHeightLabel: '건물 높이(m)',
+        reportHeightPlh: '예: 약 60m',
+        reportHoursLabel: '개방 시간',
+        reportHoursPlh: '예: 09:00~18:00, 평일만',
+        reportAccessLabel: '외부인 출입',
+        reportViewLabel: '뷰 설명',
+        reportViewPlh: '어떤 뷰가 보이나요? (예: 남산타워가 정면으로 보이고, 서쪽으로 한강이 살짝 보입니다)',
+        reportMemoLabel: '추가 메모',
+        reportMemoPlh: '기타 알려주고 싶은 내용 (예: 엘리베이터 접근 가능 등)',
+        reportNickLabel: '닉네임',
+        reportNickPlh: '제보자 닉네임 (미입력시 \'익명\')',
+        reportCancel: '취소',
+        reportSubmit: '제보하기'
+      },
+      en: {
+        docTitle: 'Seoul Rooftop Map 🏙️',
+        appTitle: 'Seoul Rooftop Map',
+        langBtn: '🇰🇷 한국어',
+        btnList: '📋 List',
+        btnReport: '📍 Report Spot',
+        sidebarTitle: '📋 Rooftop List',
+        searchPlaceholder: 'Search by name, district, or view keyword (e.g. palace, Han River)...',
+        chipAll: 'All',
+        chipGarden: '🌿 Garden',
+        chipCafe: '☕ Cafe',
+        chipNight: '🌙 Night View',
+        chipFree: '🆓 Free',
+        chipPublic: '🚪 Public',
+        statCountLabel: 'Rooftops',
+        statReportsLabel: 'Reports',
+        emptySearch: 'No rooftops found.<br>Feel free to report a new rooftop spot!',
+        basicInfo: '📊 Basic Info',
+        labelFloor: 'Floor',
+        labelHeight: 'Height',
+        labelFee: 'Admission',
+        labelAccess: 'Public Access',
+        hoursTitle: '🕐 Opening Hours',
+        featuresTitle: '✨ Features',
+        viewTitle: '🌆 View Description',
+        commentsTitle: '💬 Comments & Tips',
+        noComments: 'No comments yet. Be the first to leave one!',
+        commentAuthorPlh: 'Nickname',
+        commentTextPlh: 'Leave a comment or tip...',
+        commentSubmit: 'Post',
+        toastCommentSuccess: '💬 Comment posted successfully!',
+        toastCommentEmpty: 'Please enter a comment',
+        toastReportSuccess: '📍 Thank you! Your report has been submitted.',
+        toastReportRequired: 'Building name and address are required!',
+        accessOpen: ['🚪 Open to Public', 'access-open'],
+        accessLimited: ['⚠️ Conditional Entry', 'access-limited'],
+        accessTenant: ['🔒 Tenants Only', 'access-closed'],
+        accessUnknown: ['❓ Unknown', ''],
+        tagGarden: ['🌿 Rooftop Garden', 'tag-green'],
+        tagCafe: ['☕ Cafe', 'tag-amber'],
+        tagRestaurant: ['🍽️ Restaurant', 'tag-amber'],
+        tagSmoking: ['🚬 Smoking Area', 'tag-gray'],
+        tagBench: ['🪑 Benches/Rest Area', 'tag-blue'],
+        tagView: ['🌆 Scenic View', 'tag-purple'],
+        tagNight: ['🌙 Open at Night', 'tag-blue'],
+        noFeatures: 'No features registered',
+        noView: 'No view description available yet',
+        reportModalTitle: '📍 Report a New Rooftop',
+        reportModalSubtitle: 'Know an open rooftop in Seoul not listed here? Share it!',
+        reportNameLabel: 'Building Name',
+        reportNamePlh: 'e.g. Seoul City Hall Seosomun Annex',
+        reportAddrLabel: 'Address / Approximate Location',
+        reportAddrPlh: 'e.g. 110 Sejong-daero, Jung-gu, Seoul',
+        reportFloorLabel: 'Rooftop Floor',
+        reportFloorPlh: 'e.g. 15F',
+        reportHeightLabel: 'Height (m)',
+        reportHeightPlh: 'e.g. approx. 60m',
+        reportHoursLabel: 'Opening Hours',
+        reportHoursPlh: 'e.g. 09:00 - 18:00, Weekdays',
+        reportAccessLabel: 'Public Access',
+        reportViewLabel: 'View Description',
+        reportViewPlh: 'What can you see? (e.g. Direct view of N Seoul Tower and Han River)',
+        reportMemoLabel: 'Additional Notes',
+        reportMemoPlh: 'Tips (e.g. Direct elevator access, windy, photo spots)',
+        reportNickLabel: 'Your Nickname',
+        reportNickPlh: 'Optional (defaults to Anonymous)',
+        reportCancel: 'Cancel',
+        reportSubmit: 'Submit Report'
+      }
+    };
 
     // ═══════════════════════════════════════════
     // MAP INITIALIZATION
@@ -2781,8 +3517,9 @@
 
         marker.on('click', () => openDetail(rt.id));
 
-        // Simple popup
-        marker.bindTooltip(rt.name, {
+        // Localized popup tooltip
+        const displayName = currentLang === 'en' ? (rt.name_en || rt.name) : rt.name;
+        marker.bindTooltip(displayName, {
           direction: 'top',
           offset: [0, -48],
           className: 'custom-tooltip'
@@ -2799,14 +3536,17 @@
     // ═══════════════════════════════════════════
 
     function getFilteredRooftops() {
-      const query = document.getElementById('searchInput')?.value?.toLowerCase() || '';
+      const query = document.getElementById('searchInput')?.value?.toLowerCase().trim() || '';
 
       return rooftops.filter(rt => {
-        // Search filter (건물명, 주소, 뷰 설명 검색 지원)
+        // Search filter across both Korean and English fields
         const matchesSearch = !query ||
           rt.name.toLowerCase().includes(query) ||
+          (rt.name_en && rt.name_en.toLowerCase().includes(query)) ||
           rt.address.toLowerCase().includes(query) ||
-          (rt.view && rt.view.toLowerCase().includes(query));
+          (rt.address_en && rt.address_en.toLowerCase().includes(query)) ||
+          (rt.view && rt.view.toLowerCase().includes(query)) ||
+          (rt.view_en && rt.view_en.toLowerCase().includes(query));
 
         // Tag filter
         const matchesFilter = currentFilter === 'all' ||
@@ -2849,27 +3589,32 @@
     function renderLocationList() {
       const container = document.getElementById('locationList');
       const filtered = getFilteredRooftops();
+      const t = i18n[currentLang];
 
       if (filtered.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
             <div class="emoji">🔍</div>
-            <p>검색 결과가 없습니다.<br>새로운 옥상을 제보해주세요!</p>
+            <p>${t.emptySearch}</p>
           </div>
         `;
         return;
       }
 
-      container.innerHTML = filtered.map(rt => `
-        <div class="location-item" onclick="openDetail(${rt.id})">
-          <div class="icon">${rt.features.garden ? '🌿' : rt.features.cafe ? '☕' : rt.features.night ? '🌙' : rt.features.view ? '🌆' : '🏢'}</div>
-          <div class="info">
-            <div class="name">${rt.name}</div>
-            <div class="addr">${rt.address}</div>
+      container.innerHTML = filtered.map(rt => {
+        const name = currentLang === 'en' ? (rt.name_en || rt.name) : rt.name;
+        const addr = currentLang === 'en' ? (rt.address_en || rt.address) : rt.address;
+        return `
+          <div class="location-item" onclick="openDetail(${rt.id})">
+            <div class="icon">${rt.features.garden ? '🌿' : rt.features.cafe ? '☕' : rt.features.night ? '🌙' : rt.features.view ? '🌆' : '🏢'}</div>
+            <div class="info">
+              <div class="name">${name}</div>
+              <div class="addr">${addr}</div>
+            </div>
+            <div class="floor">${rt.floor}F</div>
           </div>
-          <div class="floor">${rt.floor}F</div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     // ═══════════════════════════════════════════
@@ -2880,57 +3625,67 @@
       const rt = rooftops.find(r => r.id === id);
       if (!rt) return;
 
+      const t = i18n[currentLang];
       document.getElementById('sidebar').classList.remove('open');
 
-      document.getElementById('detailName').textContent = rt.name;
-      document.getElementById('detailAddress').textContent = rt.address;
+      const name = currentLang === 'en' ? (rt.name_en || rt.name) : rt.name;
+      const addr = currentLang === 'en' ? (rt.address_en || rt.address) : rt.address;
+      const hours = currentLang === 'en' ? (rt.hours_en || rt.hours) : rt.hours;
+      const fee = currentLang === 'en' ? (rt.fee_en || rt.fee) : rt.fee;
+      const view = currentLang === 'en' ? (rt.view_en || rt.view) : rt.view;
+
+      document.getElementById('detailName').textContent = name;
+      document.getElementById('detailAddress').textContent = addr;
 
       const accessLabel = {
-        'open': ['🚪 누구나 출입 가능', 'access-open'],
-        'limited': ['⚠️ 조건부 출입', 'access-limited'],
-        'tenant': ['🔒 입주자만', 'access-closed'],
-      }[rt.access] || ['❓ 미확인', ''];
+        'open': t.accessOpen,
+        'limited': t.accessLimited,
+        'tenant': t.accessTenant,
+      }[rt.access] || t.accessUnknown;
 
       const featureTags = [];
-      if (rt.features.garden)     featureTags.push(['🌿 옥상정원', 'tag-green']);
-      if (rt.features.cafe)       featureTags.push(['☕ 카페', 'tag-amber']);
-      if (rt.features.restaurant) featureTags.push(['🍽️ 식당', 'tag-amber']);
-      if (rt.features.smoking)    featureTags.push(['🚬 흡연구역', 'tag-gray']);
-      if (rt.features.bench)      featureTags.push(['🪑 벤치/쉼터', 'tag-blue']);
-      if (rt.features.view)       featureTags.push(['🌆 전망 좋음', 'tag-purple']);
-      if (rt.features.night)      featureTags.push(['🌙 야간개방', 'tag-blue']);
+      if (rt.features.garden)     featureTags.push(t.tagGarden);
+      if (rt.features.cafe)       featureTags.push(t.tagCafe);
+      if (rt.features.restaurant) featureTags.push(t.tagRestaurant);
+      if (rt.features.smoking)    featureTags.push(t.tagSmoking);
+      if (rt.features.bench)      featureTags.push(t.tagBench);
+      if (rt.features.view)       featureTags.push(t.tagView);
+      if (rt.features.night)      featureTags.push(t.tagNight);
 
       const commentsHtml = rt.comments.length > 0
-        ? rt.comments.map(c => `
-          <div class="comment">
-            <div class="comment-meta">
-              <span class="comment-author">${c.author}</span>
-              <span class="comment-date">${c.date}</span>
+        ? rt.comments.map(c => {
+          const commentText = currentLang === 'en' ? (c.text_en || c.text) : c.text;
+          return `
+            <div class="comment">
+              <div class="comment-meta">
+                <span class="comment-author">${c.author}</span>
+                <span class="comment-date">${c.date}</span>
+              </div>
+              <p class="comment-text">${commentText}</p>
             </div>
-            <p class="comment-text">${c.text}</p>
-          </div>
-        `).join('')
-        : '<div class="no-comments">아직 댓글이 없습니다. 첫 댓글을 남겨보세요!</div>';
+          `;
+        }).join('')
+        : `<div class="no-comments">${t.noComments}</div>`;
 
       document.getElementById('detailBody').innerHTML = `
         <!-- Info Cards -->
         <div class="detail-section">
-          <h3>📊 기본 정보</h3>
+          <h3>${t.basicInfo}</h3>
           <div class="info-grid">
             <div class="info-card">
-              <div class="label">층수</div>
+              <div class="label">${t.labelFloor}</div>
               <div class="value highlight">${rt.floor}F</div>
             </div>
             <div class="info-card">
-              <div class="label">높이</div>
-              <div class="value">${rt.height ? rt.height + 'm' : '미확인'}</div>
+              <div class="label">${t.labelHeight}</div>
+              <div class="value">${rt.height ? rt.height + 'm' : (currentLang === 'en' ? 'N/A' : '미확인')}</div>
             </div>
             <div class="info-card">
-              <div class="label">입장료</div>
-              <div class="value">${rt.fee || '미확인'}</div>
+              <div class="label">${t.labelFee}</div>
+              <div class="value">${fee || (currentLang === 'en' ? 'Free' : '무료')}</div>
             </div>
             <div class="info-card">
-              <div class="label">외부인 출입</div>
+              <div class="label">${t.labelAccess}</div>
               <div class="value" style="font-size:12px;">
                 <span class="access-badge ${accessLabel[1]}">${accessLabel[0]}</span>
               </div>
@@ -2940,42 +3695,42 @@
 
         <!-- Hours -->
         <div class="detail-section">
-          <h3>🕐 개방 시간</h3>
-          <p style="font-size:15px; color: var(--gray-700);">${rt.hours || '미확인'}</p>
+          <h3>${t.hoursTitle}</h3>
+          <p style="font-size:15px; color: var(--gray-700);">${hours || (currentLang === 'en' ? 'Daily' : '상시')}</p>
         </div>
 
         <!-- Tags -->
         <div class="detail-section">
-          <h3>✨ 특징</h3>
+          <h3>${t.featuresTitle}</h3>
           <div class="tags">
             ${featureTags.map(([label, cls]) => `<span class="tag ${cls}">${label}</span>`).join('')}
-            ${featureTags.length === 0 ? '<span style="color:var(--gray-400); font-size:14px;">등록된 특징 정보가 없습니다</span>' : ''}
+            ${featureTags.length === 0 ? `<span style="color:var(--gray-400); font-size:14px;">${t.noFeatures}</span>` : ''}
           </div>
         </div>
 
         <!-- View -->
         <div class="detail-section">
-          <h3>🌆 뷰 설명</h3>
-          ${rt.view
-            ? `<div class="view-description">${rt.view}</div>`
-            : '<p style="color:var(--gray-400); font-size:14px;">아직 뷰 설명이 등록되지 않았습니다</p>'
+          <h3>${t.viewTitle}</h3>
+          ${view
+            ? `<div class="view-description">${view}</div>`
+            : `<p style="color:var(--gray-400); font-size:14px;">${t.noView}</p>`
           }
         </div>
 
         <!-- Comments -->
         <div class="detail-section">
-          <h3>💬 댓글 · 제보 (${rt.comments.length})</h3>
+          <h3>${t.commentsTitle} (${rt.comments.length})</h3>
           <div class="comment-list">
             ${commentsHtml}
           </div>
           <div class="comment-form" style="margin-top:16px;">
             <div class="comment-input-group">
               <div class="comment-input-row">
-                <input type="text" id="commentAuthor" placeholder="닉네임" style="width:120px; flex:none;">
-                <input type="text" id="commentText" placeholder="댓글을 남겨보세요..." style="flex:1;">
+                <input type="text" id="commentAuthor" placeholder="${t.commentAuthorPlh}" style="width:120px; flex:none;">
+                <input type="text" id="commentText" placeholder="${t.commentTextPlh}" style="flex:1;">
               </div>
               <button class="btn btn-primary" onclick="addComment(${rt.id})" style="align-self: flex-end;">
-                등록
+                ${t.commentSubmit}
               </button>
             </div>
           </div>
@@ -2997,11 +3752,13 @@
     // ═══════════════════════════════════════════
 
     function addComment(rooftopId) {
-      const author = document.getElementById('commentAuthor').value.trim() || '익명';
+      const defaultAnon = currentLang === 'en' ? 'Anonymous' : '익명';
+      const author = document.getElementById('commentAuthor').value.trim() || defaultAnon;
       const text = document.getElementById('commentText').value.trim();
+      const t = i18n[currentLang];
 
       if (!text) {
-        showToast('댓글 내용을 입력해주세요');
+        showToast(t.toastCommentEmpty);
         return;
       }
 
@@ -3012,11 +3769,12 @@
         id: Date.now(),
         author: author,
         date: new Date().toISOString().split('T')[0],
-        text: text
+        text: text,
+        text_en: text
       });
 
       openDetail(rooftopId); // Re-render
-      showToast('💬 댓글이 등록되었습니다!');
+      showToast(t.toastCommentSuccess);
     }
 
     // ═══════════════════════════════════════════
@@ -3034,9 +3792,10 @@
     function submitReport() {
       const name = document.getElementById('reportName').value.trim();
       const address = document.getElementById('reportAddress').value.trim();
+      const t = i18n[currentLang];
 
       if (!name || !address) {
-        showToast('건물명과 주소는 필수입니다!');
+        showToast(t.toastReportRequired);
         return;
       }
 
@@ -3056,9 +3815,9 @@
         features: checkedFeatures,
         view: document.getElementById('reportView').value.trim(),
         memo: document.getElementById('reportMemo').value.trim(),
-        nickname: document.getElementById('reportNickname').value.trim() || '익명',
+        nickname: document.getElementById('reportNickname').value.trim() || (currentLang === 'en' ? 'Anonymous' : '익명'),
         submittedAt: new Date().toISOString(),
-        status: 'pending' // pending, approved, rejected
+        status: 'pending'
       };
 
       reports.push(report);
@@ -3071,7 +3830,75 @@
       });
 
       closeReportModal();
-      showToast('📍 제보가 접수되었습니다! 검토 후 등록됩니다.');
+      showToast(t.toastReportSuccess);
+    }
+
+    // ═══════════════════════════════════════════
+    // LANGUAGE SWITCHER
+    // ═══════════════════════════════════════════
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('seoul_roof_lang', lang);
+      const t = i18n[lang];
+
+      document.title = t.docTitle;
+      document.getElementById('appTitle').textContent = t.appTitle;
+      document.getElementById('langToggleBtn').textContent = t.langBtn;
+      document.getElementById('btnList').textContent = t.btnList;
+      document.getElementById('btnReport').textContent = t.btnReport;
+      document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
+      document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+
+      document.getElementById('chipAll').textContent = t.chipAll;
+      document.getElementById('chipGarden').textContent = t.chipGarden;
+      document.getElementById('chipCafe').textContent = t.chipCafe;
+      document.getElementById('chipNight').textContent = t.chipNight;
+      document.getElementById('chipFree').textContent = t.chipFree;
+      document.getElementById('chipPublic').textContent = t.chipPublic;
+
+      document.getElementById('statCountLabel').textContent = t.statCountLabel;
+      document.getElementById('statReportsLabel').textContent = t.statReportsLabel;
+
+      // Modal elements
+      if (document.getElementById('modalTitle')) {
+        document.getElementById('modalTitle').textContent = t.reportModalTitle;
+        document.getElementById('modalSub').textContent = t.reportModalSubtitle;
+        document.getElementById('labelReportName').innerHTML = `${t.reportNameLabel} <span class="required">*</span>`;
+        document.getElementById('reportName').placeholder = t.reportNamePlh;
+        document.getElementById('labelReportAddr').innerHTML = `${t.reportAddrLabel} <span class="required">*</span>`;
+        document.getElementById('reportAddress').placeholder = t.reportAddrPlh;
+        document.getElementById('hintReportAddr').textContent = lang === 'en' ? 'Approximate location or landmark is also fine' : '정확한 주소가 어려우면 대략적인 위치도 괜찮습니다';
+        document.getElementById('labelReportFloor').innerHTML = `${t.reportFloorLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('reportFloor').placeholder = t.reportFloorPlh;
+        document.getElementById('labelReportHeight').innerHTML = `${t.reportHeightLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('reportHeight').placeholder = t.reportHeightPlh;
+        document.getElementById('labelReportHours').innerHTML = `${t.reportHoursLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('reportHours').placeholder = t.reportHoursPlh;
+        document.getElementById('labelReportAccess').innerHTML = `${t.reportAccessLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('labelReportView').innerHTML = `${t.reportViewLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('reportView').placeholder = t.reportViewPlh;
+        document.getElementById('labelReportMemo').innerHTML = `${t.reportMemoLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('reportMemo').placeholder = t.reportMemoPlh;
+        document.getElementById('labelReportNick').innerHTML = `${t.reportNickLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('reportNickname').placeholder = t.reportNickPlh;
+        document.getElementById('btnModalCancel').textContent = t.reportCancel;
+        document.getElementById('btnModalSubmit').textContent = t.reportSubmit;
+      }
+
+      renderMarkers();
+      renderLocationList();
+
+      // If detail panel is open, re-render it
+      const detailName = document.getElementById('detailName').textContent;
+      if (document.getElementById('detailPanel').classList.contains('open') && detailName) {
+        const currentRt = rooftops.find(r => r.name === detailName || r.name_en === detailName);
+        if (currentRt) openDetail(currentRt.id);
+      }
+    }
+
+    function toggleLanguage() {
+      setLanguage(currentLang === 'ko' ? 'en' : 'ko');
     }
 
     // ═══════════════════════════════════════════
@@ -3098,7 +3925,7 @@
     // INIT
     // ═══════════════════════════════════════════
 
-    renderMarkers();
+    setLanguage(currentLang);
     updateStats();
 
     // Close modal on overlay click
