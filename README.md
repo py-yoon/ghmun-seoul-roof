@@ -1,8 +1,8 @@
 # 서울 옥상 지도 (Seoul Rooftop Map) 🏙️
 
-서울 시내에서 시민에게 무료 또는 자유롭게 개방되어 있는 옥상정원, 루프탑 테라스, 전망대 **45곳**을 한눈에 찾아볼 수 있는 인터랙티브 지도 웹 애플리케이션입니다. (한국어 및 영어 다국어 지원, Supabase 실시간 댓글 및 시민 제보 시스템 연동)
+서울 시내에서 시민에게 무료 또는 자유롭게 개방되어 있는 옥상정원, 루프탑 테라스, 전망대 **50곳**을 한눈에 찾아볼 수 있는 인터랙티브 지도 웹 애플리케이션입니다. (한국어 및 영어 다국어 완벽 지원, Supabase 실시간 방문자 팁 및 시민 제보 시스템 연동)
 
-An interactive rooftop map web application showcasing **45 verified publicly accessible rooftop gardens, terraces, and observatories** across Seoul, South Korea. Fully supports both Korean and English with real-time Supabase visitor tips and citizen reporting.
+An interactive rooftop map web application showcasing **50 verified publicly accessible rooftop gardens, terraces, and observatories** across Seoul, South Korea. Fully supports both Korean and English with real-time Supabase visitor tips and citizen reporting.
 
 🔗 **라이브 서비스 (Live App)**: [https://ghmun-seoul-roof.vercel.app](https://ghmun-seoul-roof.vercel.app)
 
@@ -11,26 +11,26 @@ An interactive rooftop map web application showcasing **45 verified publicly acc
 ## 📌 주요 기능 (Features)
 
 - **💬 Supabase 실시간 방문자 팁 및 댓글 (Real-time Comments)**:
-  - 가짜/임의로 지어낸 목업 댓글을 100% 배제하고, **실제 방문 시민들이 남긴 실시간 방문 팁과 댓글**만 연동되어 표시됩니다.
-  - 익명 세션 자동 연동으로 로그인 없이도 자유롭게 닉네임과 방문 팁/후기 작성 가능
-  - XSS 방지 HTML 이스케이프 및 스팸 방지 레이트 리밋 적용
+  - 임의로 지어낸 목업 데이터를 100% 제거하고, 실제 방문한 시민들이 남긴 실시간 방문 팁과 댓글만 Supabase를 통해 비동기 조회/기록됩니다.
+  - 익명 세션 자동 지원으로 로그인 없이도 자유롭게 팁 작성 가능
+  - XSS 방지 HTML 이스케이프 및 스팸 방지 레이트 리밋 내장
 - **📍 Supabase 시민 새 옥상 제보 (Rooftop Reports)**:
-  - 미등록 개방 옥상을 시민들이 직접 제보하는 모달 폼이 Supabase 백엔드 데이터베이스에 실시간 기록됩니다.
-  - 건물명, 주소, 층수, 높이, 개방 시간, 출입 조건, 특징, 조망 설명, 제보자 닉네임 수집
+  - 아직 등록되지 않은 개방 옥상을 시민들이 직접 제보할 수 있는 모달 폼 연동 (Supabase 실시간 저장)
+  - 건물명, 주소, 층수, 높이, 개방 시간, 출입 조건, 시설 특징, 조망 설명, 닉네임 수집
 - **🌐 다국어 완벽 지원 (Bilingual Support)**:
   - 한국어(KO) 및 영어(EN) 원클릭 전환 버튼 (`localStorage` 영구 보존)
-  - 45개 전 옥상 명소 영문 데이터셋 완비 및 UI/필터/모달/토스트 전면 영문화
+  - 50개 전 옥상 명소의 영문 데이터셋(`name_en`, `address_en`, `hours_en`, `fee_en`, `view_en`) 완비
 - **🗺️ Leaflet 인터랙티브 지도 (Interactive Map)**:
   - 서울 전역의 개방 옥상 위치를 맞춤형 핀 아이콘(🌿 정원, ☕ 카페, 🌙 야간개방, 🌆 전망, 🏢 빌딩)으로 시각화
 - **🔍 스마트 검색 및 실시간 필터링 (Smart Search & Filter)**:
-  - 명소 이름, 도로명/구/동 주소, 뷰 키워드(예: `경복궁`, `남산`, `한강`, `노을`, `비행기`, `Namsan`, `Han River` 등) 한영 동시 검색 지원
+  - 명소 이름, 도로명/구/동 주소, 뷰 키워드(예: `경복궁`, `남산`, `한강`, `노을`, `비행기`, `성곽`, `Namsan`, `Han River` 등) 한영 동시 검색 지원
   - 카테고리 필터: `전체 (All)`, `🌿 정원 (Gardens)`, `☕ 카페 (Cafes)`, `🌙 야간개방 (Night Views)`, `🆓 무료 (Free Entry)`, `🚪 개방형 (Open Access)`
 - **📊 상세 정보 패널 (Detail Panel)**:
   - 정확한 층수 및 건물 높이, 개방 시간 및 휴관일, 입장료 및 외부인 출입 허용 여부, 파노라마 조망 및 현장 특징 상세 설명
 
 ---
 
-## 🏛️ 등록된 서울 개방 옥상 명소 45곳 (45 Verified Rooftops)
+## 🏛️ 등록된 서울 개방 옥상 명소 50곳 (50 Verified Rooftops)
 
 1. **서울로7017 하늘정원** (중구) - 서울역 및 도심 빌딩숲 야경 공중정원
 2. **대한민국역사박물관 8층 황토마루 옥상정원** (종로구) - 경복궁·광화문·북악산 파노라마
@@ -77,6 +77,11 @@ An interactive rooftop map web application showcasing **45 verified publicly acc
 43. **롯데백화점 노원점 10층 옥상정원** (노원구) - 불암산·수락산 자락과 노원 도심이 한눈에 보이는 전망 쉼터
 44. **서초구 방배숲환경도서관 옥상정원 '구름, 뜰'** (서초구) - 서리풀공원 숲 품은 친환경 생태 도서관 루프탑
 45. **NC백화점 강서점 10층 하늘공원** (강서구) - 발산역 일대와 우장산 전경 조망 산책로
+46. **노원구 월계도서관 옥상정원 '달빛정원'** (노원구) - 수국과 배롱나무, 파라솔 쉼터가 있는 라이프러리 생태 옥상
+47. **버티공영주차장 옥상공원** (중구) - 103m 순환 산책로와 투시형 전망 엘리베이터 갖춘 24시간 다산동 성곽마을 뷰 쉼터
+48. **현대시티아울렛 동대문점 11층 하늘정원** (중구) - DDP 맞은편 동대문 패션타운 야경 감상 야외 하늘정원
+49. **롯데백화점 미아점 9층 샤롯데가든 (옥상정원)** (강북구) - 북한산 능선과 미아 도심 조망의 백화점 옥상 힐링정원
+50. **신도림 테크노마트 14층 하늘공원 (경복궁 옥상정원)** (구로구) - 경회루 모티브 전통 누각 정자와 연못, 철도 궤적 360도 파노라마 옥상
 
 ---
 
