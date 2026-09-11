@@ -750,6 +750,100 @@
       font-size: 16px;
     }
 
+    /* Paid Observatory Pin Styling */
+    .marker-pin.is-paid {
+      z-index: 100 !important;
+    }
+
+    .marker-pin.is-paid .pin-body {
+      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+      box-shadow: 0 4px 14px rgba(234, 88, 12, 0.6), 0 0 0 2.5px #fbbf24;
+      border: 3px solid #ffffff;
+    }
+
+    .marker-pin .pin-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: #e11d48;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 9999px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+      border: 1.5px solid #ffffff;
+      z-index: 10;
+      white-space: nowrap;
+      letter-spacing: -0.3px;
+      line-height: 1.3;
+    }
+
+    .badge-paid-pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      color: #c2410c;
+      background: #ffedd5;
+      border: 1px solid #fed7aa;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .location-item .icon.icon-paid {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+    }
+
+    .paid-notice-card {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .paid-notice-card .paid-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .paid-notice-card strong {
+      display: block;
+      font-size: 13px;
+      color: #9a3412;
+      margin-bottom: 2px;
+    }
+
+    .paid-notice-card p {
+      font-size: 13px;
+      color: #c2410c;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .custom-tooltip {
+      background: rgba(17, 24, 39, 0.92);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 9px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.25);
+    }
+
+    .custom-tooltip.tooltip-paid {
+      background: #7c2d12;
+      color: #ffedd5;
+      border: 1px solid #ea580c;
+    }
+
     /* ── Empty State ── */
     .empty-state {
       text-align: center;
@@ -3242,6 +3336,8 @@
         tagView: ['🌆 전망 좋음', 'tag-purple'],
         tagNight: ['🌙 야간개방', 'tag-blue'],
         tagPaid: ['🔭 유료 전망대', 'tag-amber'],
+        paidNoticeTitle: '유료 전망대 / 이용 시설',
+        paidNoticeDesc: '입장권 발권 또는 식음료 주문이 필요한 명소입니다.',
         noFeatures: '등록된 특징 정보가 없습니다',
         noView: '아직 뷰 설명이 등록되지 않았습니다',
         reportModalTitle: '📍 새 옥상 제보하기',
@@ -3315,6 +3411,8 @@
         tagView: ['🌆 Scenic View', 'tag-purple'],
         tagNight: ['🌙 Open at Night', 'tag-blue'],
         tagPaid: ['🔭 Paid Observatory', 'tag-amber'],
+        paidNoticeTitle: 'Paid Observatory / Admission Required',
+        paidNoticeDesc: 'Ticket purchase or food/beverage order required for entry.',
         noFeatures: 'No features registered',
         noView: 'No view description available yet',
         reportModalTitle: '📍 Report a New Rooftop',
@@ -3466,24 +3564,31 @@
     // ═══════════════════════════════════════════
 
     function createMarkerIcon(rooftop) {
-      const icon = (rooftop.tags && rooftop.tags.includes('paid')) ? '🔭' :
-                   rooftop.features.garden ? '🌿' :
-                   rooftop.features.cafe ? '☕' :
-                   rooftop.features.night ? '🌙' :
-                   rooftop.features.view ? '🌆' : '🏢';
+      const isPaid = rooftop.tags && rooftop.tags.includes('paid');
+      const icon = isPaid
+        ? (rooftop.name.includes('타워') ? '🗼' : rooftop.name.includes('서울달') ? '🎈' : '🔭')
+        : rooftop.features.garden ? '🌿' :
+          rooftop.features.cafe ? '☕' :
+          rooftop.features.night ? '🌙' :
+          rooftop.features.view ? '🌆' : '🏢';
+
+      const badgeText = isPaid ? (currentLang === 'en' ? 'PAID' : '유료') : '';
+      const badgeHtml = isPaid ? `<span class="pin-badge">${badgeText}</span>` : '';
+      const paidClass = isPaid ? 'is-paid' : '';
 
       return L.divIcon({
         className: 'custom-marker',
         html: `
-          <div class="marker-pin">
+          <div class="marker-pin ${paidClass}">
+            ${badgeHtml}
             <div class="pin-body">
               <span class="pin-icon">${icon}</span>
             </div>
           </div>
         `,
-        iconSize: [36, 44],
-        iconAnchor: [18, 44],
-        popupAnchor: [0, -44]
+        iconSize: [38, 46],
+        iconAnchor: [19, 46],
+        popupAnchor: [0, -46]
       });
     }
 
@@ -3506,11 +3611,13 @@
         marker.on('click', () => openDetail(rt.id));
 
         // Localized popup tooltip
+        const isPaid = rt.tags && rt.tags.includes('paid');
         const displayName = currentLang === 'en' ? (rt.name_en || rt.name) : rt.name;
-        marker.bindTooltip(displayName, {
+        const prefix = isPaid ? (currentLang === 'en' ? '[PAID] ' : '[유료] ') : '';
+        marker.bindTooltip(prefix + displayName, {
           direction: 'top',
           offset: [0, -48],
-          className: 'custom-tooltip'
+          className: isPaid ? 'custom-tooltip tooltip-paid' : 'custom-tooltip'
         });
 
         markers[rt.id] = marker;
@@ -3593,14 +3700,23 @@
       container.innerHTML = filtered.map(rt => {
         const name = currentLang === 'en' ? (rt.name_en || rt.name) : rt.name;
         const addr = currentLang === 'en' ? (rt.address_en || rt.address) : rt.address;
+        const isPaid = rt.tags && rt.tags.includes('paid');
+        const icon = isPaid
+          ? (rt.name.includes('타워') ? '🗼' : rt.name.includes('서울달') ? '🎈' : '🔭')
+          : rt.features.garden ? '🌿' :
+            rt.features.cafe ? '☕' :
+            rt.features.night ? '🌙' :
+            rt.features.view ? '🌆' : '🏢';
+        const badgeHtml = isPaid ? `<span class="badge-paid-pill">${currentLang === 'en' ? 'PAID' : '유료'}</span>` : '';
+        const floorText = rt.floor > 0 ? `${rt.floor}F` : (rt.height ? `${rt.height}m` : '');
         return `
           <div class="location-item" onclick="openDetail(${rt.id})">
-            <div class="icon">${(rt.tags && rt.tags.includes('paid')) ? '🔭' : rt.features.garden ? '🌿' : rt.features.cafe ? '☕' : rt.features.night ? '🌙' : rt.features.view ? '🌆' : '🏢'}</div>
+            <div class="icon ${isPaid ? 'icon-paid' : ''}">${icon}</div>
             <div class="info">
-              <div class="name">${name}</div>
+              <div class="name">${name} ${badgeHtml}</div>
               <div class="addr">${addr}</div>
             </div>
-            <div class="floor">${rt.floor}F</div>
+            <div class="floor">${floorText}</div>
           </div>
         `;
       }).join('');
@@ -3644,7 +3760,19 @@
 
       const commentsHtml = renderCommentsHtml(rt.comments);
 
+      const isPaid = rt.tags && rt.tags.includes('paid');
+      const paidNoticeHtml = isPaid ? `
+        <div class="paid-notice-card">
+          <span class="paid-icon">💰</span>
+          <div>
+            <strong>${t.paidNoticeTitle}</strong>
+            <p>${fee || t.paidNoticeDesc}</p>
+          </div>
+        </div>
+      ` : '';
+
       document.getElementById('detailBody').innerHTML = `
+        ${paidNoticeHtml}
         <!-- Info Cards -->
         <div class="detail-section">
           <h3>${t.basicInfo}</h3>
