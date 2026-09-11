@@ -1,8 +1,8 @@
-# 서울 옥상 지도 (Seoul Rooftop Map) 🏙️
+# 서울 옥상 & 전망대 지도 (Seoul Rooftop & Observatory Map) 🏙️🔭
 
-서울 시내에서 시민에게 무료 또는 자유롭게 개방되어 있는 옥상정원, 루프탑 테라스, 전망대 **50곳**을 한눈에 찾아볼 수 있는 인터랙티브 지도 웹 애플리케이션입니다. (한국어 및 영어 다국어 완벽 지원, Supabase 실시간 방문자 팁 및 시민 제보 시스템 연동)
+서울 시내에서 시민에게 무료로 개방된 옥상정원·테라스 **50곳**과 서울을 대표하는 랜드마크 유료 전망대·루프탑 라운지 **10곳** 등 총 **60곳**의 조망 명소를 한눈에 찾아볼 수 있는 인터랙티브 지도 웹 애플리케이션입니다. (한국어 및 영어 다국어 완벽 지원, Supabase 실시간 방문자 팁 및 시민 제보 시스템 연동)
 
-An interactive rooftop map web application showcasing **50 verified publicly accessible rooftop gardens, terraces, and observatories** across Seoul, South Korea. Fully supports both Korean and English with real-time Supabase visitor tips and citizen reporting.
+An interactive rooftop & observatory map showcasing **60 verified locations** across Seoul: 50 publicly accessible free rooftop gardens and 10 iconic paid observatories & sky lounges. Fully supports both Korean and English with real-time Supabase visitor tips and citizen reporting.
 
 🔗 **라이브 서비스 (Live App)**: [https://ghmun-seoul-roof.vercel.app](https://ghmun-seoul-roof.vercel.app)
 
@@ -10,28 +10,26 @@ An interactive rooftop map web application showcasing **50 verified publicly acc
 
 ## 📌 주요 기능 (Features)
 
+- **🔭 유료 전망대 & 무료 옥상 분리 필터링 (Free & Paid Filter)**:
+  - `전체 (All)`, `🌿 정원 (Gardens)`, `☕ 카페 (Cafes)`, `🌙 야간개방 (Night Views)`, `🆓 무료 (Free)`, `💰 유료 전망대 (Paid Observatories)`, `🚪 개방형 (Open Access)` 원클릭 필터 지원
+  - 롯데월드타워 서울스카이, N서울타워, 서울달, 63빌딩 등 유료 전망대는 맞춤형 `🔭` 핀 마커 및 티켓 요금 정보 제공
 - **💬 Supabase 실시간 방문자 팁 및 댓글 (Real-time Comments)**:
-  - 임의로 지어낸 목업 데이터를 100% 제거하고, 실제 방문한 시민들이 남긴 실시간 방문 팁과 댓글만 Supabase를 통해 비동기 조회/기록됩니다.
+  - 가짜 목업 데이터를 100% 제거하고, 실제 방문한 시민들이 남긴 실시간 방문 팁과 댓글만 Supabase를 통해 비동기 조회/기록
   - 익명 세션 자동 지원으로 로그인 없이도 자유롭게 팁 작성 가능
   - XSS 방지 HTML 이스케이프 및 스팸 방지 레이트 리밋 내장
 - **📍 Supabase 시민 새 옥상 제보 (Rooftop Reports)**:
   - 아직 등록되지 않은 개방 옥상을 시민들이 직접 제보할 수 있는 모달 폼 연동 (Supabase 실시간 저장)
-  - 건물명, 주소, 층수, 높이, 개방 시간, 출입 조건, 시설 특징, 조망 설명, 닉네임 수집
 - **🌐 다국어 완벽 지원 (Bilingual Support)**:
   - 한국어(KO) 및 영어(EN) 원클릭 전환 버튼 (`localStorage` 영구 보존)
-  - 50개 전 옥상 명소의 영문 데이터셋(`name_en`, `address_en`, `hours_en`, `fee_en`, `view_en`) 완비
+  - 60개 전 명소의 영문 데이터셋(`name_en`, `address_en`, `hours_en`, `fee_en`, `view_en`) 완비
 - **🗺️ Leaflet 인터랙티브 지도 (Interactive Map)**:
-  - 서울 전역의 개방 옥상 위치를 맞춤형 핀 아이콘(🌿 정원, ☕ 카페, 🌙 야간개방, 🌆 전망, 🏢 빌딩)으로 시각화
-- **🔍 스마트 검색 및 실시간 필터링 (Smart Search & Filter)**:
-  - 명소 이름, 도로명/구/동 주소, 뷰 키워드(예: `경복궁`, `남산`, `한강`, `노을`, `비행기`, `성곽`, `Namsan`, `Han River` 등) 한영 동시 검색 지원
-  - 카테고리 필터: `전체 (All)`, `🌿 정원 (Gardens)`, `☕ 카페 (Cafes)`, `🌙 야간개방 (Night Views)`, `🆓 무료 (Free Entry)`, `🚪 개방형 (Open Access)`
-- **📊 상세 정보 패널 (Detail Panel)**:
-  - 정확한 층수 및 건물 높이, 개방 시간 및 휴관일, 입장료 및 외부인 출입 허용 여부, 파노라마 조망 및 현장 특징 상세 설명
+  - 서울 전역의 개방 옥상 위치를 맞춤형 핀 아이콘(🌿 정원, ☕ 카페, 🌙 야간개방, 🔭 유료전망대, 🌆 전망, 🏢 빌딩)으로 시각화
 
 ---
 
-## 🏛️ 등록된 서울 개방 옥상 명소 50곳 (50 Verified Rooftops)
+## 🏛️ 등록된 서울 옥상 & 전망대 명소 60곳 (60 Locations)
 
+### 🌿 무료 개방 옥상 & 정원 (50곳)
 1. **서울로7017 하늘정원** (중구) - 서울역 및 도심 빌딩숲 야경 공중정원
 2. **대한민국역사박물관 8층 황토마루 옥상정원** (종로구) - 경복궁·광화문·북악산 파노라마
 3. **정동전망대 (서소문청사 1동 13층)** (중구) - 덕수궁 전경 및 정동길 클래식 뷰
@@ -82,6 +80,18 @@ An interactive rooftop map web application showcasing **50 verified publicly acc
 48. **현대시티아울렛 동대문점 11층 하늘정원** (중구) - DDP 맞은편 동대문 패션타운 야경 감상 야외 하늘정원
 49. **롯데백화점 미아점 9층 샤롯데가든 (옥상정원)** (강북구) - 북한산 능선과 미아 도심 조망의 백화점 옥상 힐링정원
 50. **신도림 테크노마트 14층 하늘공원 (경복궁 옥상정원)** (구로구) - 경회루 모티브 전통 누각 정자와 연못, 철도 궤적 360도 파노라마 옥상
+
+### 🔭 유료 전망대 & 스카이 루프탑 라운지 (10곳)
+51. **롯데월드타워 서울스카이 (120층 야외 스카이테라스 & 전망대)** (송파구) - 500m 고도에서 서울 전역과 서해까지 조망하는 국내 최고층 파노라마 전망대
+52. **N서울타워 전망대** (용산구) - 남산 정상 해발 480m에서 서울 4대문과 고궁, 한강을 360도로 굽어보는 서울의 영원한 상징 타워
+53. **서울달 (SEOULDAL 여의도 130m 공중 전망대)** (영등포구) - 여의도공원 상공 130m로 수직 비행하는 계류식 가스기구 야외 공중 전망대
+54. **63빌딩 60층 '63 스카이 피크닉' 전망대** (영등포구) - 한강과 원효대교, 노들섬 일몰이 한눈에 펼쳐지는 여의도의 클래식 골든타워 전망대
+55. **DDP 루프탑 투어 (지붕 워크)** (중구) - 자하 하디드의 은빛 비정형 곡면 알루미늄 지붕 652m를 걷는 익스트림 도심 루프탑 투어
+56. **L7 명동 21층 루프탑 플로팅** (중구) - 남산서울타워를 정면으로 마주하는 야외 테라스 풋스파 & 루프탑 바
+57. **AC 호텔 바이 메리어트 서울 강남 21층 루프탑 클라우드 (KLOUD)** (강남구) - 테헤란로 빌딩숲과 마천루 파노라마 야경을 감상하는 강남 대표 스카이라운지
+58. **소피텔 앰배서더 서울 32층 라티튜드32** (송파구) - 잠실 석촌호수와 롯데월드타워를 야외 테라스에서 감상하는 프렌치 럭셔리 루프탑
+59. **몬드리안 서울 이태원 RF 프리빌리지 루프탑 바** (용산구) - 감각적인 야외 글라스 돔과 테라스에서 남산타워와 용산 야경을 즐기는 이국적 루프탑
+60. **호텔 카푸치노 17층 루프탑 바** (강남구) - 논현동 언주역 사거리 상공 야외 테라스에서 강남 빌딩숲 야경을 조망하는 루프탑 바
 
 ---
 
