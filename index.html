@@ -1,0 +1,3119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서울 옥상 지도 🏙️</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .header-logo .emoji { font-size: 24px; }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: var(--shadow); }
+
+    .btn-secondary {
+      background: white;
+      color: var(--gray-700);
+      border: 1px solid var(--gray-300);
+    }
+    .btn-secondary:hover { background: var(--gray-50); border-color: var(--gray-400); }
+
+    .btn-accent {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-accent:hover { background: #d97706; }
+
+    .btn-icon {
+      width: 36px; height: 36px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    /* ── Map ── */
+    #map {
+      position: fixed;
+      top: 60px;
+      left: 0; right: 0; bottom: 0;
+      z-index: 1;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 400px;
+      bottom: 0;
+      background: white;
+      z-index: 500;
+      box-shadow: var(--shadow-xl);
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar.open { transform: translateX(0); }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .sidebar-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .sidebar-close {
+      width: 32px; height: 32px;
+      border: none;
+      background: var(--gray-100);
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-500);
+      transition: all 0.2s;
+    }
+    .sidebar-close:hover { background: var(--gray-200); color: var(--gray-800); }
+
+    .sidebar-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    /* ── Detail Panel (right side) ── */
+    .detail-panel {
+      position: fixed;
+      top: 60px;
+      right: 0;
+      width: 420px;
+      bottom: 0;
+      background: white;
+      z-index: 500;
+      box-shadow: var(--shadow-xl);
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .detail-panel.open { transform: translateX(0); }
+
+    .detail-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--gray-200);
+      flex-shrink: 0;
+    }
+
+    .detail-header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .detail-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .detail-header .address {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    .detail-body {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .detail-section {
+      padding: 20px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .detail-section:last-child { border-bottom: none; }
+
+    .detail-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    /* ── Info Grid ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .info-card {
+      background: var(--gray-50);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .info-card .label {
+      font-size: 11px;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .info-card .value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+
+    .info-card .value.highlight {
+      color: var(--primary);
+    }
+
+    /* ── Tags ── */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .tag-blue { background: #dbeafe; color: #1e40af; }
+    .tag-green { background: #d1fae5; color: #065f46; }
+    .tag-amber { background: #fef3c7; color: #92400e; }
+    .tag-red { background: #fee2e2; color: #991b1b; }
+    .tag-purple { background: #ede9fe; color: #5b21b6; }
+    .tag-gray { background: var(--gray-100); color: var(--gray-600); }
+
+    /* ── View Description ── */
+    .view-description {
+      background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--gray-700);
+      border-left: 3px solid var(--primary);
+    }
+
+    /* ── Comments ── */
+    .comment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .comment {
+      background: var(--gray-50);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+    }
+
+    .comment-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .comment-author {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+
+    .comment-date {
+      font-size: 11px;
+      color: var(--gray-400);
+    }
+
+    .comment-text {
+      font-size: 14px;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    .comment-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .comment-form input,
+    .comment-form textarea {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      resize: none;
+      transition: border-color 0.2s;
+    }
+
+    .comment-form input:focus,
+    .comment-form textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    .comment-input-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .comment-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .comment-input-row input {
+      width: 120px;
+      flex: none;
+    }
+
+    .no-comments {
+      text-align: center;
+      padding: 20px;
+      color: var(--gray-400);
+      font-size: 14px;
+    }
+
+    /* ── Report Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 560px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+      transform: translateY(20px);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      padding: 24px 24px 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .modal-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .modal-header p {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+    }
+
+    .form-group label .required {
+      color: var(--danger);
+    }
+
+    .form-group label .optional {
+      font-weight: 400;
+      color: var(--gray-400);
+      font-size: 12px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-group .hint {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 4px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .checkbox-group label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 400;
+      cursor: pointer;
+      padding: 6px 12px;
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      transition: all 0.2s;
+    }
+
+    .checkbox-group label:has(input:checked) {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      display: none;
+    }
+
+    .modal-footer {
+      padding: 0 24px 24px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    /* ── Location List ── */
+    .location-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .location-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .location-item:hover {
+      background: var(--gray-50);
+      border-color: var(--gray-200);
+    }
+
+    .location-item .icon {
+      width: 44px;
+      height: 44px;
+      background: var(--primary-light);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .location-item .info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .location-item .name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-800);
+      margin-bottom: 2px;
+    }
+
+    .location-item .addr {
+      font-size: 12px;
+      color: var(--gray-400);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .location-item .floor {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .filter-chip {
+      padding: 6px 14px;
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      background: white;
+      color: var(--gray-600);
+      transition: all 0.2s;
+    }
+
+    .filter-chip:hover { border-color: var(--primary); color: var(--primary); }
+    .filter-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* ── Search ── */
+    .search-box {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 14px 10px 40px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      background: var(--gray-50);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    .search-box .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--gray-400);
+    }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 30px;
+      padding: 10px 24px;
+      box-shadow: var(--shadow-lg);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 14px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .stats-bar .stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stats-bar .stat-num {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stats-bar .divider {
+      width: 1px;
+      height: 20px;
+      background: var(--gray-200);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--gray-800);
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      z-index: 3000;
+      opacity: 0;
+      transition: all 0.3s;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Custom Marker ── */
+    .custom-marker {
+      background: none;
+      border: none;
+    }
+
+    .marker-pin {
+      width: 36px;
+      height: 44px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .marker-pin:hover { transform: scale(1.15); }
+
+    .marker-pin .pin-body {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.4);
+      border: 3px solid white;
+    }
+
+    .marker-pin .pin-body .pin-icon {
+      transform: rotate(45deg);
+      font-size: 16px;
+    }
+
+    /* ── Empty State ── */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray-400);
+    }
+
+    .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; line-height: 1.6; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; }
+      .detail-panel { width: 100%; }
+      .stats-bar { width: calc(100% - 40px); justify-content: center; }
+      .header-logo span { display: none; }
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+    /* ── Accessibility Status ── */
+    .access-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .access-open { background: #d1fae5; color: #065f46; }
+    .access-closed { background: #fee2e2; color: #991b1b; }
+    .access-limited { background: #fef3c7; color: #92400e; }
+  </style>
+</head>
+<body>
+
+  <!-- ══════ HEADER ══════ -->
+  <header class="header">
+    <div class="header-logo">
+      <span class="emoji">🏙️</span>
+      <span>서울 옥상 지도</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" onclick="toggleSidebar()">
+        📋 목록
+      </button>
+      <button class="btn btn-primary" onclick="openReportModal()">
+        📍 새 옥상 제보
+      </button>
+    </div>
+  </header>
+
+  <!-- ══════ MAP ══════ -->
+  <div id="map"></div>
+
+  <!-- ══════ SIDEBAR (Location List) ══════ -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>📋 옥상 목록</h2>
+      <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+    </div>
+    <div class="sidebar-body">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="건물명 또는 지역으로 검색..."
+               oninput="filterLocations()">
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-chip active" data-filter="all" onclick="setFilter('all', this)">전체</button>
+        <button class="filter-chip" data-filter="garden" onclick="setFilter('garden', this)">🌿 정원</button>
+        <button class="filter-chip" data-filter="cafe" onclick="setFilter('cafe', this)">☕ 카페</button>
+        <button class="filter-chip" data-filter="night" onclick="setFilter('night', this)">🌙 야간개방</button>
+        <button class="filter-chip" data-filter="free" onclick="setFilter('free', this)">🆓 무료</button>
+        <button class="filter-chip" data-filter="public" onclick="setFilter('public', this)">🚪 개방형</button>
+      </div>
+
+      <div class="location-list" id="locationList">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ DETAIL PANEL ══════ -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-header">
+      <div class="detail-header-top">
+        <div>
+          <h2 id="detailName"></h2>
+          <p class="address" id="detailAddress"></p>
+        </div>
+        <button class="sidebar-close" onclick="closeDetail()">✕</button>
+      </div>
+    </div>
+    <div class="detail-body" id="detailBody">
+      <!-- Dynamically populated -->
+    </div>
+  </div>
+
+  <!-- ══════ REPORT MODAL ══════ -->
+  <div class="modal-overlay" id="reportModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2>📍 새 옥상 제보하기</h2>
+          <p>아직 등록되지 않은 개방 옥상을 알려주세요!</p>
+        </div>
+        <button class="sidebar-close" onclick="closeReportModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>건물명 <span class="required">*</span></label>
+          <input type="text" id="reportName" placeholder="예: 서울시청 서소문별관">
+        </div>
+        <div class="form-group">
+          <label>주소(지번 또는 도로명) <span class="required">*</span></label>
+          <input type="text" id="reportAddress" placeholder="예: 서울시 중구 세종대로 110">
+          <p class="hint">정확한 주소가 어려우면 대략적인 위치도 괜찮습니다</p>
+        </div>
+        <div class="form-group">
+          <label>옥상 층수 <span class="optional">(선택)</span></label>
+          <input type="text" id="reportFloor" placeholder="예: 15층">
+        </div>
+        <div class="form-group">
+          <label>건물 높이(m) <span class="optional">(선택)</span></label>
+          <input type="text" id="reportHeight" placeholder="예: 약 60m">
+        </div>
+        <div class="form-group">
+          <label>개방 시간 <span class="optional">(선택)</span></label>
+          <input type="text" id="reportHours" placeholder="예: 09:00~18:00, 평일만">
+        </div>
+        <div class="form-group">
+          <label>외부인 출입 <span class="optional">(선택)</span></label>
+          <select id="reportAccess">
+            <option value="">선택해주세요</option>
+            <option value="open">누구나 자유롭게</option>
+            <option value="limited">조건부 (신분증 등)</option>
+            <option value="tenant">건물 입주자만</option>
+            <option value="unknown">잘 모르겠음</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>특징 <span class="optional">(해당하는 것 모두 선택)</span></label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" value="garden"> 🌿 옥상정원</label>
+            <label><input type="checkbox" value="cafe"> ☕ 카페</label>
+            <label><input type="checkbox" value="restaurant"> 🍽️ 식당</label>
+            <label><input type="checkbox" value="smoking"> 🚬 흡연구역</label>
+            <label><input type="checkbox" value="bench"> 🪑 벤치/쉼터</label>
+            <label><input type="checkbox" value="view"> 🌆 전망 좋음</label>
+            <label><input type="checkbox" value="night"> 🌙 야간개방</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>뷰 설명 <span class="optional">(선택)</span></label>
+          <textarea id="reportView" placeholder="어떤 뷰가 보이나요? (예: 남산타워가 정면으로 보이고, 서쪽으로 한강이 살짝 보입니다)"></textarea>
+        </div>
+        <div class="form-group">
+          <label>추가 메모 <span class="optional">(선택)</span></label>
+          <textarea id="reportMemo" placeholder="기타 알려주고 싶은 내용 (예: 엘리베이터 접근 가능, 바람 많이 불어요 등)"></textarea>
+        </div>
+        <div class="form-group">
+          <label>닉네임 <span class="optional">(선택)</span></label>
+          <input type="text" id="reportNickname" placeholder="제보자 닉네임 (미입력시 '익명')">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeReportModal()">취소</button>
+        <button class="btn btn-primary" onclick="submitReport()">제보하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ STATS BAR ══════ -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat">
+      <span>📍</span>
+      <span>등록된 옥상</span>
+      <span class="stat-num" id="statCount">0</span>
+    </div>
+    <div class="divider"></div>
+    <div class="stat">
+      <span>💬</span>
+      <span>제보</span>
+      <span class="stat-num" id="statReports">0</span>
+    </div>
+  </div>
+
+  <!-- ══════ TOAST ══════ -->
+  <div class="toast" id="toast"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ═══════════════════════════════════════════
+    // DATA
+    // ═══════════════════════════════════════════
+
+    let rooftops = [
+  {
+    "id": 1,
+    "name": "서울로7017 하늘정원",
+    "address": "서울특별시 중구 청파로 432",
+    "lat": 37.5559,
+    "lng": 126.9723,
+    "floor": 3,
+    "height": 17,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "매일 00:00~24:00 (연중무휴)",
+    "fee": "무료",
+    "view": "남산서울타워와 숭례문 방향 조망, 서울역 광장 및 철도 선로, 도심 빌딩 숲 스카이라인이 한눈에 내려다보이는 공중 보행 옥상정원입니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 1,
+        "author": "도심산책",
+        "date": "2026-09-01",
+        "text": "밤에 가면 서울역 야경과 차량 불빛 궤적이 정말 멋집니다. 벤치가 많아 걷다 쉬기 좋아요."
+      },
+      {
+        "id": 2,
+        "author": "초록식물",
+        "date": "2026-08-20",
+        "text": "계절마다 피어나는 꽃과 식물이 달라져서 사계절 산책하는 재미가 있습니다."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "대한민국역사박물관 8층 황토마루 옥상정원",
+    "address": "서울특별시 종로구 세종대로 198 8층",
+    "lat": 37.5738,
+    "lng": 126.978,
+    "floor": 8,
+    "height": 35,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "매일 10:00~18:00 (수·토 야간개방 10:00~21:00)",
+    "fee": "무료",
+    "view": "경복궁 광화문과 근정전, 청와대, 북악산 능선이 완벽하게 일렬로 펼쳐지는 서울 최고의 고궁 파노라마 옥상정원입니다. 수·토 야간개방 시 광화문 야경이 환상적입니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 3,
+        "author": "경복궁사랑",
+        "date": "2026-08-28",
+        "text": "8층 엘리베이터 내리자마자 감탄이 절로 나옵니다. 경복궁 전경을 가장 완벽한 각도에서 볼 수 있어요."
+      },
+      {
+        "id": 4,
+        "author": "노을사냥꾼",
+        "date": "2026-08-15",
+        "text": "수요일 저녁 8시쯤 방문하면 고궁과 도심 빌딩 야경이 어우러진 최고의 장면을 담을 수 있습니다."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "정동전망대 (서울시 서소문청사 1동 13층)",
+    "address": "서울특별시 중구 덕수궁길 15 서소문청사 1동 13층",
+    "lat": 37.5644,
+    "lng": 126.9748,
+    "floor": 13,
+    "height": 50,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "평일 13:30~17:30 / 주말 09:00~18:00 (금·토 야간 22:00까지)",
+    "fee": "무료",
+    "view": "덕수궁 중화전, 석조전, 즉조당 등 고궁 전각과 정동 로터리 일대 근현대 건축물이 미니어처처럼 내려다보이는 카페 겸 도심 옥상전망대입니다.",
+    "tags": [
+      "cafe",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public"
+    ],
+    "features": {
+      "garden": false,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 5,
+        "author": "정동길산책",
+        "date": "2026-09-05",
+        "text": "카페 다락 창가 좌석에서 커피 마시며 내려다보는 덕수궁 풍경은 언제 봐도 평화롭습니다."
+      },
+      {
+        "id": 6,
+        "author": "단풍구경",
+        "date": "2026-08-11",
+        "text": "가을 단풍철에는 석조전과 어우러진 노란 은행잎 풍경이 장관입니다."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "서울도서관 5층 하늘뜰 옥상정원",
+    "address": "서울특별시 중구 세종대로 110 (구 서울시청사 5층)",
+    "lat": 37.5663,
+    "lng": 126.9779,
+    "floor": 5,
+    "height": 25,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "평일 09:00~21:00 / 주말 09:00~18:00 (매주 월요일 및 공휴일 휴관)",
+    "fee": "무료",
+    "view": "서울광장의 푸른 잔디와 분수, 세종대로 차량 행렬, 서울시청 신청사의 파도형 유리 건축미와 덕수궁 방면을 한눈에 담을 수 있는 아늑한 도심 옥상정원입니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 7,
+        "author": "책읽는오후",
+        "date": "2026-09-02",
+        "text": "도서관에서 책 빌려 올라와 야외 벤치에서 읽기 좋아요. 서울광장이 바로 아래로 보입니다."
+      },
+      {
+        "id": 8,
+        "author": "시청직장인",
+        "date": "2026-07-29",
+        "text": "점심시간에 5층 카페 행복플러스 들렀다가 바람 쐬러 나가기 딱 좋습니다."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "서울시청 본관 하늘전망대 (9층)",
+    "address": "서울특별시 중구 세종대로 110 서울시청 본관 9층",
+    "lat": 37.5665,
+    "lng": 126.9784,
+    "floor": 9,
+    "height": 45,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 07:30~18:00 / 금·토 07:30~22:00 (일요일 휴무)",
+    "fee": "무료",
+    "view": "신청사 본관 1층 로봇카페 옆 전용 엘리베이터로 직통 이동 가능하며, 통유리 너머로 서울광장, 덕수궁, 숭례문으로 이어지는 서울 도심 스카이라인 파노라마 야경을 감상할 수 있습니다.",
+    "tags": [
+      "cafe",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public"
+    ],
+    "features": {
+      "garden": false,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 9,
+        "author": "야경마니아",
+        "date": "2026-09-04",
+        "text": "금요일과 토요일에는 밤 10시까지 야간 개방해서 서울광장 야경을 높은 곳에서 감상하기 최고입니다."
+      },
+      {
+        "id": 10,
+        "author": "도심탐험가",
+        "date": "2026-08-25",
+        "text": "전용 엘리베이터를 타면 9층으로 바로 올라갈 수 있어서 접근성이 아주 편리합니다."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "국립정동극장 세실 세실마루 (옥상)",
+    "address": "서울특별시 중구 세종대로19길 16 국립정동극장 세실 R층",
+    "lat": 37.5671,
+    "lng": 126.9763,
+    "floor": 3,
+    "height": 15,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 09:00~21:00 (매주 월요일 휴관)",
+    "fee": "무료",
+    "view": "대한성공회 서울주교좌성당의 로마네스크 양식 주황 기와지붕과 덕수궁 돌담길, 성공회 수녀원 건물이 바로 눈앞에 닿을 듯 펼쳐져 유럽의 고성을 마주한 듯 이국적인 옥상 쉼터입니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": false,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 11,
+        "author": "정동골목",
+        "date": "2026-09-08",
+        "text": "성공회 성당 지붕이 코앞에 보여서 유럽 감성이 물씬 납니다. 밤 9시까지 열려 야경도 훌륭해요."
+      },
+      {
+        "id": 12,
+        "author": "숨은명소",
+        "date": "2026-08-30",
+        "text": "엘리베이터 타고 R층 누르면 바로 정원이 연결됩니다. 조용히 힐링하기 좋은 명소예요."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "세운상가 9층 세운옥상 (서울옥상)",
+    "address": "서울특별시 종로구 청계천로 159 9층",
+    "lat": 37.5702,
+    "lng": 126.9951,
+    "floor": 9,
+    "height": 40,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 10:00~20:00 (기상 여건에 따라 탄력 운영)",
+    "fee": "무료",
+    "view": "북쪽으로는 유네스코 세계문화유산 종묘의 푸른 숲과 북악산, 남쪽으로는 청계천과 남산서울타워, 을지로 노포 지붕들이 360도로 시원하게 펼쳐지는 루프탑 덱입니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": false,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 13,
+        "author": "을지로러버",
+        "date": "2026-09-03",
+        "text": "종묘 숲을 위에서 내려다보는 특별한 경험을 할 수 있어요. 해질 무렵 노을 뷰가 환상적입니다."
+      },
+      {
+        "id": 14,
+        "author": "건축탐방",
+        "date": "2026-08-18",
+        "text": "엘리베이터로 9층까지 올라가면 탁 트인 옥상 공간이 펼쳐집니다. 망원경도 갖춰져 있어요."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "도킹서울 & 서울역 옥상정원",
+    "address": "서울특별시 중구 한강대로 405 (롯데마트 4F~옥상 연결)",
+    "lat": 37.5557,
+    "lng": 126.9705,
+    "floor": 5,
+    "height": 22,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 11:00~20:00 (매주 월요일 휴관 / 옥상정원 상시)",
+    "fee": "무료",
+    "view": "약 20년간 폐쇄되었던 옛 주차 램프가 예술 빛 공간으로 재탄생하여 옥상정원과 연결됩니다. 구 서울역사 돔 지붕과 인왕산, 숭례문 방향 철도 풍경을 독특한 시선으로 조망합니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": false,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 15,
+        "author": "미술관산책",
+        "date": "2026-09-07",
+        "text": "나선형 램프를 따라 빛 작품을 감상하며 올라와 옥상정원으로 이어지는 동선이 매우 독창적입니다."
+      },
+      {
+        "id": 16,
+        "author": "기차소리",
+        "date": "2026-08-22",
+        "text": "서울역으로 오가는 열차들과 구 역사의 클래식한 돔이 가까이서 보여 색다른 운치가 있어요."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "세빛섬 가빛섬 4·5층 세빛마루 옥상정원",
+    "address": "서울특별시 서초구 올림픽대로 2085-14 가빛섬 4·5층",
+    "lat": 37.5113,
+    "lng": 126.9946,
+    "floor": 4,
+    "height": 20,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "매일 10:00~22:00 (연중무휴)",
+    "fee": "무료",
+    "view": "반포한강공원 한가운데 수상 복합문화시설 가빛섬 옥상에서 감상하는 360도 한강 파노라마 뷰입니다. 반포대교 달빛무지개분수와 남산타워, 한강 노을과 야경을 빈백과 벤치에서 누릴 수 있습니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 17,
+        "author": "한강분수러버",
+        "date": "2026-09-08",
+        "text": "반포대교 달빛무지개분수가 한눈에 내려다보이는 최고의 루프탑 무료 명소입니다. 빈백에 누워 야경 보면 천국이에요."
+      },
+      {
+        "id": 18,
+        "author": "세빛밤산책",
+        "date": "2026-08-27",
+        "text": "물 위에 떠 있는 옥상이라 바람도 정말 시원하고 사방이 탁 트여 있어 가슴이 뻥 뚫립니다."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "노들섬 3층 루프탑 테라스 (노들스퀘어)",
+    "address": "서울특별시 용산구 양녕로 445 노들섬 3층",
+    "lat": 37.5176,
+    "lng": 126.9582,
+    "floor": 3,
+    "height": 15,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "야외 상시 개방 24시간 (편의시설 10:00~21:00)",
+    "fee": "무료",
+    "view": "한강 중앙 섬 위에서 여의도 63빌딩과 마천루 스카이라인, 한강철교를 건너는 지하철과 기차들, 붉게 물드는 노을과 서울의 찬란한 리버뷰 야경을 감상할 수 있는 오픈 루프탑입니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 19,
+        "author": "노을러버",
+        "date": "2026-09-09",
+        "text": "여의도 방향으로 해가 지는 일몰 풍경은 서울에서 단연 손꼽힙니다. 루프탑 잔디계단에 앉아있으면 행복해요."
+      },
+      {
+        "id": 20,
+        "author": "한강자전거",
+        "date": "2026-08-16",
+        "text": "한강대교 걷다가 노들섬 루프탑으로 올라오면 시원하고 쾌적합니다. 24시간 열려 있어 밤 산책에도 좋아요."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "노량진수산시장 5층 하늘채 옥상정원",
+    "address": "서울특별시 동작구 노들로 674 노량진수산물도매시장 신관 5층",
+    "lat": 37.5147,
+    "lng": 126.9415,
+    "floor": 5,
+    "height": 30,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "매일 09:00~22:00",
+    "fee": "무료",
+    "view": "여의도 63빌딩, 파크원, IFC 마천루 군락이 손에 잡힐 듯 가까이 보이며, 그 아래로 쉴 새 없이 열차가 오가는 노량진역 철도선로와 한강철교가 다이내믹하게 교차하는 사진가들의 성지입니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 21,
+        "author": "철도마니아",
+        "date": "2026-09-06",
+        "text": "수산시장 건물 5층에 이런 옥상정원이 숨어있어요. 기차 지나가는 모습과 여의도 빌딩 뷰가 정말 멋집니다."
+      },
+      {
+        "id": 22,
+        "author": "노량진이웃",
+        "date": "2026-08-14",
+        "text": "식사 후 엘리베이터 타고 5층 옥상으로 올라와서 야경 보며 커피 한잔 마시기 좋은 힐링 코스입니다."
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "은평역사한옥박물관 3층 용출정 옥상전망대",
+    "address": "서울특별시 은평구 연서로50길 8 3층/옥상",
+    "lat": 37.6385,
+    "lng": 126.9387,
+    "floor": 3,
+    "height": 16,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 09:00~18:00 (매주 월요일 휴관)",
+    "fee": "성인 1,000원 (박물관 관람 포함)",
+    "view": "북한산 의상봉과 용출봉의 웅장한 바위 능선이 병풍처럼 둘러싸고, 그 아래로 은평한옥마을의 단아한 기와지붕 군락과 생태숲이 한 폭의 진경산수화처럼 시원하게 펼쳐집니다.",
+    "tags": [
+      "bench",
+      "view",
+      "garden",
+      "public"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 23,
+        "author": "한옥마니아",
+        "date": "2026-08-31",
+        "text": "정자 용출정 마루에 걸터앉아 바라보는 북한산 봉우리와 은평한옥마을 전경은 서울 최고의 절경입니다."
+      },
+      {
+        "id": 24,
+        "author": "가족나들이",
+        "date": "2026-08-09",
+        "text": "입장료 1,000원으로 박물관 관람과 함께 북한산 뷰 명당 옥상을 누릴 수 있어 가성비가 최고입니다."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "국립항공박물관 4층 옥상전망대",
+    "address": "서울특별시 강서구 하늘길 177 4층",
+    "lat": 37.5606,
+    "lng": 126.8016,
+    "floor": 4,
+    "height": 25,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 10:00~18:00 (입장마감 17:30, 매주 월요일 휴관)",
+    "fee": "무료",
+    "view": "김포국제공항 활주로 바로 옆 옥상에서 여객기들의 이륙과 착륙, 지상 유도로 이동을 360도로 생생하게 관람할 수 있는 국내 유일의 공항 활주로 특화 옥상전망대입니다.",
+    "tags": [
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 25,
+        "author": "비행기덕후",
+        "date": "2026-09-05",
+        "text": "비행기 뜨고 내리는 모습이 눈앞에 가득 찹니다. 아이들도 너무 좋아하고 출사지로도 최고예요."
+      },
+      {
+        "id": 26,
+        "author": "공항스케치",
+        "date": "2026-08-17",
+        "text": "박물관 무료 관람 후 4층 옥상으로 올라가 시원한 바람맞으며 비행기를 구경할 수 있어 힐링됩니다."
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "신세계백화점 본점 신관 6층 트리니티 가든",
+    "address": "서울특별시 중구 소공로 63 신관 6층",
+    "lat": 37.5607,
+    "lng": 126.981,
+    "floor": 6,
+    "height": 30,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "fee": "무료",
+    "view": "제프 쿤스, 헨리 무어 등 세계적인 현대 미술 거장들의 조각 컬렉션이 야외 정원에 전시되어 있으며, 남산서울타워와 신세계 본점의 고풍스러운 석조건물이 어우러진 도심 속 고급 조각 정원입니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 27,
+        "author": "조각미술관",
+        "date": "2026-09-03",
+        "text": "명동 쇼핑 후 6층 옥상으로 나오면 복잡한 도심과 단절된 미술관 정원 같은 평화로움이 느껴집니다."
+      },
+      {
+        "id": 28,
+        "author": "남산뷰",
+        "date": "2026-08-19",
+        "text": "남산타워가 정면으로 올려다보이고 세계적인 조각품들과 함께 멋진 사진을 남길 수 있습니다."
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "현대백화점 무역센터점 11층 하늘정원",
+    "address": "서울특별시 강남구 테헤란로 517 11층",
+    "lat": 37.5086,
+    "lng": 127.0597,
+    "floor": 11,
+    "height": 55,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "fee": "무료",
+    "view": "강남 테헤란로의 초고층 빌딩 숲과 코엑스 일대 전경을 11층 상공에서 조망하는 도심형 힐링 정원입니다. 잔디 화단과 파라솔 테이블, 벤치 및 계절별 테마 전시가 열립니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 29,
+        "author": "삼성동직장인",
+        "date": "2026-09-02",
+        "text": "코엑스가 붐빌 때 11층 하늘정원으로 올라오면 파라솔 아래서 여유롭게 쉴 수 있어 애용합니다."
+      },
+      {
+        "id": 30,
+        "author": "테헤란뷰",
+        "date": "2026-08-12",
+        "text": "강남 한복판에서 녹지를 즐길 수 있는 깔끔하고 쾌적한 옥상 쉼터입니다."
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "name": "신세계백화점 강남점 11층 S가든 (하늘정원)",
+    "address": "서울특별시 서초구 신반포로 176 센트럴시티 11층",
+    "lat": 37.5049,
+    "lng": 127.0044,
+    "floor": 11,
+    "height": 60,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "fee": "무료",
+    "view": "반포와 서초 도심 일대가 시원하게 내려다보이는 공중 옥상정원입니다. 미로형 잔디 화단과 분수대, 빛과 프리즘 조형물, 편안한 벤치가 고속터미널의 번잡함을 잊게 합니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 31,
+        "author": "반포힐링",
+        "date": "2026-09-04",
+        "text": "11층 식당가에서 식사하고 야외 정원으로 나오면 조경이 잘 되어 있어 산책하기 아주 좋아요."
+      },
+      {
+        "id": 32,
+        "author": "터미널대기",
+        "date": "2026-08-21",
+        "text": "고속버스 시간 남을 때 올라와서 분수 소리 들으며 바람 쐬기 최적의 장소입니다."
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "name": "영등포 타임스퀘어 5층 하늘정원",
+    "address": "서울특별시 영등포구 영중로 15 타임스퀘어 5층",
+    "lat": 37.517,
+    "lng": 126.9038,
+    "floor": 5,
+    "height": 28,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "매일 10:00~22:00",
+    "fee": "무료",
+    "view": "타임스퀘어 5층 GATE 18번을 통해 바로 연결되는 대형 개방형 옥상정원입니다. 푸른 잔디밭과 나무 산책로, 조형물과 벤치가 어우러져 영등포 도심 전경을 여유롭게 감상할 수 있습니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 33,
+        "author": "영등포주민",
+        "date": "2026-09-07",
+        "text": "타임스퀘어 5층 게이트 18번으로 나가면 넓은 잔디 하늘정원이 나와요. 쇼핑하다가 야외 공기 쐬기 최고입니다."
+      },
+      {
+        "id": 34,
+        "author": "도심오아시스",
+        "date": "2026-08-23",
+        "text": "밤 10시까지 개방되어 저녁에 조명 켜진 정원 산책하기 정말 낭만적입니다."
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "name": "AK플라자 홍대 17층 무신사 테라스 파크",
+    "address": "서울특별시 마포구 양화로 188 AK플라자 홍대 17층",
+    "lat": 37.5574,
+    "lng": 126.9255,
+    "floor": 17,
+    "height": 70,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "매일 11:00~20:00",
+    "fee": "무료 (회원 확인)",
+    "view": "홍대입구역 전용 엘리베이터로 직통 이동하는 17층 최상층 루프탑입니다. 약 800평 규모의 초대형 야외 옥상 테라스에서 홍대 거리, 신촌, 경의선숲길과 멀리 여의도까지 시원하게 조망합니다.",
+    "tags": [
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 35,
+        "author": "홍대매니아",
+        "date": "2026-09-08",
+        "text": "전용 엘리베이터 타고 17층 올라가면 홍대 전체가 발아래 펼쳐지는 광활한 루프탑이 나옵니다. 뷰가 압도적이에요."
+      },
+      {
+        "id": 36,
+        "author": "테라스러버",
+        "date": "2026-08-26",
+        "text": "카페 라운지와 야외 테라스 파크가 넓고 쾌적해서 홍대에서 가장 좋아하는 뷰 포인트입니다."
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "name": "하이커 그라운드 5층 청계천 테라스",
+    "address": "서울특별시 중구 청계천로 40 한국관광공사 서울센터 5층",
+    "lat": 37.5687,
+    "lng": 126.9816,
+    "floor": 5,
+    "height": 25,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 10:00~19:00 (매주 월요일 휴관)",
+    "fee": "무료",
+    "view": "청계천 광교사거리 중심에 위치하여 5층 야외 테라스에서 청계천 물길과 양옆 빌딩 숲의 시원한 수변 도심 풍경을 가깝게 조망할 수 있는 복합문화 옥상 라운지입니다.",
+    "tags": [
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": false,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 37,
+        "author": "청계천산책",
+        "date": "2026-09-05",
+        "text": "5층 하이커 라운지에 노티드 도넛도 있고, 야외 테라스에서 내려다보는 청계천 뷰가 일품입니다."
+      },
+      {
+        "id": 38,
+        "author": "도심포토존",
+        "date": "2026-08-19",
+        "text": "관광안내센터 건물이라 무료로 누구나 들어갈 수 있고 청계천 풍경 사진 찍기 딱 좋은 숨은 명당입니다."
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "name": "더현대 서울 6층 뷰라운지 & 사운즈 포레스트",
+    "address": "서울특별시 영등포구 여의대로 108 6층",
+    "lat": 37.5259,
+    "lng": 126.9284,
+    "floor": 6,
+    "height": 38,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "fee": "무료",
+    "view": "천연 채광이 쏟아지는 유리 천장 아래 축구장 절반 크기의 초대형 실내 숲 '사운즈 포레스트'를 6층 공중 브릿지와 뷰라운지에서 한눈에 내려다보는 여의도 대표 랜드마크입니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 39,
+        "author": "포토스팟",
+        "date": "2026-09-06",
+        "text": "6층 브릿지에서 아래 숲과 자연광 천장을 배경으로 사진 찍으면 온실 숲에 들어온 듯 근사합니다."
+      },
+      {
+        "id": 40,
+        "author": "여의도나들이",
+        "date": "2026-08-23",
+        "text": "날씨 상관없이 사계절 푸른 정원을 높은 곳에서 즐길 수 있어 서울에서 가장 세련된 힐링 공간입니다."
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "name": "용산 아이파크몰 4층 더가든 야외테라스",
+    "address": "서울특별시 용산구 한강대로23길 55 테이스트파크 4층",
+    "lat": 37.5298,
+    "lng": 126.9647,
+    "floor": 4,
+    "height": 25,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "일~목 10:30~20:30 / 금·토 10:30~21:00",
+    "fee": "무료",
+    "view": "용산역 철도 기지창과 용산 도심 초고층 빌딩 숲이 시원하게 열려 있으며, 넓은 잔디 계단 덱과 휴식 테라스에서 노을과 반짝이는 도심 조명 야경을 여유롭게 만끽할 수 있습니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 41,
+        "author": "용산마니아",
+        "date": "2026-09-01",
+        "text": "4층 야외 가든이 정말 넓고 쾌적해요. 잔디 계단에 걸터앉아 노을 바라보기 좋습니다."
+      },
+      {
+        "id": 42,
+        "author": "철길야경",
+        "date": "2026-08-15",
+        "text": "용산 CGV 영화 보러 올 때마다 들르는 힐링 공간입니다. 도심 야경이 아주 운치 있어요."
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "name": "인사동 쌈지길 4층 하늘정원",
+    "address": "서울특별시 종로구 인사동길 44 4층 옥상",
+    "lat": 37.5743,
+    "lng": 126.9849,
+    "floor": 4,
+    "height": 18,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "매일 10:30~20:30 (명절 당일 휴무)",
+    "fee": "무료",
+    "view": "중정을 둘러싼 나선형 경사로를 따라 공방을 구경하며 오르면 만나는 옥상정원입니다. 인사동 전통 골목의 기와지붕과 한옥 풍경, 연인들의 소원 담장이 아기자기한 매력을 전합니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 43,
+        "author": "인사동데이트",
+        "date": "2026-09-02",
+        "text": "나선형 길을 걷다 보면 어느새 옥상에 도착해요. 하늘정원 카페에서 식혜 마시며 쉬기 좋습니다."
+      },
+      {
+        "id": 44,
+        "author": "전통기와뷰",
+        "date": "2026-08-11",
+        "text": "인사동 골목 기와지붕들이 올망졸망 보여서 한국적인 정취를 옥상에서 제대로 느낄 수 있습니다."
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "name": "서울공예박물관 교육동 5층 옥상전망대",
+    "address": "서울특별시 종로구 율곡로3길 4 교육동 5층",
+    "lat": 37.5768,
+    "lng": 126.9839,
+    "floor": 5,
+    "height": 22,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 10:00~18:00 (입장마감 17:30, 매주 월요일 휴관)",
+    "fee": "무료 (예약 불필요)",
+    "view": "안국동 로터리와 북촌 방향의 전통 한옥 기와 골목들, 인왕산과 북악산의 능선이 병풍처럼 펼쳐지는 조용한 옥상전망대입니다. 옛 풍문여고 건물을 리모델링해 정취가 특별합니다.",
+    "tags": [
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 45,
+        "author": "북촌전망",
+        "date": "2026-08-29",
+        "text": "예약 없이도 교육동 5층 엘리베이터 타고 올라가면 바로 옥상전망대를 이용할 수 있어요. 북촌 기와 뷰가 멋집니다."
+      },
+      {
+        "id": 46,
+        "author": "공예마실",
+        "date": "2026-08-07",
+        "text": "박물관 관람 후 옥상 벤치에서 인왕산과 도심 풍경 보며 사색하기 참 좋은 무료 공간입니다."
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "name": "청와대 사랑채 2층 테라스 & 카페",
+    "address": "서울특별시 종로구 효자로13길 45 청와대 사랑채 2층",
+    "lat": 37.5833,
+    "lng": 126.9734,
+    "floor": 2,
+    "height": 12,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "수~월 09:00~18:00 (입장마감 17:30, 매주 화요일 휴관)",
+    "fee": "무료 (예약 불필요)",
+    "view": "청와대 본관의 청기와 지붕과 영빈관, 북악산의 푸른 산세, 사랑채 앞 분수광장과 인왕산 자락을 시원한 야외 테라스에서 한눈에 조망할 수 있는 도심 테라스 쉼터입니다.",
+    "tags": [
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": false,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 47,
+        "author": "청와대나들이",
+        "date": "2026-09-04",
+        "text": "예약 없이 무료로 사랑채에 들어와서 2층 테라스 카페로 나가면 청와대 본관과 북악산이 한 폭의 그림입니다."
+      },
+      {
+        "id": 48,
+        "author": "효자동산책",
+        "date": "2026-08-20",
+        "text": "테라스에서 내려다보는 분수대 광장과 북악산 풍경이 평화로워요. 음료 마시며 쉬기 좋습니다."
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "name": "도봉구 평화문화진지 5동 옥상전망대",
+    "address": "서울특별시 도봉구 마들로 932 평화문화진지 5동",
+    "lat": 37.6896,
+    "lng": 127.0435,
+    "floor": 4,
+    "height": 20,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 10:00~18:00 (매주 월요일 휴관)",
+    "fee": "무료",
+    "view": "과거 군사 대전차방호시설 상부에 세워진 4층(20m) 높이의 옥상전망대 타워입니다. 도봉산 자운봉, 만장봉, 선인봉의 웅장한 화강암 바위 절벽과 수락산이 파노라마로 압도적인 장관을 선사합니다.",
+    "tags": [
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 49,
+        "author": "도봉산등산객",
+        "date": "2026-09-03",
+        "text": "도봉산역 1-1번 출구 나오면 바로 있어요. 전망대 꼭대기에서 보는 도봉산 암벽 파노라마는 서울 최고입니다."
+      },
+      {
+        "id": 50,
+        "author": "역사문화탐방",
+        "date": "2026-08-16",
+        "text": "대전차방호벽이 문화공간으로 변신한 의미 있는 장소이자 가슴이 뻥 뚫리는 옥상 전망 명소입니다."
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "name": "마포 문화비축기지 T6 옥상마루",
+    "address": "서울특별시 마포구 증산로 87 T6 커뮤니티센터 2~3층",
+    "lat": 37.5701,
+    "lng": 126.8943,
+    "floor": 3,
+    "height": 15,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 10:00~18:00 (월요일 휴관 / 공원 야외 24시간 상시 개방)",
+    "fee": "무료",
+    "view": "과거 석유비축기지 시절 해체된 거대 철제 탱크의 철판을 재활용해 세운 독창적인 원형 건물입니다. 옥상마루 중앙에서 둥근 하늘을 올려다보며 매봉산 숲의 피톤치드를 온전히 느낄 수 있습니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 51,
+        "author": "생태건축",
+        "date": "2026-09-01",
+        "text": "녹슨 원형 철판 너머로 둥근 하늘이 올려다보이는 옥상마루는 서울 어디에서도 볼 수 없는 건축적 감동을 줍니다."
+      },
+      {
+        "id": 52,
+        "author": "상암숲길",
+        "date": "2026-08-16",
+        "text": "T6 안 에코도서관과 카페에서 책 한 권 들고 옥상마루 벤치에 앉아 쉬어가기 정말 평화롭습니다."
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "name": "마포구청 12층 하늘정원 (하늘도서관)",
+    "address": "서울특별시 마포구 월드컵로 212 마포구청 12층",
+    "lat": 37.5662,
+    "lng": 126.9015,
+    "floor": 12,
+    "height": 48,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "평일 09:00~18:00 (주말 및 공휴일 휴관)",
+    "fee": "무료",
+    "view": "구청사 12층 최상층에 위치하여 통창과 야외 하늘정원 테라스에서 상암 월드컵경기장, 매봉산 숲, 평화의공원과 멀리 한강 방면까지 탁 트인 시야로 조망할 수 있는 마포의 숨은 전망 쉼터입니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 53,
+        "author": "마포주민",
+        "date": "2026-08-26",
+        "text": "12층 엘리베이터 타고 올라가면 도서관과 멋진 야외 하늘정원이 나옵니다. 뷰가 정말 시원하고 쾌적해요."
+      },
+      {
+        "id": 54,
+        "author": "월드컵경기장뷰",
+        "date": "2026-08-08",
+        "text": "월드컵경기장과 공원 숲을 무료로 내려다볼 수 있는 최고의 공공 옥상 공간입니다."
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "name": "한성백제박물관 3층 옥상정원 (하늘공원)",
+    "address": "서울특별시 송파구 위례성대로 71 한성백제박물관 3층/옥상",
+    "lat": 37.5165,
+    "lng": 127.1189,
+    "floor": 3,
+    "height": 18,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~금 09:00~19:00 / 토·일 09:00~18:00 (매주 월요일 휴관)",
+    "fee": "무료",
+    "view": "몽촌토성의 부드러운 고대 잔디 능선과 올림픽공원의 드넓은 녹지, 저 멀리 솟아오른 롯데월드타워의 현대적 마천루가 과거와 미래의 조화를 이루며 평화롭게 펼쳐집니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 55,
+        "author": "송파공원러",
+        "date": "2026-09-07",
+        "text": "박물관 지붕 경사로를 걸어 올라가면 몽촌토성 잔디 언덕이 파노라마로 보입니다. 피크닉 온 것처럼 평온해요."
+      },
+      {
+        "id": 56,
+        "author": "올림픽공원",
+        "date": "2026-08-19",
+        "text": "올림픽공원 산책할 때 가장 좋아하는 쉼터입니다. 롯데타워 전경도 시원하게 잘 보입니다."
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "name": "송파책박물관 2층 야외 옥상정원 (어울림정원)",
+    "address": "서울특별시 송파구 송파대로37길 77 송파책박물관 2층",
+    "lat": 37.4984,
+    "lng": 127.1082,
+    "floor": 2,
+    "height": 12,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 10:00~18:00 (입장마감 17:30, 매주 월요일 휴관)",
+    "fee": "무료 (예약 불필요)",
+    "view": "책장의 레이어를 형상화한 건축미를 품은 2층 야외 옥상정원입니다. 푸른 잔디와 야외 조형 벤치가 조성되어 있어 도서관 관람 후 여유롭게 햇살과 바람을 느끼며 휴식하기 좋습니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 57,
+        "author": "책과정원",
+        "date": "2026-09-04",
+        "text": "2층으로 나가면 조용한 야외 어울림정원이 나와요. 아이들과 함께 책 읽다 바람 쐬기 정말 좋습니다."
+      },
+      {
+        "id": 58,
+        "author": "송파이웃",
+        "date": "2026-08-18",
+        "text": "건축물 디자인도 세련되고 정원 관리가 아주 깔끔하게 되어 있어 기분 전환에 최고예요."
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "name": "현대백화점 천호점 13층 하늘정원 (수국광장)",
+    "address": "서울특별시 강동구 천호대로 1005 현대백화점 천호점 13층",
+    "lat": 37.5386,
+    "lng": 127.1245,
+    "floor": 13,
+    "height": 60,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "fee": "무료",
+    "view": "백화점 13층 최상층에 넓게 펼쳐진 목재 덱 광장과 원형 수국정원입니다. 풍납토성 능선과 한강 줄기, 잠실 롯데월드타워와 강동구 도심 스카이라인이 시원하게 조망됩니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 59,
+        "author": "강동주민",
+        "date": "2026-09-05",
+        "text": "13층 옥상정원이 생각보다 훨씬 넓고 수국 정원이 예쁩니다. 롯데타워와 한강 쪽 야경이 끝내줘요."
+      },
+      {
+        "id": 60,
+        "author": "천호마실",
+        "date": "2026-08-22",
+        "text": "쇼핑하다가 엘리베이터 타고 13층 올라오면 바람도 시원하고 벤치가 많아 편하게 쉴 수 있습니다."
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "name": "성수연방 3층 천상가옥 온실 루프탑",
+    "address": "서울특별시 성동구 성수이로14길 14 3층",
+    "lat": 37.5412,
+    "lng": 127.0571,
+    "floor": 3,
+    "height": 12,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "매일 11:00~22:00",
+    "fee": "무료 (카페 이용 자율)",
+    "view": "옛 화학공장을 리모델링한 복합문화공간 꼭대기의 온실형 루프탑 테라스입니다. 성수동 붉은 벽돌 팩토리 감성과 녹음 가득한 화분 인테리어, 트렌디한 성수동 골목 정취를 누릴 수 있습니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "cafe",
+      "public"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 61,
+        "author": "성수핫플러",
+        "date": "2026-09-05",
+        "text": "온실 통유리 사이로 쏟아지는 햇살과 초록 식물들이 너무 예쁜 공간입니다. 루프탑 야외 좌석도 매력적이에요."
+      },
+      {
+        "id": 62,
+        "author": "카페탐방",
+        "date": "2026-08-24",
+        "text": "성수동의 인더스트리얼한 분위기를 옥상 테라스에서 즐길 수 있어서 데이트 코스로 제격입니다."
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "name": "서울창업허브 공덕 본관 10층 하늘정원",
+    "address": "서울특별시 마포구 백범로31길 21 10층 옥상",
+    "lat": 37.5469,
+    "lng": 126.9507,
+    "floor": 10,
+    "height": 42,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "평일 09:00~20:00 (주말 및 공휴일 휴무)",
+    "fee": "무료",
+    "view": "마포 공덕역 스타트업 허브 꼭대기에 마련된 공공 개방형 하늘정원입니다. 경의선숲길의 초록 선형 녹지와 공덕·여의도 방면의 빌딩숲 스카이라인이 시원하게 조망됩니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 63,
+        "author": "공덕직장인",
+        "date": "2026-08-30",
+        "text": "외부인도 자유롭게 이용할 수 있는 공공 옥상정원입니다. 나무 덱과 벤치에서 바람 쐬면 머리가 맑아져요."
+      },
+      {
+        "id": 64,
+        "author": "경의선숲길러버",
+        "date": "2026-08-11",
+        "text": "경의선숲길 라인이 높은 곳에서 한눈에 내려다보여서 산책길 뷰가 아주 좋습니다."
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "name": "현대백화점 목동점 7층 하늘정원 (글라스하우스)",
+    "address": "서울특별시 양천구 목동동로 257 7층",
+    "lat": 37.5265,
+    "lng": 126.8752,
+    "floor": 7,
+    "height": 36,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "fee": "무료",
+    "view": "통유리 온실형 카페 글라스하우스와 자연스럽게 연결된 푸른 야외 테라스 옥상정원입니다. 안양천 줄기와 목동 고층 아파트 단지, 푸른 하늘이 편안한 휴식을 선사합니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 65,
+        "author": "목동맘",
+        "date": "2026-09-04",
+        "text": "글라스하우스 온실과 이어진 야외 정원 조경이 정말 훌륭합니다. 아이와 함께 쉬어가기 참 좋아요."
+      },
+      {
+        "id": 66,
+        "author": "휴식시간",
+        "date": "2026-08-25",
+        "text": "야외 테라스 소파에 앉아 바람맞으며 쉴 수 있어 쇼핑의 피로가 싹 가십니다."
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "name": "서울숲 언더스탠드에비뉴 옥상 브릿지 테라스",
+    "address": "서울특별시 성동구 왕십리로 63 3층",
+    "lat": 37.5434,
+    "lng": 127.0428,
+    "floor": 3,
+    "height": 12,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "매일 10:00~21:00",
+    "fee": "무료",
+    "view": "알록달록한 컨테이너 건축물 위 옥상 브릿지 테라스에서 서울숲 입구의 울창한 메타세쿼이아 숲길과 성수동 디타워, 아크로서울포레스트의 세련된 건축 풍경을 가깝게 조망합니다.",
+    "tags": [
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 67,
+        "author": "서울숲산책",
+        "date": "2026-09-05",
+        "text": "컨테이너 건물들 옥상을 이어놓은 브릿지 테라스를 걷는 기분이 이색적입니다. 서울숲 가기 전 필수 코스예요."
+      },
+      {
+        "id": 68,
+        "author": "성수감성",
+        "date": "2026-08-13",
+        "text": "주변에 푸드트럭과 카페가 많아서 간식 사들고 옥상 벤치에서 먹으면 나들이 온 기분 납니다."
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "name": "뚝섬 자벌레 3층 전망데크 (한강이야기전시관)",
+    "address": "서울특별시 광진구 강변북로 2202 뚝섬한강공원 내 3층",
+    "lat": 37.5298,
+    "lng": 127.0699,
+    "floor": 3,
+    "height": 15,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "화~일 10:00~21:00 (매주 월요일 휴관)",
+    "fee": "무료",
+    "view": "자벌레 형상의 미래형 교량 건축물 꼭대기 전망데크에서 청담대교를 건너는 7호선 전철과 올림픽대로의 자동차 불빛, 잠실 롯데월드타워와 드넓은 한강 물결을 입체적으로 조망합니다.",
+    "tags": [
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": false,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 69,
+        "author": "한강야경",
+        "date": "2026-09-02",
+        "text": "7호선 뚝섬유원지역에서 바로 연결되어 접근성이 최고입니다. 청담대교 불빛과 롯데타워 뷰가 아름다워요."
+      },
+      {
+        "id": 70,
+        "author": "강바람솔솔",
+        "date": "2026-08-16",
+        "text": "실내 도서 쉼터도 잘 되어 있고 야외 데크에서 강바람 맞으며 힐링하기 최적의 장소입니다."
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "name": "롯데백화점 영등포점 11층 샤롯데가든 (옥상정원)",
+    "address": "서울특별시 영등포구 경인로 846 롯데백화점 영등포점 11층",
+    "lat": 37.5158,
+    "lng": 126.9079,
+    "floor": 11,
+    "height": 50,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "월~목 10:30~20:00 / 금~일 10:30~20:30",
+    "fee": "무료",
+    "view": "영등포역사 상부 11층 옥상에 조성된 도심 휴게정원입니다. 영등포역 광장과 오가는 열차 선로, 서남권 도심 빌딩 숲 스카이라인을 높은 곳에서 탁 트인 시야로 내려다볼 수 있습니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": true,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 71,
+        "author": "영등포역러버",
+        "date": "2026-09-06",
+        "text": "11층 엘리베이터 타고 올라오면 야외 샤롯데가든이 펼쳐집니다. 기차 소리와 도심 뷰가 색달라요."
+      },
+      {
+        "id": 72,
+        "author": "쉼터찾기",
+        "date": "2026-08-20",
+        "text": "영등포역 환승하거나 백화점 쇼핑할 때 잠시 들러 바람 쐬기 좋은 숨은 옥상정원입니다."
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "name": "강동구청 본관 5층 싱싱마당 하늘정원",
+    "address": "서울특별시 강동구 성내로 25 강동구청 본관 5층",
+    "lat": 37.5301,
+    "lng": 127.1238,
+    "floor": 5,
+    "height": 20,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "평일 09:00~18:00 (주말 및 공휴일 휴무)",
+    "fee": "무료",
+    "view": "서울시 옥상녹화 우수 건축물로 선정된 친환경 생태 옥상공원입니다. 유기농 텃밭과 야생화 군락, 작은 생태연못과 파고라 쉼터가 어우러져 도심 속 전원일기 같은 편안함을 줍니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "free",
+      "public"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": false,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": false
+    },
+    "comments": [
+      {
+        "id": 73,
+        "author": "도시농부",
+        "date": "2026-08-27",
+        "text": "구청 옥상에 이렇게 아기자기한 텃밭과 생태정원이 가꿔져 있다니 놀라워요. 꽃과 허브 향기가 가득합니다."
+      },
+      {
+        "id": 74,
+        "author": "성내동이웃",
+        "date": "2026-08-04",
+        "text": "민원 업무 보러 왔다가 잠시 올라가서 쉬기 참 좋습니다. 벤치도 그늘져서 시원해요."
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "name": "서울도시건축전시관 서울마루 (옥상광장)",
+    "address": "서울특별시 중구 세종대로 119 서울도시건축전시관 옥상",
+    "lat": 37.5675,
+    "lng": 126.9769,
+    "floor": 1,
+    "height": 8,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "상시 개방 24시간 (전시관 실내 화~일 10:00~18:00)",
+    "fee": "무료",
+    "view": "옛 국세청 남대문별관 철거 후 시민을 위해 비워진 열린 지상 옥상마루 광장 데크입니다. 대한성공회 서울주교좌성당 본당과 덕수궁 석조전, 서울시청이 막힘없는 시선으로 마주합니다.",
+    "tags": [
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public",
+      "cafe"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 75,
+        "author": "광화문산책",
+        "date": "2026-08-27",
+        "text": "성공회 성당 건물이 가장 웅장하고 예쁘게 보이는 뷰포인트입니다. 벤치에 앉아 쉬기 정말 편해요."
+      },
+      {
+        "id": 76,
+        "author": "건축파빌리온",
+        "date": "2026-08-05",
+        "text": "계절마다 독창적인 공공 건축 파빌리온 구조물이 설치되어 볼거리와 그늘 쉼터 역할을 톡톡히 합니다."
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "name": "동대문디자인플라자(DDP) 잔디언덕 옥상공원",
+    "address": "서울특별시 중구 을지로 281 DDP 배움터 4층 옥상",
+    "lat": 37.5668,
+    "lng": 127.0095,
+    "floor": 4,
+    "height": 20,
+    "heightUnit": "m",
+    "access": "open",
+    "hours": "상시 개방 24시간 (연중무휴)",
+    "fee": "무료",
+    "view": "자하 하디드가 설계한 은빛 유선형 외장 지붕을 따라 완만하게 이어지는 잔디언덕 옥상공원입니다. 동대문 패션타운의 24시간 네온사인과 고층 쇼핑타워 스카이라인이 초현실적으로 어우러집니다.",
+    "tags": [
+      "garden",
+      "bench",
+      "view",
+      "night",
+      "free",
+      "public"
+    ],
+    "features": {
+      "garden": true,
+      "cafe": true,
+      "restaurant": false,
+      "smoking": false,
+      "bench": true,
+      "view": true,
+      "night": true
+    },
+    "comments": [
+      {
+        "id": 77,
+        "author": "심야러너",
+        "date": "2026-09-08",
+        "text": "24시간 열려 있어 심야 산책할 때 최고입니다. 곡선 지붕 위 잔디와 동대문 야경이 멋집니다."
+      },
+      {
+        "id": 78,
+        "author": "DDP탐방",
+        "date": "2026-08-20",
+        "text": "배움터 4층에서 바깥 잔디언덕으로 바로 이어지는 동선이 독특하고 피크닉 기분 내기 좋습니다."
+      }
+    ]
+  }
+];
+
+    let reports = [];
+    let currentFilter = 'all';
+    let markers = {};
+
+    // ═══════════════════════════════════════════
+    // MAP INITIALIZATION
+    // ═══════════════════════════════════════════
+
+    const map = L.map('map', {
+      zoomControl: false
+    }).setView([37.5665, 126.978], 12);
+
+    L.control.zoom({ position: 'topright' }).addTo(map);
+
+    // Tile layer - CartoDB Positron (clean, modern look)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // ═══════════════════════════════════════════
+    // CUSTOM MARKER
+    // ═══════════════════════════════════════════
+
+    function createMarkerIcon(rooftop) {
+      const icon = rooftop.features.garden ? '🌿' :
+                   rooftop.features.cafe ? '☕' :
+                   rooftop.features.night ? '🌙' :
+                   rooftop.features.view ? '🌆' : '🏢';
+
+      return L.divIcon({
+        className: 'custom-marker',
+        html: `
+          <div class="marker-pin">
+            <div class="pin-body">
+              <span class="pin-icon">${icon}</span>
+            </div>
+          </div>
+        `,
+        iconSize: [36, 44],
+        iconAnchor: [18, 44],
+        popupAnchor: [0, -44]
+      });
+    }
+
+    // ═══════════════════════════════════════════
+    // RENDER MARKERS
+    // ═══════════════════════════════════════════
+
+    function renderMarkers() {
+      // Clear existing markers
+      Object.values(markers).forEach(m => map.removeLayer(m));
+      markers = {};
+
+      const filtered = getFilteredRooftops();
+
+      filtered.forEach(rt => {
+        const marker = L.marker([rt.lat, rt.lng], {
+          icon: createMarkerIcon(rt)
+        }).addTo(map);
+
+        marker.on('click', () => openDetail(rt.id));
+
+        // Simple popup
+        marker.bindTooltip(rt.name, {
+          direction: 'top',
+          offset: [0, -48],
+          className: 'custom-tooltip'
+        });
+
+        markers[rt.id] = marker;
+      });
+
+      updateStats();
+    }
+
+    // ═══════════════════════════════════════════
+    // FILTERING
+    // ═══════════════════════════════════════════
+
+    function getFilteredRooftops() {
+      const query = document.getElementById('searchInput')?.value?.toLowerCase() || '';
+
+      return rooftops.filter(rt => {
+        // Search filter (건물명, 주소, 뷰 설명 검색 지원)
+        const matchesSearch = !query ||
+          rt.name.toLowerCase().includes(query) ||
+          rt.address.toLowerCase().includes(query) ||
+          (rt.view && rt.view.toLowerCase().includes(query));
+
+        // Tag filter
+        const matchesFilter = currentFilter === 'all' ||
+          (currentFilter === 'cafe' && rt.features.cafe) ||
+          (currentFilter === 'garden' && rt.features.garden) ||
+          (currentFilter === 'night' && rt.features.night) ||
+          (currentFilter === 'free' && rt.tags.includes('free')) ||
+          (currentFilter === 'public' && rt.access === 'open');
+
+        return matchesSearch && matchesFilter;
+      });
+    }
+
+    function setFilter(filter, el) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      renderMarkers();
+      renderLocationList();
+    }
+
+    function filterLocations() {
+      renderMarkers();
+      renderLocationList();
+    }
+
+    // ═══════════════════════════════════════════
+    // SIDEBAR (LOCATION LIST)
+    // ═══════════════════════════════════════════
+
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      sb.classList.toggle('open');
+      if (sb.classList.contains('open')) {
+        closeDetail();
+        renderLocationList();
+      }
+    }
+
+    function renderLocationList() {
+      const container = document.getElementById('locationList');
+      const filtered = getFilteredRooftops();
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="emoji">🔍</div>
+            <p>검색 결과가 없습니다.<br>새로운 옥상을 제보해주세요!</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(rt => `
+        <div class="location-item" onclick="openDetail(${rt.id})">
+          <div class="icon">${rt.features.garden ? '🌿' : rt.features.cafe ? '☕' : rt.features.night ? '🌙' : rt.features.view ? '🌆' : '🏢'}</div>
+          <div class="info">
+            <div class="name">${rt.name}</div>
+            <div class="addr">${rt.address}</div>
+          </div>
+          <div class="floor">${rt.floor}F</div>
+        </div>
+      `).join('');
+    }
+
+    // ═══════════════════════════════════════════
+    // DETAIL PANEL
+    // ═══════════════════════════════════════════
+
+    function openDetail(id) {
+      const rt = rooftops.find(r => r.id === id);
+      if (!rt) return;
+
+      document.getElementById('sidebar').classList.remove('open');
+
+      document.getElementById('detailName').textContent = rt.name;
+      document.getElementById('detailAddress').textContent = rt.address;
+
+      const accessLabel = {
+        'open': ['🚪 누구나 출입 가능', 'access-open'],
+        'limited': ['⚠️ 조건부 출입', 'access-limited'],
+        'tenant': ['🔒 입주자만', 'access-closed'],
+      }[rt.access] || ['❓ 미확인', ''];
+
+      const featureTags = [];
+      if (rt.features.garden)     featureTags.push(['🌿 옥상정원', 'tag-green']);
+      if (rt.features.cafe)       featureTags.push(['☕ 카페', 'tag-amber']);
+      if (rt.features.restaurant) featureTags.push(['🍽️ 식당', 'tag-amber']);
+      if (rt.features.smoking)    featureTags.push(['🚬 흡연구역', 'tag-gray']);
+      if (rt.features.bench)      featureTags.push(['🪑 벤치/쉼터', 'tag-blue']);
+      if (rt.features.view)       featureTags.push(['🌆 전망 좋음', 'tag-purple']);
+      if (rt.features.night)      featureTags.push(['🌙 야간개방', 'tag-blue']);
+
+      const commentsHtml = rt.comments.length > 0
+        ? rt.comments.map(c => `
+          <div class="comment">
+            <div class="comment-meta">
+              <span class="comment-author">${c.author}</span>
+              <span class="comment-date">${c.date}</span>
+            </div>
+            <p class="comment-text">${c.text}</p>
+          </div>
+        `).join('')
+        : '<div class="no-comments">아직 댓글이 없습니다. 첫 댓글을 남겨보세요!</div>';
+
+      document.getElementById('detailBody').innerHTML = `
+        <!-- Info Cards -->
+        <div class="detail-section">
+          <h3>📊 기본 정보</h3>
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="label">층수</div>
+              <div class="value highlight">${rt.floor}F</div>
+            </div>
+            <div class="info-card">
+              <div class="label">높이</div>
+              <div class="value">${rt.height ? rt.height + 'm' : '미확인'}</div>
+            </div>
+            <div class="info-card">
+              <div class="label">입장료</div>
+              <div class="value">${rt.fee || '미확인'}</div>
+            </div>
+            <div class="info-card">
+              <div class="label">외부인 출입</div>
+              <div class="value" style="font-size:12px;">
+                <span class="access-badge ${accessLabel[1]}">${accessLabel[0]}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hours -->
+        <div class="detail-section">
+          <h3>🕐 개방 시간</h3>
+          <p style="font-size:15px; color: var(--gray-700);">${rt.hours || '미확인'}</p>
+        </div>
+
+        <!-- Tags -->
+        <div class="detail-section">
+          <h3>✨ 특징</h3>
+          <div class="tags">
+            ${featureTags.map(([label, cls]) => `<span class="tag ${cls}">${label}</span>`).join('')}
+            ${featureTags.length === 0 ? '<span style="color:var(--gray-400); font-size:14px;">등록된 특징 정보가 없습니다</span>' : ''}
+          </div>
+        </div>
+
+        <!-- View -->
+        <div class="detail-section">
+          <h3>🌆 뷰 설명</h3>
+          ${rt.view
+            ? `<div class="view-description">${rt.view}</div>`
+            : '<p style="color:var(--gray-400); font-size:14px;">아직 뷰 설명이 등록되지 않았습니다</p>'
+          }
+        </div>
+
+        <!-- Comments -->
+        <div class="detail-section">
+          <h3>💬 댓글 · 제보 (${rt.comments.length})</h3>
+          <div class="comment-list">
+            ${commentsHtml}
+          </div>
+          <div class="comment-form" style="margin-top:16px;">
+            <div class="comment-input-group">
+              <div class="comment-input-row">
+                <input type="text" id="commentAuthor" placeholder="닉네임" style="width:120px; flex:none;">
+                <input type="text" id="commentText" placeholder="댓글을 남겨보세요..." style="flex:1;">
+              </div>
+              <button class="btn btn-primary" onclick="addComment(${rt.id})" style="align-self: flex-end;">
+                등록
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('detailPanel').classList.add('open');
+
+      // Pan map to location
+      map.flyTo([rt.lat, rt.lng], 15, { duration: 0.8 });
+    }
+
+    function closeDetail() {
+      document.getElementById('detailPanel').classList.remove('open');
+    }
+
+    // ═══════════════════════════════════════════
+    // COMMENTS
+    // ═══════════════════════════════════════════
+
+    function addComment(rooftopId) {
+      const author = document.getElementById('commentAuthor').value.trim() || '익명';
+      const text = document.getElementById('commentText').value.trim();
+
+      if (!text) {
+        showToast('댓글 내용을 입력해주세요');
+        return;
+      }
+
+      const rt = rooftops.find(r => r.id === rooftopId);
+      if (!rt) return;
+
+      rt.comments.push({
+        id: Date.now(),
+        author: author,
+        date: new Date().toISOString().split('T')[0],
+        text: text
+      });
+
+      openDetail(rooftopId); // Re-render
+      showToast('💬 댓글이 등록되었습니다!');
+    }
+
+    // ═══════════════════════════════════════════
+    // REPORT MODAL
+    // ═══════════════════════════════════════════
+
+    function openReportModal() {
+      document.getElementById('reportModal').classList.add('open');
+    }
+
+    function closeReportModal() {
+      document.getElementById('reportModal').classList.remove('open');
+    }
+
+    function submitReport() {
+      const name = document.getElementById('reportName').value.trim();
+      const address = document.getElementById('reportAddress').value.trim();
+
+      if (!name || !address) {
+        showToast('건물명과 주소는 필수입니다!');
+        return;
+      }
+
+      const checkedFeatures = [];
+      document.querySelectorAll('.checkbox-group input:checked').forEach(cb => {
+        checkedFeatures.push(cb.value);
+      });
+
+      const report = {
+        id: Date.now(),
+        name,
+        address,
+        floor: document.getElementById('reportFloor').value.trim(),
+        height: document.getElementById('reportHeight').value.trim(),
+        hours: document.getElementById('reportHours').value.trim(),
+        access: document.getElementById('reportAccess').value,
+        features: checkedFeatures,
+        view: document.getElementById('reportView').value.trim(),
+        memo: document.getElementById('reportMemo').value.trim(),
+        nickname: document.getElementById('reportNickname').value.trim() || '익명',
+        submittedAt: new Date().toISOString(),
+        status: 'pending' // pending, approved, rejected
+      };
+
+      reports.push(report);
+      updateStats();
+
+      // Clear form
+      document.querySelectorAll('#reportModal input, #reportModal textarea, #reportModal select').forEach(el => {
+        if (el.type === 'checkbox') el.checked = false;
+        else el.value = '';
+      });
+
+      closeReportModal();
+      showToast('📍 제보가 접수되었습니다! 검토 후 등록됩니다.');
+    }
+
+    // ═══════════════════════════════════════════
+    // STATS
+    // ═══════════════════════════════════════════
+
+    function updateStats() {
+      document.getElementById('statCount').textContent = rooftops.length;
+      document.getElementById('statReports').textContent = reports.length;
+    }
+
+    // ═══════════════════════════════════════════
+    // TOAST
+    // ═══════════════════════════════════════════
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ═══════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════
+
+    renderMarkers();
+    updateStats();
+
+    // Close modal on overlay click
+    document.getElementById('reportModal').addEventListener('click', function(e) {
+      if (e.target === this) closeReportModal();
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeReportModal();
+        closeDetail();
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    });
+  </script>
+</body>
+</html>
