@@ -232,6 +232,39 @@
       margin-top: 4px;
     }
 
+    .address-original {
+      display: inline-block;
+      margin-top: 2px;
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    .lang-select {
+      border: none;
+      cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      padding-right: 28px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23555' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .directions-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .directions-bar .btn {
+      flex: 1 1 auto;
+      white-space: nowrap;
+      justify-content: center;
+    }
+
     .detail-body {
       flex: 1;
       overflow-y: auto;
@@ -1071,9 +1104,12 @@
       <span id="appTitle">서울 스카이</span>
     </div>
     <div class="header-actions">
-      <button class="btn btn-secondary" id="langToggleBtn" onclick="toggleLanguage()" style="font-weight: 600;">
-        🌐 English
-      </button>
+      <select id="langSelect" class="btn btn-secondary lang-select" onchange="setLanguage(this.value)" style="font-weight: 600;">
+        <option value="ko">🇰🇷 한국어</option>
+        <option value="en">🇺🇸 English</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="ja">🇯🇵 日本語</option>
+      </select>
       <button class="btn btn-secondary" id="btnList" onclick="toggleSidebar()">
         📋 목록
       </button>
@@ -1325,7 +1361,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "서울역 (1·4호선/경의중앙선/공항철도) 3번 출구",
+    "name_zh": "首尔路7017天空花园",
+    "hours_zh": "全年无休 00:00~24:00",
+    "fee_zh": "免费",
+    "view_zh": "空中步行花园,可俯瞰南山首尔塔、崇礼门与首尔站前广场及铁道线。",
+    "name_ja": "ソウル路7017スカイガーデン",
+    "hours_ja": "年中無休 0:00~24:00",
+    "fee_ja": "無料",
+    "view_ja": "南山ソウルタワーや崇礼門、ソウル駅前広場と線路を見渡せる空中遊歩庭園。"
   },
   {
     "id": 2,
@@ -1364,7 +1409,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "광화문역 (5호선) 2번 출구",
+    "name_zh": "大韩民国历史博物馆8楼黄土坡屋顶花园",
+    "hours_zh": "每日10:00~18:00(周三·周六夜间开放至21:00)",
+    "fee_zh": "免费",
+    "view_zh": "可正面眺望光化门、景福宫、青瓦台与北岳山的全景观景台。",
+    "name_ja": "大韓民国歴史博物館8階黄土マル屋上庭園",
+    "hours_ja": "毎日10:00~18:00(水・土は21:00まで夜間開放)",
+    "fee_ja": "無料",
+    "view_ja": "光化門、景福宮、青瓦台、北岳山を一望できるパノラマ展望台。"
   },
   {
     "id": 3,
@@ -1402,7 +1456,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "시청역 (1·2호선) 1번 출구",
+    "name_zh": "貞洞展望台(西小门厅舍1栋13楼)",
+    "hours_zh": "平日13:30~17:30 / 周末09:00~18:00(周五·周六至22:00)",
+    "fee_zh": "免费",
+    "view_zh": "如迷你画卷般俯瞰德寿宫庭院与石墙,毗邻怀旧的貞洞街区。",
+    "name_ja": "貞洞展望台(西小門庁舎1棟13階)",
+    "hours_ja": "平日13:30~17:30 / 週末9:00~18:00(金・土は22:00まで)",
+    "fee_ja": "無料",
+    "view_ja": "徳寿宮の中庭と石垣をミニチュアのように見下ろせる展望台。"
   },
   {
     "id": 4,
@@ -1440,7 +1503,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "시청역 (1·2호선) 1번 출구",
+    "name_zh": "首尔图书馆5楼天空庭园",
+    "hours_zh": "平日09:00~21:00 / 周末09:00~18:00(每周一休馆)",
+    "fee_zh": "免费",
+    "view_zh": "在1926年建成的旧市厅建筑屋顶,俯瞰首尔广场草坪与新市厅玻璃外墙。",
+    "name_ja": "ソウル図書館5階ハヌルトゥル屋上庭園",
+    "hours_ja": "平日9:00~21:00 / 週末9:00~18:00(月曜休館)",
+    "fee_ja": "無料",
+    "view_ja": "1926年築の旧市庁舎屋上から、ソウル広場の芝生と新市庁舎のガラス外壁を望む。"
   },
   {
     "id": 5,
@@ -1478,7 +1550,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "시청역 (1·2호선) 1번 출구",
+    "name_zh": "首尔市厅本馆天空展望台(9楼)",
+    "hours_zh": "周一~周四07:30~18:00 / 周五·周六07:30~22:00(周日休息)",
+    "fee_zh": "免费",
+    "view_zh": "从1楼直达电梯上楼,落地窗全景眺望首尔广场、德寿宫与崇礼门方向天际线。",
+    "name_ja": "ソウル市庁本館スカイ展望台(9階)",
+    "hours_ja": "月~木7:30~18:00 / 金・土7:30~22:00(日曜休み)",
+    "fee_ja": "無料",
+    "view_ja": "1階から直通エレベーターで上がり、ソウル広場や徳寿宮、崇礼門方面の眺望を楽しめる。"
   },
   {
     "id": 6,
@@ -1516,7 +1597,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "시청역 (1·2호선)",
+    "name_zh": "国立貞洞剧场世纪厅屋顶",
+    "hours_zh": "周二~周日09:00~21:00(每周一休馆)",
+    "fee_zh": "免费",
+    "view_zh": "欧式风情屋顶,可欣赏圣公会大教堂橙色屋顶与德寿宫石墙路。",
+    "name_ja": "国立貞洞劇場セシル屋上「セシルマル」",
+    "hours_ja": "火~日9:00~21:00(月曜休館)",
+    "fee_ja": "無料",
+    "view_ja": "聖公会大聖堂のオレンジ屋根と徳寿宮の石垣の道を望む、欧風の屋上スポット。"
   },
   {
     "id": 7,
@@ -1554,7 +1644,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "종로3가역 (1·3·5호선)",
+    "name_zh": "世运商街9楼世运屋顶(首尔屋顶)",
+    "hours_zh": "周二~周日10:00~20:00(视天气情况调整)",
+    "fee_zh": "免费",
+    "view_zh": "360度全景,可见宗庙森林、北岳山、清溪川与南山首尔塔。",
+    "name_ja": "世運商街9階「世運屋上」(ソウル屋上)",
+    "hours_ja": "火~日10:00~20:00(天候により変動あり)",
+    "fee_ja": "無料",
+    "view_ja": "宗廟の森や北岳山、清渓川、南山ソウルタワーを360度見渡せる。"
   },
   {
     "id": 8,
@@ -1592,7 +1691,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "서울역 (1·4호선/경의중앙선/공항철도)",
+    "name_zh": "Docking首尔 & 首尔站屋顶花园",
+    "hours_zh": "周二~周日11:00~20:00(每周一休馆 / 屋顶花园常时开放)",
+    "fee_zh": "免费",
+    "view_zh": "废弃20年的螺旋车道改造成艺术空间,直连旧首尔站绿色屋顶。",
+    "name_ja": "ドッキングソウル&ソウル駅屋上庭園",
+    "hours_ja": "火~日11:00~20:00(月曜休館/屋上庭園は常時開放)",
+    "fee_ja": "無料",
+    "view_ja": "20年間放置されていた螺旋型car ランプをアート空間に再生し、旧ソウル駅の緑の屋上に直結。"
   },
   {
     "id": 9,
@@ -1631,7 +1739,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "고속터미널역 (3·7·9호선) 8-1번 출구",
+    "name_zh": "世益岛(加益岛)4·5楼世益马鲁屋顶花园",
+    "hours_zh": "全年无休 10:00~22:00",
+    "fee_zh": "免费",
+    "view_zh": "汉江上的水上屋顶露台,360度江景与盘浦大桥月光彩虹喷泉夜景。",
+    "name_ja": "セビッ島(カビッ島)4・5階セビッマル屋上庭園",
+    "hours_ja": "年中無休 10:00~22:00",
+    "fee_ja": "無料",
+    "view_ja": "漢江に浮かぶ水上屋上テラスで、盤浦大橋の月光虹の噴水など360度の川景色を楽しめる。"
   },
   {
     "id": 10,
@@ -1670,7 +1787,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "노들역 (9호선)",
+    "name_zh": "鹭得岛3楼屋顶露台(鹭得广场)",
+    "hours_zh": "户外24小时常时开放(便利设施10:00~21:00)",
+    "fee_zh": "免费",
+    "view_zh": "汉江正中央小岛,可眺望汝矣岛金融区天际线与横跨汉江铁桥的列车,日落尤美。",
+    "name_ja": "ノドゥル島3階屋上テラス(ノドゥルスクエア)",
+    "hours_ja": "屋外24時間常時開放(施設利用10:00~21:00)",
+    "fee_ja": "無料",
+    "view_ja": "漢江のど真ん中の島から、汝矣島のスカイラインと漢江鉄橋を渡る列車、美しい夕日を望む。"
   },
   {
     "id": 11,
@@ -1709,7 +1835,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "노량진역 (1·9호선)",
+    "name_zh": "鹭梁津水产市场5楼天空苑屋顶花园",
+    "hours_zh": "每日09:00~22:00",
+    "fee_zh": "免费",
+    "view_zh": "近距离眺望汝矣岛63大厦等高楼与穿梭于鹭梁津站的多条列车轨道。",
+    "name_ja": "鷺梁津水産市場5階空苑屋上庭園",
+    "hours_ja": "毎日9:00~22:00",
+    "fee_ja": "無料",
+    "view_ja": "汝矣島の63スクエアなど高層ビル群と、鷺梁津駅を行き交う列車を間近に望める。"
   },
   {
     "id": 12,
@@ -1745,7 +1880,15 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "name_zh": "恩平历史韩屋博物馆3楼涌出亭屋顶展望台",
+    "hours_zh": "周二~周日09:00~18:00(每周一休馆)",
+    "fee_zh": "成人1,000韩元(含博物馆门票)",
+    "view_zh": "传统木造亭阁,框景北汉山岩峰与恩平韩屋村瓦片屋顶如水墨画。",
+    "name_ja": "恩平歴史韓屋博物館3階ヨンチュルジョン屋上展望台",
+    "hours_ja": "火~日9:00~18:00(月曜休館)",
+    "fee_ja": "大人1,000ウォン(博物館観覧込み)",
+    "view_ja": "伝統的な木造亭から、北漢山の岩峰と恩平韓屋村の瓦屋根を水墨画のように眺められる。"
   },
   {
     "id": 13,
@@ -1782,7 +1925,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "김포공항역 (5·9호선/공항철도)",
+    "name_zh": "国立航空博物馆4楼屋顶展望台",
+    "hours_zh": "周二~周日10:00~18:00(入场截止17:30,每周一休馆)",
+    "fee_zh": "免费",
+    "view_zh": "韩国唯一360度机场跑道观景屋顶,近距离观看金浦机场客机起降。",
+    "name_ja": "国立航空博物館4階屋上展望台",
+    "hours_ja": "火~日10:00~18:00(入場は17:30まで、月曜休館)",
+    "fee_ja": "無料",
+    "view_ja": "韓国唯一の360度滑走路展望屋上で、金浦空港を離着陸する旅客機を間近に見られる。"
   },
   {
     "id": 14,
@@ -1821,7 +1973,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "회현역 (4호선)",
+    "name_zh": "新世界百货店本店新馆6楼三一花园",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "露天雕塑公园,展示杰夫·昆斯等作品,背景是南山首尔塔与明洞古建筑。",
+    "name_ja": "新世界百貨店本店新館6階トリニティガーデン",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "ジェフ・クーンズらの彫刻が並ぶ屋外庭園で、南山ソウルタワーと明洞の街並みを背景に望む。"
   },
   {
     "id": 15,
@@ -1860,7 +2021,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "삼성역 (2호선)",
+    "name_zh": "现代百货店贸易中心店11楼天空花园",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "位于德黑兰路高楼与COEX之间的11楼绿洲,配有花园座席与季节艺术装置。",
+    "name_ja": "現代百貨店貿易センター店11階空中庭園",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "テヘラン路のビル群とCOEXに囲まれた11階のオアシスで、庭園とアート展示が楽しめる。"
   },
   {
     "id": 16,
@@ -1899,7 +2069,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "고속터미널역 (3·7·9호선)",
+    "name_zh": "新世界百货店江南店11楼S花园(天空庭园)",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "高速巴士客运站楼顶的迷宫花园,配有喷泉与棱镜光雕,俯瞰盘浦、瑞草。",
+    "name_ja": "新世界百貨店江南店11階Sガーデン(空中庭園)",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "高速ターミナル屋上の迷路型庭園。噴水やプリズム彫刻越しに盤浦・瑞草を一望できる。"
   },
   {
     "id": 17,
@@ -1938,7 +2117,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "영등포역 (1호선)",
+    "name_zh": "永登浦Times Square 5楼天空花园",
+    "hours_zh": "每日10:00~22:00",
+    "fee_zh": "免费",
+    "view_zh": "18号出口直达,大片草坪与木栈道,夜间点灯至22点。",
+    "name_ja": "永登浦タイムズスクエア5階空中庭園",
+    "hours_ja": "毎日10:00~22:00",
+    "fee_ja": "無料",
+    "view_ja": "18番ゲートから直結。広い芝生と木製デッキがあり、夜22時までライトアップされる。"
   },
   {
     "id": 18,
@@ -1976,7 +2164,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "홍대입구역 (2호선/공항철도/경의중앙선)",
+    "name_zh": "AK广场弘大17楼MUSINSA Terrace Park",
+    "hours_zh": "每日11:00~20:00",
+    "fee_zh": "免费(需会员确认)",
+    "view_zh": "弘大入口站上方约2,600㎡屋顶露台,俯瞰弘大商圈、京义线森林步道与汝矣岛。",
+    "name_ja": "AKプラザ弘大17階ムシンサテラスパーク",
+    "hours_ja": "毎日11:00~20:00",
+    "fee_ja": "無料(会員確認あり)",
+    "view_ja": "弘大入口駅直上の約2,600㎡屋上テラスから、弘大の街や京義線の森の道、汝矣島を望む。"
   },
   {
     "id": 19,
@@ -2013,7 +2210,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "종각역 (1호선)",
+    "name_zh": "HiKR Ground(韩国观光公社首尔中心)5楼清溪川露台",
+    "hours_zh": "周二~周日10:00~19:00(每周一休馆)",
+    "fee_zh": "免费",
+    "view_zh": "俯瞰蜿蜒的清溪川与光桥路口,附设咖啡厅。",
+    "name_ja": "HiKRグラウンド(韓国観光公社ソウルセンター)5階清渓川テラス",
+    "hours_ja": "火~日10:00~19:00(月曜休館)",
+    "fee_ja": "無料",
+    "view_ja": "蛇行する清渓川と光橋交差点を見下ろせる、カフェ併設のテラス。"
   },
   {
     "id": 20,
@@ -2052,7 +2258,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "여의도역 (5·9호선)",
+    "name_zh": "THE HYUNDAI SEOUL 6楼景观休息区&SOUNDS FOREST",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "从6楼空中步道俯瞰约3,300㎡的室内森林花园,自然采光通透明亮。",
+    "name_ja": "THE HYUNDAI SEOUL 6階ビューラウンジ&サウンズフォレスト",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "6階の空中通路から、天窓の光が降り注ぐ約3,300㎡の室内森林庭園を見下ろせる。"
   },
   {
     "id": 21,
@@ -2091,7 +2306,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "용산역 (1호선/KTX)",
+    "name_zh": "龙山ipark Mall 4楼The Garden户外露台",
+    "hours_zh": "周日~周四10:30~20:30 / 周五·周六10:30~21:00",
+    "fee_zh": "免费",
+    "view_zh": "阶梯式草坪露台,俯瞰龙山铁道基地与高楼群,日落夜景尤佳。",
+    "name_ja": "龍山アイパークモール4階ザ・ガーデン屋外テラス",
+    "hours_ja": "日~木10:30~20:30 / 金・土10:30~21:00",
+    "fee_ja": "無料",
+    "view_ja": "階段状の芝生デッキから龍山の鉄道操車場と高層ビル群を一望。夕景・夜景が特に美しい。"
   },
   {
     "id": 22,
@@ -2130,7 +2354,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "안국역 (3호선)",
+    "name_zh": "仁寺洞双叽街(Ssamziegil)4楼天空花园",
+    "hours_zh": "每日10:30~20:30(法定节假日当天休息)",
+    "fee_zh": "免费",
+    "view_zh": "沿螺旋坡道经过手工艺品店抵达屋顶花园,俯瞰仁寺洞传统瓦片屋顶。",
+    "name_ja": "仁寺洞サムジギル4階空中庭園",
+    "hours_ja": "毎日10:30~20:30(旧正月・秋夕当日休み)",
+    "fee_ja": "無料",
+    "view_ja": "螺旋状の回廊を工芸品店を見ながら上がると現れる屋上庭園。仁寺洞の瓦屋根を見渡せる。"
   },
   {
     "id": 23,
@@ -2167,7 +2400,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "안국역 (3호선)",
+    "name_zh": "首尔工艺博物馆教育馆5楼屋顶展望台",
+    "hours_zh": "周二~周日10:00~18:00(入场截止17:30,每周一休馆)",
+    "fee_zh": "免费(无需预约)",
+    "view_zh": "安国洞的静谧观景台,可见北村韩屋村瓦顶及仁王山、北岳山山脊。",
+    "name_ja": "ソウル工芸博物館教育棟5階屋上展望台",
+    "hours_ja": "火~日10:00~18:00(入場は17:30まで、月曜休館)",
+    "fee_ja": "無料(予約不要)",
+    "view_ja": "安国洞の静かな展望台。北村韓屋村の瓦屋根と仁王山・北岳山の稜線を望む。"
   },
   {
     "id": 24,
@@ -2204,7 +2446,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "경복궁역 (3호선)",
+    "name_zh": "青瓦台迎宾馆2楼露台&咖啡厅",
+    "hours_zh": "周三~周一09:00~18:00(入场截止17:30,每周二休馆)",
+    "fee_zh": "免费(无需预约)",
+    "view_zh": "正面可见青瓦台本馆蓝色屋顶、迎宾馆与北岳山。",
+    "name_ja": "青瓦台サランチェ2階テラス&カフェ",
+    "hours_ja": "水~月9:00~18:00(入場は17:30まで、火曜休館)",
+    "fee_ja": "無料(予約不要)",
+    "view_ja": "青瓦台本館の青い瓦屋根や迎賓館、北岳山を正面に望むテラス。"
   },
   {
     "id": 25,
@@ -2241,7 +2492,15 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "name_zh": "道峰区和平文化阵地5栋屋顶展望台",
+    "hours_zh": "周二~周日10:00~18:00(每周一休馆)",
+    "fee_zh": "免费",
+    "view_zh": "改造自废弃军事反坦克掩体,正面可见道峰山险峻岩壁全景。",
+    "name_ja": "道峰区平和文化陣地5棟屋上展望台",
+    "hours_ja": "火~日10:00~18:00(月曜休館)",
+    "fee_ja": "無料",
+    "view_ja": "廃止された軍の対戦車掩体壕を改装。道峰山の迫力ある岩峰を間近に一望できる。"
   },
   {
     "id": 26,
@@ -2279,7 +2538,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "월드컵경기장역 (6호선)",
+    "name_zh": "麻浦石油库文化公园T6屋顶马鲁",
+    "hours_zh": "周二~周日10:00~18:00(周一休馆 / 公园户外24小时常开)",
+    "fee_zh": "免费",
+    "view_zh": "由废弃巨型油罐钢板改造而成的圆形露天平台,可见开阔天空与梅峰山森林。",
+    "name_ja": "麻浦文化備蓄基地T6屋上マル",
+    "hours_ja": "火~日10:00~18:00(月曜休館/公園屋外は24時間常時開放)",
+    "fee_ja": "無料",
+    "view_ja": "廃止された石油タンクの鉄板を再利用した円形の屋上デッキから、空と梅峰山の森を望む。"
   },
   {
     "id": 27,
@@ -2317,7 +2585,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "마포구청역 (6호선)",
+    "name_zh": "麻浦区厅12楼天空花园(天空图书馆)",
+    "hours_zh": "平日09:00~18:00(周末及法定假日休息)",
+    "fee_zh": "免费",
+    "view_zh": "俯瞰首尔世界杯竞技场、和平公园与汉江地平线。",
+    "name_ja": "麻浦区庁12階空中庭園(空中図書館)",
+    "hours_ja": "平日9:00~18:00(週末・祝日休み)",
+    "fee_ja": "無料",
+    "view_ja": "ソウルワールドカップ競技場や平和公園、漢江の地平線を見渡せる。"
   },
   {
     "id": 28,
@@ -2355,7 +2632,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "몽촌토성역 (8호선)",
+    "name_zh": "汉城百济博物馆3楼屋顶花园(天空公园)",
+    "hours_zh": "周二~周五09:00~19:00 / 周六·周日09:00~18:00(每周一休馆)",
+    "fee_zh": "免费",
+    "view_zh": "缓坡屋顶花园,俯瞰梦村土城城墙草坪、奥林匹克公园与乐天世界塔。",
+    "name_ja": "漢城百済博物館3階屋上庭園(空中公園)",
+    "hours_ja": "火~金9:00~19:00 / 土・日9:00~18:00(月曜休館)",
+    "fee_ja": "無料",
+    "view_ja": "なだらかな傾斜の屋上庭園から、夢村土城の土塁やオリンピック公園、ロッテワールドタワーを望む。"
   },
   {
     "id": 29,
@@ -2393,7 +2679,15 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "name_zh": "松坡图书博物馆2楼户外屋顶花园(相融花园)",
+    "hours_zh": "周二~周日10:00~18:00(入场截止17:30,每周一休馆)",
+    "fee_zh": "免费(无需预约)",
+    "view_zh": "以层叠书架为灵感的开放式屋顶花园,设有户外休憩座椅与草坪。",
+    "name_ja": "松坡ブックミュージアム2階屋外屋上庭園(オウルリム庭園)",
+    "hours_ja": "火~日10:00~18:00(入場は17:30まで、月曜休館)",
+    "fee_ja": "無料(予約不要)",
+    "view_ja": "重なる本棚をモチーフにした開放的な屋上庭園。屋外のベンチと芝生でくつろげる。"
   },
   {
     "id": 30,
@@ -2432,7 +2726,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "천호역 (5·8호선)",
+    "name_zh": "现代百货店千户店13楼天空花园(绣球花广场)",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "13楼圆形绣球花园,俯瞰汉江、风纳土城遗址与乐天世界塔天际线。",
+    "name_ja": "現代百貨店千戸店13階空中庭園(アジサイ広場)",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "13階の円形アジサイ庭園から、漢江や風納土城の遺跡、ロッテワールドタワーのスカイラインを望む。"
   },
   {
     "id": 31,
@@ -2470,7 +2773,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "성수역 (2호선)",
+    "name_zh": "圣水联邦3楼天上家屋温室屋顶",
+    "hours_zh": "每日11:00~22:00",
+    "fee_zh": "免费(自愿消费咖啡厅)",
+    "view_zh": "旧化工厂改造的玻璃温室屋顶咖啡厅,充满圣水洞红砖工业感。",
+    "name_ja": "聖水連邦3階天上家屋温室ルーフトップ",
+    "hours_ja": "毎日11:00~22:00",
+    "fee_ja": "無料(カフェ利用は任意)",
+    "view_ja": "旧化学工場を改装したガラス温室カフェ。聖水洞らしい赤レンガの工業的な雰囲気が魅力。"
   },
   {
     "id": 32,
@@ -2508,7 +2820,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "공덕역 (5·6호선/공항철도/경의중앙선)",
+    "name_zh": "首尔创业中心孔德本馆10楼天空花园",
+    "hours_zh": "平日09:00~20:00(周末及法定假日休息)",
+    "fee_zh": "免费",
+    "view_zh": "俯瞰京义线森林公园绿带与孔德、麻浦密集高楼群。",
+    "name_ja": "ソウル創業ハブ孔徳本館10階空中庭園",
+    "hours_ja": "平日9:00~20:00(週末・祝日休み)",
+    "fee_ja": "無料",
+    "view_ja": "京義線の森の道沿いの緑地帯と、孔徳・麻浦の高層ビル群を見下ろせる。"
   },
   {
     "id": 33,
@@ -2547,7 +2868,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "오목교역 (5호선)",
+    "name_zh": "现代百货店木洞店7楼天空花园(玻璃屋)",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "与室内玻璃植物园相连的7楼露台花园,俯瞰安养川与木洞天际线。",
+    "name_ja": "現代百貨店木洞店7階空中庭園(グラスハウス)",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "室内植物園グラスハウスと直結する7階のテラス庭園。安養川と木洞の街並みを望む。"
   },
   {
     "id": 34,
@@ -2585,7 +2915,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "서울숲역 (수인분당선)",
+    "name_zh": "首尔林Understand Avenue屋顶桥廊露台",
+    "hours_zh": "每日10:00~21:00",
+    "fee_zh": "免费",
+    "view_zh": "彩色集装箱建筑间的空中连廊,framing首尔林水杉林荫道美景。",
+    "name_ja": "ソウルの森アンダースタンドアベニュー屋上ブリッジテラス",
+    "hours_ja": "毎日10:00~21:00",
+    "fee_ja": "無料",
+    "view_ja": "カラフルなコンテナ建築をつなぐ空中通路から、ソウルの森のメタセコイア並木を望む。"
   },
   {
     "id": 35,
@@ -2623,7 +2962,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "뚝섬유원지역 (7호선)",
+    "name_zh": "纛岛尺蠖3楼观景平台(汉江故事展示馆)",
+    "hours_zh": "周二~周日10:00~21:00(每周一休馆)",
+    "fee_zh": "免费",
+    "view_zh": "毛毛虫造型建筑内外,可见7号线列车穿越青潭大桥与乐天世界塔夜景。",
+    "name_ja": "トゥッコム(纛島)チャボルレ3階展望デッキ(漢江ストーリー展示館)",
+    "hours_ja": "火~日10:00~21:00(月曜休館)",
+    "fee_ja": "無料",
+    "view_ja": "イモムシ形の建物の内外から、7号線の列車が青潭大橋を渡る様子とロッテワールドタワーの夜景を望む。"
   },
   {
     "id": 36,
@@ -2662,7 +3010,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "영등포역 (1호선)",
+    "name_zh": "乐天百货店永登浦店11楼夏洛特花园(屋顶花园)",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "永登浦站上方11楼观景屋顶,俯瞰铁道线与首尔西南部天际线。",
+    "name_ja": "ロッテ百貨店永登浦店11階シャルロッテガーデン(屋上庭園)",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "永登浦駅の真上、11階の展望屋上から線路とソウル南西部のスカイラインを一望。"
   },
   {
     "id": 37,
@@ -2699,7 +3056,16 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "station": "강동구청역 (8호선)",
+    "name_zh": "江东区厅本馆5楼生生广场天空花园",
+    "hours_zh": "平日09:00~18:00(周末及法定假日休息)",
+    "fee_zh": "免费",
+    "view_zh": "获奖的市政绿色屋顶,设有都市农场、野花花坛与小型生态池。",
+    "name_ja": "江東区庁本館5階シンシンマダン空中庭園",
+    "hours_ja": "平日9:00~18:00(週末・祝日休み)",
+    "fee_ja": "無料",
+    "view_ja": "受賞歴のある区庁の緑の屋上。都市農園や野草花壇、小さなビオトープがある。"
   },
   {
     "id": 38,
@@ -2737,7 +3103,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "시청역 (1·2호선)",
+    "name_zh": "首尔都市建筑展示馆首尔马鲁(屋顶广场)",
+    "hours_zh": "24小时常时开放(展示馆室内周二~周日10:00~18:00)",
+    "fee_zh": "免费",
+    "view_zh": "拆除旧税务附属建筑后开辟的街边屋顶广场,正对圣公会大教堂与德寿宫。",
+    "name_ja": "ソウル都市建築展示館ソウルマル(屋上広場)",
+    "hours_ja": "24時間常時開放(展示館内部は火~日10:00~18:00)",
+    "fee_ja": "無料",
+    "view_ja": "旧税務庁舎を撤去して生まれた街区レベルの屋上広場。聖公会大聖堂と徳寿宮を正面に望む。"
   },
   {
     "id": 39,
@@ -2775,7 +3150,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "동대문역사문화공원역 (2·4·5호선)",
+    "name_zh": "东大门设计广场(DDP)草坪山丘屋顶公园",
+    "hours_zh": "24小时全年无休常时开放",
+    "fee_zh": "免费",
+    "view_zh": "沿扎哈·哈迪德流线型铝制屋顶延伸的草坪,俯瞰东大门时尚商圈24小时灯火。",
+    "name_ja": "東大門デザインプラザ(DDP)芝生の丘屋上公園",
+    "hours_ja": "24時間年中無休で常時開放",
+    "fee_ja": "無料",
+    "view_ja": "ザハ・ハディド設計の曲面アルミ屋根に沿ってなだらかに広がる芝生から、24時間灯る東大門ファッションタウンを望む。"
   },
   {
     "id": 40,
@@ -2814,7 +3198,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "문정역 (8호선/수인분당선)",
+    "name_zh": "松坡Garden5 10楼四季公园屋顶花园",
+    "hours_zh": "每日10:00~21:00",
+    "fee_zh": "免费",
+    "view_zh": "国内最大级百货屋顶生态公园之一,约25,000㎡(相当于3个足球场),四大主题花园相连。",
+    "name_ja": "松坡ガーデンファイブ10階フォーシーズンズパーク屋上庭園",
+    "hours_ja": "毎日10:00~21:00",
+    "fee_ja": "無料",
+    "view_ja": "国内最大級のデパート屋上エコパークの一つ。約25,000㎡(サッカー場3面分)に4つのテーマ庭園が連なる。"
   },
   {
     "id": 41,
@@ -2853,7 +3246,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "압구정역 (3호선)",
+    "name_zh": "现代百货店狎鸥亭本店6楼天空花园",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "位于狎鸥亭奢华商圈之上的精致花园露台,绿意盎然,设有咖啡座席。",
+    "name_ja": "現代百貨店狎鴎亭本店6階空中庭園",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "狎鴎亭の高級商業エリアの上に広がる洗練された庭園テラス。緑豊かでカフェ席もある。"
   },
   {
     "id": 42,
@@ -2892,7 +3294,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "청량리역 (1호선/경의중앙선/수인분당선)",
+    "name_zh": "乐天百货店清凉里店8楼夏洛特花园(屋顶花园)",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "位于清凉里铁道枢纽正上方的宽阔屋顶公园,可观列车进出与首尔东部天际线。",
+    "name_ja": "ロッテ百貨店清凉里店8階シャルロッテガーデン(屋上庭園)",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "清凉里の鉄道拠点の真上に広がる屋上公園。列車の発着とソウル東部の街並みを望める。"
   },
   {
     "id": 43,
@@ -2931,7 +3342,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "노원역 (4·7호선)",
+    "name_zh": "乐天百货店老原店10楼屋顶花园",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "10楼俯瞰热闹的老原商圈,北有水落山、东有佛岩山的壮丽山脊线为背景。",
+    "name_ja": "ロッテ百貨店蘆原店10階屋上庭園",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "賑やかな蘆原の街を10階から見下ろし、北の水落山と東の佛岩山の稜線を背景に望む。"
   },
   {
     "id": 44,
@@ -2970,7 +3390,15 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "name_zh": "瑞草区方背林环境图书馆屋顶花园'云、庭'",
+    "hours_zh": "平日09:00~22:00 / 周末09:00~18:00(每周五休馆)",
+    "fee_zh": "免费",
+    "view_zh": "隐于Seoripul公园树林中的生态图书馆屋顶,漫步小径清新宜人。",
+    "name_ja": "瑞草区パンベスプ環境図書館屋上庭園「雲、庭」",
+    "hours_ja": "平日9:00~22:00 / 週末9:00~18:00(金曜休館)",
+    "fee_ja": "無料",
+    "view_ja": "瑞里プル公園の木々に包まれたエコ図書館の屋上。散策路と芝生で静かな時間を過ごせる。"
   },
   {
     "id": 45,
@@ -3009,7 +3437,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "발산역 (5호선)",
+    "name_zh": "NC百货店江西店10楼天空公园",
+    "hours_zh": "周一~周四10:30~21:00 / 周五~周日10:30~22:00",
+    "fee_zh": "免费",
+    "view_zh": "发山站附近10楼开放式屋顶公园,西望牛帐山与首尔西部天际线。",
+    "name_ja": "NC百貨店江西店10階空中公園",
+    "hours_ja": "月~木10:30~21:00 / 金~日10:30~22:00",
+    "fee_ja": "無料",
+    "view_ja": "発山駅近く、10階の開放的な屋上公園から牛帳山方面とソウル西部の街並みを望む。"
   },
   {
     "id": 46,
@@ -3046,7 +3483,15 @@
       "view": true,
       "night": false
     },
-    "comments": []
+    "comments": [],
+    "name_zh": "蘆原区月溪图书馆屋顶花园'月光庭园'",
+    "hours_zh": "周二~周五09:00~18:00 / 周六·周日09:00~17:00(周一休馆)",
+    "fee_zh": "免费",
+    "view_zh": "约240㎡的生态屋顶,绣球花与紫薇树环绕,是安静的阅读休憩空间。",
+    "name_ja": "蘆原区月溪図書館屋上庭園「月光庭園」",
+    "hours_ja": "火~金9:00~18:00 / 土・日9:00~17:00(月曜休館)",
+    "fee_ja": "無料",
+    "view_ja": "約240㎡のエコ屋上庭園。アジサイやサルスベリに囲まれた静かな読書スポット。"
   },
   {
     "id": 47,
@@ -3084,7 +3529,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "버티고개역 (6호선)",
+    "name_zh": "Beoti公营停车场屋顶公园",
+    "hours_zh": "全年无休 00:00~24小时全天开放",
+    "fee_zh": "免费",
+    "view_zh": "环绕103米步道与透视观光电梯,24小时俯瞰多山洞城郭村。",
+    "name_ja": "ボティ公営駐車場屋上公園",
+    "hours_ja": "年中無休24時間開放",
+    "fee_ja": "無料",
+    "view_ja": "103mの循環散策路と展望エレベーターを備え、24時間多山洞の城郭村を見渡せる。"
   },
   {
     "id": 48,
@@ -3123,7 +3577,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "동대문역사문화공원역 (2·4·5호선)",
+    "name_zh": "现代City Outlet东大门店11楼天空花园",
+    "hours_zh": "周一~周四10:30~21:00 / 周五~周日10:30~21:30",
+    "fee_zh": "免费",
+    "view_zh": "正对DDP的11楼露天花园,可赏东大门时尚商圈夜景灯光。",
+    "name_ja": "現代シティアウトレット東大門店11階空中庭園",
+    "hours_ja": "月~木10:30~21:00 / 金~日10:30~21:30",
+    "fee_ja": "無料",
+    "view_ja": "DDPの向かいに位置する11階の屋外庭園。東大門ファッションタウンの夜景を楽しめる。"
   },
   {
     "id": 49,
@@ -3162,7 +3625,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "미아사거리역 (4호선)",
+    "name_zh": "乐天百货店弥阿店9楼夏洛特花园(屋顶花园)",
+    "hours_zh": "周一~周四10:30~20:00 / 周五~周日10:30~20:30",
+    "fee_zh": "免费",
+    "view_zh": "俯瞰北汉山山脊与弥阿十字路口一带首尔北部市容的疗愈花园。",
+    "name_ja": "ロッテ百貨店彌阿店9階シャルロッテガーデン(屋上庭園)",
+    "hours_ja": "月~木10:30~20:00 / 金~日10:30~20:30",
+    "fee_ja": "無料",
+    "view_ja": "北漢山の稜線と弥阿四叉路一帯のソウル北部の街並みを見渡せる癒しの庭園。"
   },
   {
     "id": 50,
@@ -3200,7 +3672,16 @@
       "view": true,
       "night": true
     },
-    "comments": []
+    "comments": [],
+    "station": "신도림역 (1·2호선)",
+    "name_zh": "新道林Techno Mart 14楼天空公园(景福宫风屋顶花园)",
+    "hours_zh": "每日10:30~21:00(入场截止20:30)",
+    "fee_zh": "免费",
+    "view_zh": "以庆会楼为灵感的传统楼阁与莲池,360度俯瞰铁道枢纽与周边市区。",
+    "name_ja": "新道林テクノマート14階空中公園(景福宮モチーフの屋上庭園)",
+    "hours_ja": "毎日10:30~21:00(入場は20:30まで)",
+    "fee_ja": "無料",
+    "view_ja": "慶会楼をモチーフにした伝統楼閣と蓮池があり、鉄道拠点と周辺市街を360度見渡せる。"
   },
   {
     "id": 51,
@@ -3238,7 +3719,16 @@
       "night": true,
       "paid": true
     },
-    "comments": []
+    "comments": [],
+    "station": "잠실역 (2·8호선)",
+    "name_zh": "乐天世界塔首尔天空(120楼户外天空露台&展望台)",
+    "hours_zh": "周日~周四10:30~22:00 / 周五·周六及公休日10:30~23:00(闭馆前1小时停止入场)",
+    "fee_zh": "成人31,000韩元 / 儿童27,000韩元",
+    "view_zh": "韩国最高的观景台,海拔500米,120楼露天天空露台与118楼玻璃地板天空甲板可360度俯瞰首尔全境与西海。",
+    "name_ja": "ロッテワールドタワー ソウルスカイ(120階屋外スカイテラス&展望台)",
+    "hours_ja": "日~木10:30~22:00 / 金・土・祝日10:30~23:00(閉館1時間前まで入場可)",
+    "fee_ja": "大人31,000ウォン / 子供27,000ウォン",
+    "view_ja": "標高500mの韓国最高展望台。120階の屋外スカイテラスと118階のガラス床から、ソウル全域を360度見渡せる。"
   },
   {
     "id": 52,
@@ -3276,7 +3766,16 @@
       "night": true,
       "paid": true
     },
-    "comments": []
+    "comments": [],
+    "station": "명동역 (4호선)",
+    "name_zh": "N首尔塔展望台",
+    "hours_zh": "周一~周五10:30~22:30 / 周六·周日及公休日10:00~23:00",
+    "fee_zh": "成人29,000韩元 / 儿童23,000韩元",
+    "view_zh": "位于南山山顶海拔480米,360度俯瞰首尔四大门、古宫与汉江,是首尔永恒的地标。",
+    "name_ja": "Nソウルタワー展望台",
+    "hours_ja": "月~金10:30~22:30 / 土・日・祝日10:00~23:00",
+    "fee_ja": "大人29,000ウォン / 子供23,000ウォン",
+    "view_ja": "南山山頂、標高480mからソウルの四大門や古宮、漢江を360度見渡せる、ソウルの象徴的なタワー。"
   },
   {
     "id": 53,
@@ -3313,7 +3812,16 @@
       "night": true,
       "paid": true
     },
-    "comments": []
+    "comments": [],
+    "station": "여의나루역 (5호선)",
+    "name_zh": "首尔达(SEOULDAL 汝矣岛130米空中系留氦气球展望台)",
+    "hours_zh": "周二~周日12:00~22:00(周一休息,依天气情况运行)",
+    "fee_zh": "成人25,000韩元 / 青少年·长者20,000韩元 / 儿童15,000韩元",
+    "view_zh": "系留式氦气球垂直升至汝矣岛公园上空130米,俯瞰汝矣岛金融区摩天楼与汉江。",
+    "name_ja": "ソウルダル(汝矣島上空130mの係留気球展望台)",
+    "hours_ja": "火~日12:00~22:00(月曜休み、天候により運休あり)",
+    "fee_ja": "大人25,000ウォン / 青少年・シニア20,000ウォン / 子供15,000ウォン",
+    "view_ja": "係留式の気球で汝矣島公園の上空130mまで上昇し、汝矣島の高層ビル群と漢江を一望できる。"
   },
   {
     "id": 54,
@@ -3351,7 +3859,16 @@
       "night": true,
       "paid": true
     },
-    "comments": []
+    "comments": [],
+    "station": "여의나루역 (5호선)",
+    "name_zh": "63大厦60楼'63 Sky Picnic'展望台(63广场)",
+    "hours_zh": "每日10:00~20:00",
+    "fee_zh": "成人约18,000~20,000韩元",
+    "view_zh": "汝矣岛的经典金色地标建筑,可赏元晓大桥、鹭得岛与汉江日落全景。",
+    "name_ja": "63ビル60階「63スカイピクニック」展望台(63スクエア)",
+    "hours_ja": "毎日10:00~20:00",
+    "fee_ja": "大人約18,000~20,000ウォン",
+    "view_ja": "汝矣島の象徴的な金色のタワー。元暁大橋やノドゥル島、漢江に沈む夕日を一望できる。"
   },
   {
     "id": 55,
@@ -3388,7 +3905,16 @@
       "night": true,
       "paid": true
     },
-    "comments": []
+    "comments": [],
+    "station": "동대문역사문화공원역 (2·4·5호선)",
+    "name_zh": "DDP屋顶漫步之旅(屋顶Walk)",
+    "hours_zh": "周五~周日11:00 / 13:00 / 16:00(季节性预约制,雨天取消)",
+    "fee_zh": "普通场26,000韩元 / 特别场(日落)50,000韩元",
+    "view_zh": "系上安全装备行走于扎哈·哈迪德652米曲面铝制屋顶,360度俯瞰东大门时尚商圈。",
+    "name_ja": "DDPルーフトップツアー(屋根の上を歩く)",
+    "hours_ja": "金~日11:00 / 13:00 / 16:00(季節制の事前予約制、雨天中止)",
+    "fee_ja": "一般26,000ウォン / スペシャル(夕景)50,000ウォン",
+    "view_ja": "安全装備を着用し、ザハ・ハディド設計の652mの曲面アルミ屋根を歩く体験ツアー。東大門一帯を360度見渡せる。"
   },
   {
     "id": 56,
@@ -3425,7 +3951,16 @@
       "night": true,
       "paid": true
     },
-    "comments": []
+    "comments": [],
+    "station": "명동역 (4호선)",
+    "name_zh": "L7明洞21楼Rooftop Floating",
+    "hours_zh": "每日17:00~01:00",
+    "fee_zh": "需点餐消费(鸡尾酒约18,000韩元起)",
+    "view_zh": "21楼露天露台正对南山首尔塔,备有户外脚汤泡池与精致鸡尾酒。",
+    "name_ja": "L7明洞21階ルーフトップフローティング",
+    "hours_ja": "毎日17:00~01:00",
+    "fee_ja": "飲食注文制(カクテル約18,000ウォン~)",
+    "view_ja": "南山ソウルタワーを真正面に望む21階の屋外テラス。足湯やクラフトカクテルが楽しめる。"
   },
   {
     "id": 57,
@@ -3462,7 +3997,16 @@
       "night": true,
       "paid": true
     },
-    "comments": []
+    "comments": [],
+    "station": "강남역 (2호선)",
+    "name_zh": "AC Hotel by Marriott首尔江南21楼Rooftop KLOUD",
+    "hours_zh": "每日18:00~01:00",
+    "fee_zh": "需点餐消费(鸡尾酒约22,000韩元起)",
+    "view_zh": "德黑兰路核心地段21楼露台,俯瞰江南摩天楼群夜景与车流光带。",
+    "name_ja": "ACホテル・バイ・マリオット ソウル江南21階ルーフトップKLOUD",
+    "hours_ja": "毎日18:00~01:00",
+    "fee_ja": "飲食注文制(カクテル約22,000ウォン~)",
+    "view_ja": "テヘラン路の中心、21階のテラスから江南の高層ビル群と光の帯のような夜景を一望。"
   },
   {
     "id": 58,
@@ -3499,7 +4043,16 @@
       "night": true,
       "paid": true
     },
-    "comments": []
+    "comments": [],
+    "station": "잠실나루역 (2호선)",
+    "name_zh": "索菲特大使首尔酒店32楼Latitude32屋顶酒廊",
+    "hours_zh": "每日17:00~01:00",
+    "fee_zh": "需点餐消费(鸡尾酒约25,000韩元起)",
+    "view_zh": "法式奢华屋顶酒廊,俯瞰石村湖与乐天世界塔壮观景色。",
+    "name_ja": "ソフィテル・アンバサダー・ソウル32階ラティチュード32",
+    "hours_ja": "毎日17:00~01:00",
+    "fee_ja": "飲食注文制(カクテル約25,000ウォン~)",
+    "view_ja": "石村湖とロッテワールドタワーを望むフレンチスタイルの高級屋上ラウンジ。"
   },
   {
     "id": 59,
@@ -3536,7 +4089,16 @@
       "night": true,
       "paid": true
     },
-    "comments": []
+    "comments": [],
+    "station": "이태원역 (6호선)",
+    "name_zh": "Mondrian首尔梨泰院RF Privilege屋顶酒吧",
+    "hours_zh": "每日18:00~02:00",
+    "fee_zh": "需点餐消费(鸡尾酒约24,000韩元起)",
+    "view_zh": "设计感十足的玻璃穹顶与露台座位,可赏南山首尔塔与梨泰院暮色夜景。",
+    "name_ja": "モンドリアン ソウル梨泰院RFプリビレッジルーフトップバー",
+    "hours_ja": "毎日18:00~02:00",
+    "fee_ja": "飲食注文制(カクテル約24,000ウォン~)",
+    "view_ja": "ガラスドームとテラス席が印象的な屋上バー。南山ソウルタワーと梨泰院の夕景・夜景を楽しめる。"
   },
   {
     "id": 60,
@@ -3573,13 +4135,33 @@
       "night": true,
       "paid": true
     },
-    "comments": []
+    "comments": [],
+    "station": "언주역 (7호선)",
+    "name_zh": "Hotel Cappuccino 17楼屋顶酒吧",
+    "hours_zh": "每日18:00~24:00",
+    "fee_zh": "需点餐消费(琴酒Tonic/鸡尾酒约17,000韩元起)",
+    "view_zh": "论岘洞言州站十字路口上方17楼露台,可远眺南山首尔塔与江南楼群夜景。",
+    "name_ja": "ホテル・カプチーノ17階ルーフトップバー",
+    "hours_ja": "毎日18:00~24:00",
+    "fee_ja": "飲食注文制(ジントニック/カクテル約17,000ウォン~)",
+    "view_ja": "論峴洞・彦州駅交差点上空17階のテラスから、遠くに南山タワーと江南のビル群の夜景を望む。"
   }
 ];
 
     let reports = [];
     let currentFilter = 'all';
     let currentLang = localStorage.getItem('seoul_roof_lang') || 'ko';
+
+    // Returns the field in the current language, falling back to Korean if untranslated.
+    function localizedField(rt, field) {
+      if (currentLang === 'ko') return rt[field];
+      const localized = rt[field + '_' + currentLang];
+      if (localized) return localized;
+      // No per-language address translation: a romanized address is more useful for
+      // navigation than the Korean original, so fall back to English before Korean.
+      if (field === 'address' && rt.address_en) return rt.address_en;
+      return rt[field];
+    }
     let markers = {};
 
     // Map legend state (all categories shown by default)
@@ -3598,7 +4180,6 @@
       ko: {
         docTitle: '서울 스카이 🏙️',
         appTitle: '서울 스카이',
-        langBtn: '🌐 English',
         btnList: '📋 목록',
         btnReport: '📍 새 옥상 제보',
         sidebarTitle: '📋 옥상 목록',
@@ -3659,8 +4240,24 @@
         tagPaid: ['🔭 유료 전망대', 'tag-amber'],
         paidNoticeTitle: '유료 전망대 / 이용 시설',
         paidNoticeDesc: '입장권 발권 또는 식음료 주문이 필요한 명소입니다.',
+        directionsTitle: '길찾기',
+        openInNaverMap: '네이버지도로 길찾기',
+        openInGoogleMap: '구글지도로 열기',
+        copyAddress: '주소 복사 (택시 기사님께 보여주세요)',
+        addressCopied: '주소가 복사되었습니다',
+        originalAddressLabel: '한글 주소 (원문)',
+        nearestStationLabel: '가까운 지하철역',
         noFeatures: '등록된 특징 정보가 없습니다',
         noView: '아직 뷰 설명이 등록되지 않았습니다',
+        anonymousLabel: '익명',
+        notAvailableLabel: '미확인',
+        dailyLabel: '상시',
+        paidPrefixLabel: '[유료] ',
+        paidBadgeLabel: '유료',
+        commentPostError: '댓글 등록에 실패했습니다. 잠시 후 다시 시도해주세요.',
+        reportSubmitError: '제보 전송에 실패했습니다. 다시 시도해주세요.',
+        optionalLabel: '선택',
+        approxLocationHint: '정확한 주소가 어려우면 대략적인 위치도 괜찮습니다',
         reportModalTitle: '📍 새 옥상 제보하기',
         reportModalSubtitle: '아직 등록되지 않은 개방 옥상을 알려주세요!',
         reportNameLabel: '건물명',
@@ -3686,7 +4283,6 @@
       en: {
         docTitle: 'Seoul Sky 🏙️',
         appTitle: 'Seoul Sky',
-        langBtn: '🇰🇷 한국어',
         btnList: '📋 List',
         btnReport: '📍 Report Spot',
         sidebarTitle: '📋 Rooftop List',
@@ -3747,8 +4343,24 @@
         tagPaid: ['🔭 Paid Observatory', 'tag-amber'],
         paidNoticeTitle: 'Paid Observatory / Admission Required',
         paidNoticeDesc: 'Ticket purchase or food/beverage order required for entry.',
+        directionsTitle: 'Get Directions',
+        openInNaverMap: 'Directions via Naver Map',
+        openInGoogleMap: 'Open in Google Maps',
+        copyAddress: 'Copy address (show to a taxi driver)',
+        addressCopied: 'Address copied',
+        originalAddressLabel: 'Korean address (original)',
+        nearestStationLabel: 'Nearest subway station',
         noFeatures: 'No features registered',
         noView: 'No view description available yet',
+        anonymousLabel: 'Anonymous',
+        notAvailableLabel: 'N/A',
+        dailyLabel: 'Daily',
+        paidPrefixLabel: '[PAID] ',
+        paidBadgeLabel: 'PAID',
+        commentPostError: 'Failed to post comment. Please try again.',
+        reportSubmitError: 'Failed to submit report. Please try again.',
+        optionalLabel: 'optional',
+        approxLocationHint: 'Approximate location or landmark is also fine',
         reportModalTitle: '📍 Report a New Rooftop',
         reportModalSubtitle: 'Know an open rooftop in Seoul not listed here? Share it!',
         reportNameLabel: 'Building Name',
@@ -3770,6 +4382,212 @@
         reportNickPlh: 'Optional (defaults to Anonymous)',
         reportCancel: 'Cancel',
         reportSubmit: 'Submit Report'
+      },
+      zh: {
+        docTitle: '首尔天空 🏙️',
+        appTitle: '首尔天空',
+        btnList: '📋 列表',
+        btnReport: '📍 举报新楼顶',
+        sidebarTitle: '📋 楼顶列表',
+        searchPlaceholder: '按建筑名、地区或景观关键词搜索(如:景福宫、汉江)...',
+        chipAll: '全部',
+        chipGarden: '🌿 花园',
+        chipCafe: '☕ 咖啡厅',
+        chipNight: '🌙 夜间开放',
+        chipPublic: '🚪 开放型',
+        legendToggleLabel: '图例',
+        legendPanelTitle: '地图图例',
+        legendFeeTitle: '费用',
+        legendFreeLabel: '免费',
+        legendPaidLabel: '收费',
+        legendHeightTitle: '高度',
+        legendHLowLabel: '~30米',
+        legendHMidLabel: '30~100米',
+        legendHHighLabel: '100米以上',
+        legendTypeTitle: '类型',
+        legendTypeShoppingLabel: '购物·商业',
+        legendTypePublicLabel: '公共·文化',
+        legendTypeParkLabel: '公园·汉江',
+        legendTypeLandmarkLabel: '地标·酒店',
+        legendResetBtn: '显示全部',
+        statCountLabel: '已收录楼顶',
+        statReportsLabel: '举报数',
+        emptySearch: '未找到相关结果。<br>欢迎举报新的楼顶!',
+        basicInfo: '📊 基本信息',
+        labelFloor: '楼层',
+        labelHeight: '高度',
+        labelFee: '门票',
+        labelAccess: '外部人员可否进入',
+        hoursTitle: '🕐 开放时间',
+        featuresTitle: '✨ 特色',
+        viewTitle: '🌆 景观介绍',
+        commentsTitle: '💬 访客提示与评论',
+        noComments: '暂无访客提示或评论。快来留下第一条吧!',
+        commentsLoading: '正在加载评论...',
+        commentAuthorPlh: '昵称(留空则显示匿名)',
+        commentTextPlh: '分享您的游览提示或点评(如:日落前30分钟景色最美)...',
+        commentSubmit: '发布',
+        commentSubmitting: '发布中...',
+        toastCommentSuccess: '💬 评论发布成功!',
+        toastCommentEmpty: '请输入评论内容',
+        toastReportSuccess: '📍 感谢举报!审核通过后将显示在地图上。',
+        toastReportRequired: '建筑名称和地址为必填项!',
+        accessOpen: ['🚪 任何人均可进入', 'access-open'],
+        accessLimited: ['⚠️ 有条件进入', 'access-limited'],
+        accessTenant: ['🔒 仅限入驻人员', 'access-closed'],
+        accessUnknown: ['❓ 未知', ''],
+        tagGarden: ['🌿 屋顶花园', 'tag-green'],
+        tagCafe: ['☕ 咖啡厅', 'tag-amber'],
+        tagRestaurant: ['🍽️ 餐厅', 'tag-amber'],
+        tagSmoking: ['🚬 吸烟区', 'tag-gray'],
+        tagBench: ['🪑 长椅/休息区', 'tag-blue'],
+        tagView: ['🌆 景观优美', 'tag-purple'],
+        tagNight: ['🌙 夜间开放', 'tag-blue'],
+        tagPaid: ['🔭 付费观景台', 'tag-amber'],
+        paidNoticeTitle: '付费观景台 / 消费场所',
+        paidNoticeDesc: '需购买门票或点餐消费方可进入。',
+        directionsTitle: '路线导航',
+        openInNaverMap: '用Naver地图导航',
+        openInGoogleMap: '用谷歌地图打开',
+        copyAddress: '复制地址(可出示给出租车司机)',
+        addressCopied: '地址已复制',
+        originalAddressLabel: '韩语原文地址',
+        nearestStationLabel: '最近地铁站',
+        noFeatures: '暂无特色信息',
+        noView: '暂无景观介绍',
+        anonymousLabel: '匿名',
+        notAvailableLabel: '未知',
+        dailyLabel: '每日开放',
+        paidPrefixLabel: '[收费] ',
+        paidBadgeLabel: '收费',
+        commentPostError: '评论发布失败,请稍后重试。',
+        reportSubmitError: '举报提交失败,请重试。',
+        optionalLabel: '选填',
+        approxLocationHint: '若不清楚精确地址,大致位置也可以',
+        reportModalTitle: '📍 举报新楼顶',
+        reportModalSubtitle: '发现地图上没有的开放楼顶?欢迎告诉我们!',
+        reportNameLabel: '建筑名称',
+        reportNamePlh: '例:首尔市厅西小门别馆',
+        reportAddrLabel: '地址(地号或道路名)',
+        reportAddrPlh: '例:首尔市中区世宗大路110号',
+        reportFloorLabel: '楼顶所在楼层',
+        reportFloorPlh: '例:15楼',
+        reportHeightLabel: '建筑高度(米)',
+        reportHeightPlh: '例:约60米',
+        reportHoursLabel: '开放时间',
+        reportHoursPlh: '例:09:00~18:00,仅工作日',
+        reportAccessLabel: '外部人员可否进入',
+        reportViewLabel: '景观介绍',
+        reportViewPlh: '能看到什么景色?(例:正面可见南山塔,西侧可远眺汉江)',
+        reportMemoLabel: '补充说明',
+        reportMemoPlh: '其他想告知的信息(如:有电梯直达、风较大等)',
+        reportNickLabel: '昵称',
+        reportNickPlh: '举报者昵称(留空则显示"匿名")',
+        reportCancel: '取消',
+        reportSubmit: '提交举报'
+      },
+      ja: {
+        docTitle: 'ソウルスカイ 🏙️',
+        appTitle: 'ソウルスカイ',
+        btnList: '📋 リスト',
+        btnReport: '📍 屋上を報告',
+        sidebarTitle: '📋 屋上リスト',
+        searchPlaceholder: '建物名、地域、眺望キーワードで検索(例:景福宮、漢江)...',
+        chipAll: 'すべて',
+        chipGarden: '🌿 庭園',
+        chipCafe: '☕ カフェ',
+        chipNight: '🌙 夜間開放',
+        chipPublic: '🚪 開放型',
+        legendToggleLabel: '凡例',
+        legendPanelTitle: '地図の凡例',
+        legendFeeTitle: '料金',
+        legendFreeLabel: '無料',
+        legendPaidLabel: '有料',
+        legendHeightTitle: '高さ',
+        legendHLowLabel: '~30m',
+        legendHMidLabel: '30~100m',
+        legendHHighLabel: '100m~',
+        legendTypeTitle: 'タイプ',
+        legendTypeShoppingLabel: 'ショッピング・商業',
+        legendTypePublicLabel: '公共・文化',
+        legendTypeParkLabel: '公園・漢江',
+        legendTypeLandmarkLabel: 'ランドマーク・ホテル',
+        legendResetBtn: 'すべて表示',
+        statCountLabel: '登録スポット',
+        statReportsLabel: '報告数',
+        emptySearch: '検索結果がありません。<br>新しい屋上スポットを報告してください!',
+        basicInfo: '📊 基本情報',
+        labelFloor: '階数',
+        labelHeight: '高さ',
+        labelFee: '入場料',
+        labelAccess: '外部者の立入',
+        hoursTitle: '🕐 開放時間',
+        featuresTitle: '✨ 特徴',
+        viewTitle: '🌆 眺望の説明',
+        commentsTitle: '💬 訪問者のヒント・コメント',
+        noComments: 'まだ訪問ヒントやコメントがありません。最初のコメントを残してみましょう!',
+        commentsLoading: 'コメントを読み込み中...',
+        commentAuthorPlh: 'ニックネーム(未入力の場合は匿名)',
+        commentTextPlh: '訪問のヒントや感想を書いてください(例:日没30分前の眺めが最高です)...',
+        commentSubmit: '投稿',
+        commentSubmitting: '投稿中...',
+        toastCommentSuccess: '💬 コメントが投稿されました!',
+        toastCommentEmpty: 'コメント内容を入力してください',
+        toastReportSuccess: '📍 ご報告ありがとうございます!確認後、地図に反映されます。',
+        toastReportRequired: '建物名と住所は必須です!',
+        accessOpen: ['🚪 誰でも入場可能', 'access-open'],
+        accessLimited: ['⚠️ 条件付き入場', 'access-limited'],
+        accessTenant: ['🔒 テナント専用', 'access-closed'],
+        accessUnknown: ['❓ 不明', ''],
+        tagGarden: ['🌿 屋上庭園', 'tag-green'],
+        tagCafe: ['☕ カフェ', 'tag-amber'],
+        tagRestaurant: ['🍽️ レストラン', 'tag-amber'],
+        tagSmoking: ['🚬 喫煙エリア', 'tag-gray'],
+        tagBench: ['🪑 ベンチ/休憩所', 'tag-blue'],
+        tagView: ['🌆 眺めが良い', 'tag-purple'],
+        tagNight: ['🌙 夜間開放', 'tag-blue'],
+        tagPaid: ['🔭 有料展望台', 'tag-amber'],
+        paidNoticeTitle: '有料展望台 / 利用施設',
+        paidNoticeDesc: '入場チケットの購入または飲食の注文が必要な施設です。',
+        directionsTitle: '道案内',
+        openInNaverMap: 'Naverマップで道案内',
+        openInGoogleMap: 'Googleマップで開く',
+        copyAddress: '住所をコピー(タクシー運転手に見せてください)',
+        addressCopied: '住所をコピーしました',
+        originalAddressLabel: '韓国語住所(原文)',
+        nearestStationLabel: '最寄りの地下鉄駅',
+        noFeatures: '登録された特徴情報がありません',
+        noView: 'まだ眺望の説明が登録されていません',
+        anonymousLabel: '匿名',
+        notAvailableLabel: '不明',
+        dailyLabel: '常時開放',
+        paidPrefixLabel: '[有料] ',
+        paidBadgeLabel: '有料',
+        commentPostError: 'コメントの投稿に失敗しました。もう一度お試しください。',
+        reportSubmitError: '報告の送信に失敗しました。もう一度お試しください。',
+        optionalLabel: '任意',
+        approxLocationHint: '正確な住所が分からない場合は、おおよその位置でも構いません',
+        reportModalTitle: '📍 新しい屋上を報告する',
+        reportModalSubtitle: 'まだ登録されていない開放屋上を教えてください!',
+        reportNameLabel: '建物名',
+        reportNamePlh: '例:ソウル市庁 西小門別館',
+        reportAddrLabel: '住所(地番または道路名)',
+        reportAddrPlh: '例:ソウル市中区世宗大路110',
+        reportFloorLabel: '屋上の階数',
+        reportFloorPlh: '例:15階',
+        reportHeightLabel: '建物の高さ(m)',
+        reportHeightPlh: '例:約60m',
+        reportHoursLabel: '開放時間',
+        reportHoursPlh: '例:09:00~18:00、平日のみ',
+        reportAccessLabel: '外部者の立入',
+        reportViewLabel: '眺望の説明',
+        reportViewPlh: 'どんな景色が見えますか?(例:南山タワーが正面に見え、西側に漢江が少し見えます)',
+        reportMemoLabel: '追加メモ',
+        reportMemoPlh: 'その他伝えたい内容(例:エレベーターでアクセス可能、風が強いなど)',
+        reportNickLabel: 'ニックネーム',
+        reportNickPlh: '報告者のニックネーム(未入力の場合「匿名」)',
+        reportCancel: 'キャンセル',
+        reportSubmit: '報告する'
       }
     };
 
@@ -3825,7 +4643,7 @@
         if (!roofErr && Array.isArray(roofData) && roofData.length > 0) {
           return roofData.map(c => ({
             id: c.id,
-            author: c.nickname || (currentLang === 'en' ? 'Anonymous' : '익명'),
+            author: c.nickname || i18n[currentLang].anonymousLabel,
             date: (c.created_at || '').slice(0, 10),
             text: c.content || ''
           }));
@@ -3841,7 +4659,7 @@
         if (!placeErr && Array.isArray(placeData)) {
           return placeData.map(c => ({
             id: c.id,
-            author: c.author_name || (currentLang === 'en' ? 'Anonymous' : '익명'),
+            author: c.author_name || i18n[currentLang].anonymousLabel,
             date: (c.created_at || '').slice(0, 10),
             text: c.content || ''
           }));
@@ -3954,8 +4772,8 @@
 
         // Localized popup tooltip
         const isPaid = rt.tags && rt.tags.includes('paid');
-        const displayName = currentLang === 'en' ? (rt.name_en || rt.name) : rt.name;
-        const prefix = isPaid ? (currentLang === 'en' ? '[PAID] ' : '[유료] ') : '';
+        const displayName = localizedField(rt, 'name');
+        const prefix = isPaid ? i18n[currentLang].paidPrefixLabel : '';
         marker.bindTooltip(prefix + displayName, {
           direction: 'top',
           offset: [0, -48],
@@ -3976,14 +4794,18 @@
       const query = document.getElementById('searchInput')?.value?.toLowerCase().trim() || '';
 
       return rooftops.filter(rt => {
-        // Search filter across both Korean and English fields
+        // Search filter across all language fields
         const matchesSearch = !query ||
           rt.name.toLowerCase().includes(query) ||
           (rt.name_en && rt.name_en.toLowerCase().includes(query)) ||
+          (rt.name_zh && rt.name_zh.toLowerCase().includes(query)) ||
+          (rt.name_ja && rt.name_ja.toLowerCase().includes(query)) ||
           rt.address.toLowerCase().includes(query) ||
           (rt.address_en && rt.address_en.toLowerCase().includes(query)) ||
           (rt.view && rt.view.toLowerCase().includes(query)) ||
-          (rt.view_en && rt.view_en.toLowerCase().includes(query));
+          (rt.view_en && rt.view_en.toLowerCase().includes(query)) ||
+          (rt.view_zh && rt.view_zh.toLowerCase().includes(query)) ||
+          (rt.view_ja && rt.view_ja.toLowerCase().includes(query));
 
         // Tag filter
         const matchesFilter = currentFilter === 'all' ||
@@ -4077,8 +4899,8 @@
       }
 
       container.innerHTML = filtered.map(rt => {
-        const name = currentLang === 'en' ? (rt.name_en || rt.name) : rt.name;
-        const addr = currentLang === 'en' ? (rt.address_en || rt.address) : rt.address;
+        const name = localizedField(rt, 'name');
+        const addr = localizedField(rt, 'address');
         const isPaid = rt.tags && rt.tags.includes('paid');
         const icon = isPaid
           ? (rt.name.includes('타워') ? '🗼' : rt.name.includes('서울달') ? '🎈' : '🔭')
@@ -4086,7 +4908,7 @@
             rt.features.cafe ? '☕' :
             rt.features.night ? '🌙' :
             rt.features.view ? '🌆' : '🏢';
-        const badgeHtml = isPaid ? `<span class="badge-paid-pill">${currentLang === 'en' ? 'PAID' : '유료'}</span>` : '';
+        const badgeHtml = isPaid ? `<span class="badge-paid-pill">${i18n[currentLang].paidBadgeLabel}</span>` : '';
         const floorText = rt.floor > 0 ? `${rt.floor}F` : (rt.height ? `${rt.height}m` : '');
         return `
           <div class="location-item" onclick="openDetail(${rt.id})">
@@ -4112,14 +4934,16 @@
       const t = i18n[currentLang];
       document.getElementById('sidebar').classList.remove('open');
 
-      const name = currentLang === 'en' ? (rt.name_en || rt.name) : rt.name;
-      const addr = currentLang === 'en' ? (rt.address_en || rt.address) : rt.address;
-      const hours = currentLang === 'en' ? (rt.hours_en || rt.hours) : rt.hours;
-      const fee = currentLang === 'en' ? (rt.fee_en || rt.fee) : rt.fee;
-      const view = currentLang === 'en' ? (rt.view_en || rt.view) : rt.view;
+      const name = localizedField(rt, 'name');
+      const addr = localizedField(rt, 'address');
+      const hours = localizedField(rt, 'hours');
+      const fee = localizedField(rt, 'fee');
+      const view = localizedField(rt, 'view');
 
       document.getElementById('detailName').textContent = name;
-      document.getElementById('detailAddress').textContent = addr;
+      document.getElementById('detailAddress').innerHTML = currentLang !== 'ko'
+        ? `${escapeHtml(addr)}<br><span class="address-original">${escapeHtml(t.originalAddressLabel)}: ${escapeHtml(rt.address)}</span>`
+        : escapeHtml(addr);
 
       const accessLabel = {
         'open': t.accessOpen,
@@ -4150,7 +4974,18 @@
         </div>
       ` : '';
 
+      const naverUrl = `https://map.naver.com/p/search/${encodeURIComponent(rt.name + ' ' + rt.address)}`;
+      const googleUrl = `https://www.google.com/maps/search/?api=1&query=${rt.lat},${rt.lng}`;
+      const directionsHtml = `
+        <div class="directions-bar">
+          <a class="btn btn-primary" href="${naverUrl}" target="_blank" rel="noopener">🧭 ${t.openInNaverMap}</a>
+          <a class="btn btn-secondary" href="${googleUrl}" target="_blank" rel="noopener">🗺️ ${t.openInGoogleMap}</a>
+          <button class="btn btn-secondary" onclick="copyRoofAddress(${rt.id})">📋 ${t.copyAddress}</button>
+        </div>
+      `;
+
       document.getElementById('detailBody').innerHTML = `
+        ${directionsHtml}
         ${paidNoticeHtml}
         <!-- Info Cards -->
         <div class="detail-section">
@@ -4162,11 +4997,11 @@
             </div>
             <div class="info-card">
               <div class="label">${t.labelHeight}</div>
-              <div class="value">${rt.height ? rt.height + 'm' : (currentLang === 'en' ? 'N/A' : '미확인')}</div>
+              <div class="value">${rt.height ? rt.height + 'm' : i18n[currentLang].notAvailableLabel}</div>
             </div>
             <div class="info-card">
               <div class="label">${t.labelFee}</div>
-              <div class="value">${fee || (currentLang === 'en' ? 'Free' : '무료')}</div>
+              <div class="value">${fee || i18n[currentLang].legendFreeLabel}</div>
             </div>
             <div class="info-card">
               <div class="label">${t.labelAccess}</div>
@@ -4174,13 +5009,19 @@
                 <span class="access-badge ${accessLabel[1]}">${accessLabel[0]}</span>
               </div>
             </div>
+            ${rt.station ? `
+            <div class="info-card" style="grid-column: 1 / -1;">
+              <div class="label">${t.nearestStationLabel}</div>
+              <div class="value" style="font-size:14px;">🚇 ${rt.station}</div>
+            </div>
+            ` : ''}
           </div>
         </div>
 
         <!-- Hours -->
         <div class="detail-section">
           <h3>${t.hoursTitle}</h3>
-          <p style="font-size:15px; color: var(--gray-700);">${hours || (currentLang === 'en' ? 'Daily' : '상시')}</p>
+          <p style="font-size:15px; color: var(--gray-700);">${hours || i18n[currentLang].dailyLabel}</p>
         </div>
 
         <!-- Tags -->
@@ -4240,6 +5081,27 @@
       });
     }
 
+    function copyRoofAddress(id) {
+      const rt = rooftops.find(r => r.id === id);
+      if (!rt) return;
+      const t = i18n[currentLang];
+      const text = rt.address; // always copy the Korean address — most usable locally (taxis, Naver/Kakao search)
+      const done = () => showToast(t.addressCopied);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(done);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        done();
+      }
+    }
+
     function escapeHtml(str) {
       if (!str) return '';
       return String(str)
@@ -4275,7 +5137,7 @@
     // ═══════════════════════════════════════════
 
     async function addComment(rooftopId) {
-      const defaultAnon = currentLang === 'en' ? 'Anonymous' : '익명';
+      const defaultAnon = i18n[currentLang].anonymousLabel;
       const author = document.getElementById('commentAuthor').value.trim() || defaultAnon;
       const text = document.getElementById('commentText').value.trim();
       const t = i18n[currentLang];
@@ -4346,7 +5208,7 @@
         showToast(t.toastCommentSuccess);
       } catch (err) {
         console.error('Comment submission error:', err);
-        showToast(currentLang === 'en' ? 'Failed to post comment. Please try again.' : '댓글 등록에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        showToast(i18n[currentLang].commentPostError);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -4382,7 +5244,7 @@
         checkedFeatures.push(cb.value);
       });
 
-      const nickname = document.getElementById('reportNickname').value.trim() || (currentLang === 'en' ? 'Anonymous' : '익명');
+      const nickname = document.getElementById('reportNickname').value.trim() || (i18n[currentLang].anonymousLabel);
       const payload = {
         name,
         address,
@@ -4452,7 +5314,7 @@
         showToast(t.toastReportSuccess);
       } catch (err) {
         console.error('Report submission error:', err);
-        showToast(currentLang === 'en' ? 'Failed to submit report. Please try again.' : '제보 전송에 실패했습니다. 다시 시도해주세요.');
+        showToast(i18n[currentLang].reportSubmitError);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -4466,13 +5328,15 @@
     // ═══════════════════════════════════════════
 
     function setLanguage(lang) {
+      if (!i18n[lang]) lang = 'ko';
       currentLang = lang;
       localStorage.setItem('seoul_roof_lang', lang);
       const t = i18n[lang];
 
       document.title = t.docTitle;
+      document.documentElement.lang = lang;
       document.getElementById('appTitle').textContent = t.appTitle;
-      document.getElementById('langToggleBtn').textContent = t.langBtn;
+      document.getElementById('langSelect').value = lang;
       document.getElementById('btnList').textContent = t.btnList;
       document.getElementById('btnReport').textContent = t.btnReport;
       document.getElementById('sidebarTitle').textContent = t.sidebarTitle;
@@ -4512,19 +5376,19 @@
         document.getElementById('reportName').placeholder = t.reportNamePlh;
         document.getElementById('labelReportAddr').innerHTML = `${t.reportAddrLabel} <span class="required">*</span>`;
         document.getElementById('reportAddress').placeholder = t.reportAddrPlh;
-        document.getElementById('hintReportAddr').textContent = lang === 'en' ? 'Approximate location or landmark is also fine' : '정확한 주소가 어려우면 대략적인 위치도 괜찮습니다';
-        document.getElementById('labelReportFloor').innerHTML = `${t.reportFloorLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('hintReportAddr').textContent = t.approxLocationHint;
+        document.getElementById('labelReportFloor').innerHTML = `${t.reportFloorLabel} <span class="optional">(${t.optionalLabel})</span>`;
         document.getElementById('reportFloor').placeholder = t.reportFloorPlh;
-        document.getElementById('labelReportHeight').innerHTML = `${t.reportHeightLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('labelReportHeight').innerHTML = `${t.reportHeightLabel} <span class="optional">(${t.optionalLabel})</span>`;
         document.getElementById('reportHeight').placeholder = t.reportHeightPlh;
-        document.getElementById('labelReportHours').innerHTML = `${t.reportHoursLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('labelReportHours').innerHTML = `${t.reportHoursLabel} <span class="optional">(${t.optionalLabel})</span>`;
         document.getElementById('reportHours').placeholder = t.reportHoursPlh;
-        document.getElementById('labelReportAccess').innerHTML = `${t.reportAccessLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
-        document.getElementById('labelReportView').innerHTML = `${t.reportViewLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('labelReportAccess').innerHTML = `${t.reportAccessLabel} <span class="optional">(${t.optionalLabel})</span>`;
+        document.getElementById('labelReportView').innerHTML = `${t.reportViewLabel} <span class="optional">(${t.optionalLabel})</span>`;
         document.getElementById('reportView').placeholder = t.reportViewPlh;
-        document.getElementById('labelReportMemo').innerHTML = `${t.reportMemoLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('labelReportMemo').innerHTML = `${t.reportMemoLabel} <span class="optional">(${t.optionalLabel})</span>`;
         document.getElementById('reportMemo').placeholder = t.reportMemoPlh;
-        document.getElementById('labelReportNick').innerHTML = `${t.reportNickLabel} <span class="optional">(${lang === 'en' ? 'optional' : '선택'})</span>`;
+        document.getElementById('labelReportNick').innerHTML = `${t.reportNickLabel} <span class="optional">(${t.optionalLabel})</span>`;
         document.getElementById('reportNickname').placeholder = t.reportNickPlh;
         document.getElementById('btnModalCancel').textContent = t.reportCancel;
         document.getElementById('btnModalSubmit').textContent = t.reportSubmit;
@@ -4536,13 +5400,9 @@
       // If detail panel is open, re-render it
       const detailName = document.getElementById('detailName').textContent;
       if (document.getElementById('detailPanel').classList.contains('open') && detailName) {
-        const currentRt = rooftops.find(r => r.name === detailName || r.name_en === detailName);
+        const currentRt = rooftops.find(r => [r.name, r.name_en, r.name_zh, r.name_ja].includes(detailName));
         if (currentRt) openDetail(currentRt.id);
       }
-    }
-
-    function toggleLanguage() {
-      setLanguage(currentLang === 'ko' ? 'en' : 'ko');
     }
 
     // ═══════════════════════════════════════════
