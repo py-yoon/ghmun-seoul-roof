@@ -13,7 +13,7 @@ An interactive rooftop & observatory map covering **90 locations** across Seoul:
 - **🔭 유료 전망대 & 무료 옥상 분리 필터링 (Free & Paid Filter)**:
   - `전체 (All)`, `🌿 정원 (Gardens)`, `☕ 카페 (Cafes)`, `🌙 야간개방 (Night Views)`, `🆓 무료 (Free)`, `💰 유료 전망대 (Paid Observatories)`, `🚪 개방형 (Open Access)` 원클릭 필터 지원
   - 롯데월드타워 서울스카이, N서울타워, 서울달, 63빌딩 등 유료 전망대는 맞춤형 `🔭` 핀 마커 및 티켓 요금 정보 제공
-  - 요금이 `무료`로 표기된 곳은 71곳이며, 박물관 입장료가 포함된 곳이나 개방 예정으로 요금이 `미정`인 곳은 별도로 표기
+  - `free` 태그가 붙은 무료 개방 명소는 78곳이며, 박물관 입장료가 포함된 은평역사한옥박물관(1,000원)과 개방 예정으로 요금이 `미정`인 세종문화회관은 무료·유료 어느 쪽에도 넣지 않음
 - **🚪 개방 상태 구분 (Access Status)**:
   - 예약·조건 없이 상시 접근 가능한 `open` 78곳, 운영시간·사전예약·투어가 필요한 `limited` 11곳, 개방 예정인 `planned` 1곳(세종문화회관 옥상 전망대, 2026년 연내 개방 예정)
 - **💬 Supabase 실시간 방문자 팁 및 댓글 (Real-time Comments)**:
